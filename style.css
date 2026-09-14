@@ -169,7 +169,7 @@ html.is-loading,html.is-loading body{overflow:hidden;height:100%}
   transition:width .35s var(--e-out),height .35s var(--e-out),margin .35s var(--e-out),
              border-color .3s,background-color .3s;
 }
-.cur-ring span{font-size:9px;letter-spacing:.16em;text-transform:uppercase;opacity:0;transition:opacity .25s;color:#fff}
+.cur-ring span{font-size:9px;letter-spacing:.16em;text-transform:uppercase;opacity:0;transition:opacity .25s;color:#fff;white-space:nowrap}
 body.cur-hov .cur-ring{width:62px;height:62px;margin:-31px 0 0 -31px;border-color:var(--red)}
 body.cur-hov .cur__dot{opacity:0}
 body.cur-view .cur-ring{width:86px;height:86px;margin:-43px 0 0 -43px;background:var(--red);border-color:var(--red)}
@@ -450,6 +450,11 @@ html.js .wrow{opacity:0}
   .wrow.act .wrow__t{color:var(--white)}
   .wrow.act .wrow__a{color:var(--red);transform:translateX(8px)}
 }
+.wrow--soon{cursor:default;color:var(--ash-dim)}
+.wrow--soon .wrow__t{color:var(--ash-dim)}
+.wlist.dim .wrow--soon{opacity:.3}
+.wrow__dot{width:9px;height:9px;border-radius:50%;background:var(--red);justify-self:center;
+  box-shadow:0 0 0 0 rgba(230,32,43,.65);animation:pulse 2s ease-out infinite}
 .work__more{margin-top:clamp(1.6rem,4vw,2.6rem);color:var(--ash);font-size:.92rem}
 .peek{
   position:fixed;top:0;left:0;width:clamp(240px,24vw,360px);aspect-ratio:17/11;

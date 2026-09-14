@@ -598,6 +598,7 @@ const I18N = {
   en: {
     'skip':'Skip to content',
     'fab':'Let’s talk',
+    'cur.view':'View',
     'hero.eyebrow':'Independent web studio · Tahiti · since 2026',
     'hero.l1':'Your website',
     'hero.l2':'shouldn’t just',
@@ -659,8 +660,9 @@ const I18N = {
 
     'work.label':'05 / Work',
     'work.h':'Three sites delivered.<br>Three happy clients.',
-    'w1.t':'Project one','w2.t':'Project two','w3.t':'Project three',
-    'w.new':'Full build','w.mod':'Modernisation',
+    'w1.t':'Heihere Lodge','w1.m':'Holiday rental · Moorea',
+    'w2.t':'Raiko Glow','w2.m':'Online store · LED',
+    'w3.t':'Third project','w3.m':'Details to come',
     'work.more':'+ more projects currently in production',
 
     'fin.l1':'Let’s','fin.l2':'talk.',

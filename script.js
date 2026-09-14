@@ -11,8 +11,8 @@ const CONFIG = {
   whatsapp: '68989374886',
   message : "Bonjour Rai, je souhaite créer un site web.",
   email   : 'rai.web.tahiti@gmail.com',
-  // Mettre à true une fois assets/video/sequence-1080.mp4 généré
-  video   : { enabled:false, hd:'assets/video/sequence-1080.mp4', sd:'assets/video/sequence-720.mp4' }
+  // Passer à true une fois les 2 fichiers déposés dans assets/video/
+  video   : { enabled:false, hd:'assets/video/sequence-hd.mp4', sd:'assets/video/sequence-sd.mp4' }
 };
 
 /* ---------- UTILS ---------- */

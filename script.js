@@ -16,7 +16,7 @@ const CONFIG = {
   video   : { auto:true, hd:'assets/video/sequence-hd.mp4', sd:'assets/video/sequence-sd.mp4' },
 
   // Intro : durée totale en millisecondes. once:true = une seule fois par onglet.
-  intro   : { duration:8000, once:false },
+  intro   : { duration:6000, once:false },
 
   // force:true  -> les animations tournent même si le visiteur a activé
   //                « réduire les animations » sur son téléphone.
@@ -77,9 +77,9 @@ function smooth(){
 
 /* ---------- 3. INTRO (logo animé) ---------- */
 function intro(done){
-  const box  = $('#intro');
+  const box = $('#intro');
   if (!box) return done();
-  const num  = $('#introNum'), bar = $('#introBar'), skip = $('#introSkip');
+  const bar = $('#introBar'), skip = $('#introSkip');
   const seen = (() => { try { return sessionStorage.getItem('rwd-intro'); } catch(e){ return null; } })();
 
   const leave = () => {
@@ -94,56 +94,42 @@ function intro(done){
   }
   document.documentElement.classList.add('is-loading');
 
-  const D = CONFIG.intro.duration / 1000;   // 8 s par défaut
-  const counter = { v:0 };
-
+  const D = CONFIG.intro.duration / 1000;   // 6 s
   const tl = gsap.timeline({ defaults:{ ease:'expo.out' }, onComplete: leave });
 
-  // 1. la ligne rouge naît du néant
-  tl.fromTo('.intro__seed', { scaleX:0, opacity:1 },
-                            { scaleX:1, duration:.9, ease:'expo.inOut' }, 0)
-    .to('.intro__glow', { opacity:1, scale:1, duration:2.2, ease:'power2.out' }, .2)
-    .to('.intro__skip', { opacity:1, duration:.6 }, .6)
+  tl // 1. la ligne rouge naît du néant
+    .fromTo('.intro__seed', { scaleX:0, opacity:1 }, { scaleX:1, duration:.7, ease:'expo.inOut' }, 0)
+    .to('.intro__glow', { opacity:1, scale:1, duration:1.8, ease:'power2.out' }, .15)
+    .to('.intro__skip', { opacity:1, duration:.5 }, .5)
 
-  // 2. la ligne se disperse, l'orbite se referme autour du vide
-    .to('.intro__seed', { scaleX:1.25, opacity:0, duration:.7, ease:'power2.in' }, .95)
-    .set('.intro__logo', { opacity:1 }, .95)
-    .fromTo('.intro__logo .lg-orbit__a',
-            { opacity:0, rotate:-52, scale:.82 },
-            { opacity:1, rotate:0, scale:1, duration:1.5 }, 1.0)
-    .fromTo('.intro__logo .lg-orbit__b',
-            { opacity:0, rotate:-52, scale:.82 },
-            { opacity:1, rotate:0, scale:1, duration:1.5 }, 1.12)
+    // 2. elle se disperse, l'orbite se referme autour du vide
+    .to('.intro__seed', { scaleX:1.2, opacity:0, duration:.55, ease:'power2.in' }, .68)
+    .set('.intro__logo', { opacity:1 }, .68)
+    .fromTo('.intro__logo .lg-orbit__a', { opacity:0, rotate:-48, scale:.84 },
+                                         { opacity:1, rotate:0, scale:1, duration:1.15 }, .72)
+    .fromTo('.intro__logo .lg-orbit__b', { opacity:0, rotate:-48, scale:.84 },
+                                         { opacity:1, rotate:0, scale:1, duration:1.15 }, .84)
 
-  // 3. le mot se lève derrière l'orbite
-    .fromTo('.intro__logo .lg-word',
-            { opacity:0, yPercent:34 },
-            { opacity:1, yPercent:0, duration:1.25 }, 1.85)
-    .fromTo('.intro__logo .lg-agency',
-            { opacity:0, x:26 },
-            { opacity:1, x:0, duration:.9 }, 2.5)
-    .to('.intro__tag', { opacity:1, duration:.8 }, 2.3)
+    // 3. le mot se lève derrière l'orbite
+    .fromTo('.intro__logo .lg-word',   { opacity:0, yPercent:32 },
+                                       { opacity:1, yPercent:0, duration:1 }, 1.35)
+    .fromTo('.intro__logo .lg-agency', { opacity:0, x:22 },
+                                       { opacity:1, x:0, duration:.7 }, 1.95)
+    .to('.intro__tag', { opacity:1, duration:.6 }, 1.8)
 
-  // 4. le compteur court sur toute la durée restante
-    .to(counter, {
-        v:100, duration: D - 2.1, ease:'power1.inOut',
-        onUpdate(){ num.textContent = String(Math.round(counter.v)).padStart(2,'0'); }
-      }, .9)
-    .to(bar, { scaleX:1, duration: D - 2.1, ease:'power1.inOut' }, .9)
+    // 4. un éclat balaie le logo, la barre se remplit sur toute la durée
+    .to(bar, { scaleX:1, duration: D - 1.5, ease:'power1.inOut' }, .6)
+    .fromTo('.intro__sweep', { xPercent:-130 }, { xPercent:130, duration:1.25, ease:'power2.inOut' }, 2.45)
+    .to('.intro__logo', { scale:1.03, duration: D - 3.3, ease:'sine.inOut' }, 2.3)
 
-  // 5. un éclat balaie le logo pendant l'attente
-    .fromTo('.intro__sweep', { xPercent:-130 }, { xPercent:130, duration:1.6, ease:'power2.inOut' }, 3.4)
-    .to('.intro__logo', { scale:1.035, duration: D - 5.2, ease:'sine.inOut' }, 3.2)
+    // 5. sortie : le logo se retire, le rideau s'ouvre sur le site
+    .to('.intro__logo', { scale:1.12, opacity:0, filter:'blur(8px)', duration:.7, ease:'power2.in' }, D - 1.35)
+    .to('.intro__glow', { opacity:0, duration:.6 }, D - 1.35)
+    .to(['.intro__foot','.intro__bar','.intro__skip'], { opacity:0, y:22, duration:.5 }, D - 1.3)
+    .to('.intro__curtain', { scaleY:1, duration:.55, ease:'expo.inOut' }, D - .8)
+    .to(box, { opacity:0, duration:.38, ease:'power2.out' }, D - .38);
 
-  // 6. sortie : le logo se retire, le rideau s'ouvre sur le site
-    .to('.intro__sweep', { xPercent:130, duration:.01 }, D - 1.8)
-    .to('.intro__logo',  { scale:1.14, opacity:0, filter:'blur(9px)', duration:.9, ease:'power2.in' }, D - 1.7)
-    .to('.intro__glow',  { opacity:0, duration:.8 }, D - 1.7)
-    .to(['.intro__foot','.intro__bar','.intro__skip'], { opacity:0, y:26, duration:.6 }, D - 1.6)
-    .to('.intro__curtain', { scaleY:1, duration:.65, ease:'expo.inOut' }, D - 1.0)
-    .to(box, { opacity:0, duration:.45, ease:'power2.out' }, D - .45);
-
-  skip.addEventListener('click', () => { tl.pause(); gsap.to(box,{opacity:0,duration:.4,onComplete:leave}); });
+  skip.addEventListener('click', () => { tl.pause(); gsap.to(box,{opacity:0,duration:.35,onComplete:leave}); });
   addEventListener('keydown', e => { if (e.key === 'Escape') skip.click(); }, { once:true });
 }
 
@@ -657,7 +643,7 @@ const I18N = {
     'mission.label':'01 / My mission',
     'mission.txt':"Too many great businesses are invisible online. I build the site that makes them impossible to ignore, one that brings in clients, and makes their brand feel obvious.",
     'mission.hot':'invisible|impossible|ignore|clients|obvious',
-    'mission.sig':'Rai, founder',
+    'mission.role':'founder',
 
     'pillars.label':'02 / What I do',
     'pillars.h':'Three ways<br>to make you<br>visible.',
@@ -735,7 +721,9 @@ function i18nInit(){
     document.documentElement.lang = lang;
     $$('[data-i18n]').forEach(el => {
       const v = d[el.dataset.i18n];
-      if (v != null) el.innerHTML = v;
+      // Remplacer l'innerHTML détache les nœuds que GSAP anime (le soulignement
+      // du hero vit dans hero.l4). On ne touche donc que ce qui change vraiment.
+      if (v != null && el.innerHTML !== v) el.innerHTML = v;
     });
     if (mis){
       mis.dataset.raw = d['mission.txt'];
@@ -779,7 +767,8 @@ function boot(){
   links();
   intro(() => {
     smooth();
-    cursor();
+    i18nInit();   // avant hero() : la langue doit être posée avant que
+    cursor();     // les timelines ne prennent leurs cibles dans le DOM
     hero();
     cinema();
     stats();
@@ -792,7 +781,6 @@ function boot(){
     chrome();
     flourish();
     resizing();
-    i18nInit();
     if (hasGSAP()) ScrollTrigger.refresh();
   });
 }

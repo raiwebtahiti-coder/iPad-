@@ -22,7 +22,7 @@
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@75..125,400..900&family=Instrument+Sans:wght@400..600&family=Nothing+You+Could+Do&family=Anton&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@75..125,400..900&family=Azeret+Mono:wght@400;500&family=Instrument+Sans:wght@400..600&family=Nothing+You+Could+Do&family=Anton&display=swap">
 <link rel="stylesheet" href="style.css">
 
 <script type="application/ld+json">
@@ -64,9 +64,10 @@
     <text class="lg-agency" x="962" y="84" font-size="29" text-anchor="end" letter-spacing="2" transform="translate(962 84) skewX(-11) translate(-962 -84)">AGENCY</text>
   </g>
 </svg>
-      <span class="intro__sweep" aria-hidden="true"></span>
     </div>
   </div>
+
+  <p class="intro__manifesto" data-i18n="intro.manifesto">Un seul interlocuteur. Du premier croquis à la mise en ligne.</p>
 
   <div class="intro__foot">
     <span class="intro__tag">Studio web indépendant · Tahiti</span>
@@ -183,6 +184,11 @@
   </div>
 </section>
 
+<!-- ================= BANDEAU DEFILANT ================= -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker__track" id="ticker"></div>
+</div>
+
 <!-- ================= MISSION ================= -->
 <section class="sec mission" id="mission">
   <div class="wrap">
@@ -196,7 +202,7 @@
 <!-- ================= PILLARS ================= -->
 <section class="sec pillars" id="services">
   <div class="wrap">
-    <p class="label" data-i18n="pillars.label">02 / Ce que je fais</p>
+    <p class="label" data-i18n="pillars.label">02 / Ce que je fais <i>(3)</i></p>
     <h2 class="h1 reveal-up" data-i18n="pillars.h">Trois façons<br>de vous rendre<br>visible.</h2>
 
     <div class="grid3" id="pillars">
@@ -292,7 +298,7 @@
 <!-- ================= WORK ================= -->
 <section class="sec work" id="work">
   <div class="wrap">
-    <p class="label" data-i18n="work.label">05 / Réalisations</p>
+    <p class="label" data-i18n="work.label">05 / Réalisations <i>(3)</i></p>
     <h2 class="h1 reveal-up" data-i18n="work.h">Trois sites livrés.<br>Trois fois satisfait.</h2>
 
     <div class="wlist" id="wlist">
@@ -349,25 +355,28 @@
 
 <!-- ================= FOOTER ================= -->
 <footer class="ft" id="ft">
-  <div class="ft__mark" id="ftMark" aria-hidden="true"><span>RAI WEB DESIGN</span></div>
+  <div class="ft__mark" id="ftMark" aria-hidden="true">
+    <span class="ft__logotype"><span>RAI WEB DESIGN</span><span>RAI WEB DESIGN</span></span>
+  </div>
   <div class="wrap ft__cols">
     <div class="ft__col">
       <h4 data-i18n="ft.contact">Contact</h4>
-      <a data-wa href="#" target="_blank" rel="noopener noreferrer">WhatsApp</a>
-      <a data-mail href="#" data-i18n="ft.mail">Email</a>
+      <a class="roll" data-wa href="#" target="_blank" rel="noopener noreferrer"><span data-i18n="ft.wa">WhatsApp</span><span aria-hidden="true" data-i18n="ft.wa">WhatsApp</span></a>
+      <a class="roll" data-mail href="#"><span data-i18n="ft.mail">Email</span><span aria-hidden="true" data-i18n="ft.mail">Email</span></a>
     </div>
     <div class="ft__col">
       <h4 data-i18n="ft.nav">Navigation</h4>
-      <a href="#mission" data-i18n="ft.n1">Mission</a>
-      <a href="#services" data-i18n="ft.n2">Services</a>
-      <a href="#work" data-i18n="ft.n3">Réalisations</a>
-      <a href="#contact" data-i18n="ft.n4">Contact</a>
+      <a class="roll" href="#mission"><span data-i18n="ft.n1">Mission</span><span aria-hidden="true" data-i18n="ft.n1">Mission</span></a>
+      <a class="roll" href="#services"><span data-i18n="ft.n2">Services</span><span aria-hidden="true" data-i18n="ft.n2">Services</span></a>
+      <a class="roll" href="#work"><span data-i18n="ft.n3">Réalisations</span><span aria-hidden="true" data-i18n="ft.n3">Réalisations</span></a>
+      <a class="roll" href="#contact"><span data-i18n="ft.n4">Contact</span><span aria-hidden="true" data-i18n="ft.n4">Contact</span></a>
     </div>
     <div class="ft__col">
       <h4 data-i18n="ft.studio">Studio</h4>
       <p data-i18n="ft.s1">Tahiti, Polynésie française</p>
       <p data-i18n="ft.s2">Clients partout dans le monde</p>
       <p data-i18n="ft.s3">Fondé en juin 2026</p>
+      <p class="clock"><span class="clock__dot" aria-hidden="true"></span><span class="clock__t" id="clock">--:--</span><em data-i18n="ft.avail">disponible</em></p>
     </div>
   </div>
   <div class="wrap ft__base">

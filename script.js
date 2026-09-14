@@ -119,16 +119,16 @@ function intro(done){
     .fromTo('.intro__logo .lg-agency', { opacity:0, x:22 },
                                        { opacity:1, x:0, duration:.7 }, 1.95)
     .to('.intro__tag', { opacity:1, duration:.6 }, 1.8)
+    .fromTo('.intro__manifesto', { opacity:0, y:14 }, { opacity:1, y:0, duration:.9 }, 2.15)
 
-    // 4. un éclat balaie le logo, la barre se remplit sur toute la durée
+    // 4. la barre se remplit sur toute la durée, le logo respire
     .to(bar, { scaleX:1, duration: D - 1.5, ease:'power1.inOut' }, .6)
-    .fromTo('.intro__sweep', { xPercent:-130 }, { xPercent:130, duration:1.25, ease:'power2.inOut' }, 2.45)
-    .to('.intro__logo', { scale:1.03, duration: D - 3.3, ease:'sine.inOut' }, 2.3)
+    .to('.intro__logo', { scale:1.035, duration: D - 3.3, ease:'sine.inOut' }, 2.3)
 
     // 5. sortie : le logo se retire, le rideau s'ouvre sur le site
     .to('.intro__logo', { scale:1.12, opacity:0, filter:'blur(8px)', duration:.7, ease:'power2.in' }, D - 1.35)
     .to('.intro__glow', { opacity:0, duration:.6 }, D - 1.35)
-    .to(['.intro__foot','.intro__bar','.intro__skip'], { opacity:0, y:22, duration:.5 }, D - 1.3)
+    .to(['.intro__foot','.intro__bar','.intro__skip','.intro__manifesto'], { opacity:0, y:22, duration:.5 }, D - 1.3)
     .to('.intro__curtain', { scaleY:1, duration:.55, ease:'expo.inOut' }, D - .8)
     .to(box, { opacity:0, duration:.38, ease:'power2.out' }, D - .38);
 
@@ -578,7 +578,42 @@ function chrome(){
   }
 }
 
-/* ---------- 15. FIORITURES ---------- */
+/* ---------- 15. BANDEAU DEFILANT ---------- */
+function ticker(){
+  const track = $('#ticker');
+  if (!track) return;
+  const build = () => {
+    const words = (I18N_TICKER[document.documentElement.lang] || I18N_TICKER.fr);
+    const seq = words.map(w => `<b>${w}</b><i></i>`).join('');
+    // deux exemplaires : l'animation translate de -50%, la boucle est invisible
+    track.innerHTML = `<span class="ticker__seq">${seq}</span><span class="ticker__seq">${seq}</span>`;
+  };
+  build();
+  track.dataset.build = '1';
+  window.__rebuildTicker = build;
+}
+const I18N_TICKER = {
+  fr: ['Création de site web','Modernisation','Hébergement géré','Livré en 2 semaines',
+       'Un seul interlocuteur','Tahiti · clients partout'],
+  en: ['Website creation','Modernisation','Managed hosting','Delivered in 2 weeks',
+       'One person to talk to','Tahiti · clients everywhere']
+};
+
+/* ---------- 16. HEURE LOCALE DE TAHITI ---------- */
+function clock(){
+  const el = $('#clock');
+  if (!el) return;
+  const tick = () => {
+    // Tahiti est à UTC-10 toute l'année, sans heure d'été.
+    const d = new Date(Date.now() - 10 * 3600 * 1000);
+    el.textContent = String(d.getUTCHours()).padStart(2,'0') + ':' +
+                     String(d.getUTCMinutes()).padStart(2,'0');
+  };
+  tick();
+  setInterval(tick, 20000);
+}
+
+/* ---------- 17. FIORITURES ---------- */
 function flourish(){
   // marque fixe : elle apparaît une fois le hero passé
   const brand = $('#brand');
@@ -627,7 +662,7 @@ function flourish(){
   }
 }
 
-/* ---------- 16. RESIZE ---------- */
+/* ---------- 18. RESIZE ---------- */
 function resizing(){
   if (!hasGSAP()) return;
   // limitCallbacks est volontairement absent : il supprime les callbacks quand le
@@ -646,6 +681,8 @@ const I18N = {
     'skip':'Skip to content',
     'fab':'Let’s talk',
     'cur.view':'View',
+    'intro.manifesto':'One person to talk to. From the first sketch to launch.',
+    'ft.avail':'available',
     'hero.eyebrow':'Independent web studio · Tahiti · since 2026',
     'hero.l1':'Your website',
     'hero.l2':'shouldn’t just',
@@ -670,7 +707,7 @@ const I18N = {
     'mission.hot':'invisible|impossible|ignore|clients|obvious',
     'mission.role':'founder',
 
-    'pillars.label':'02 / What I do',
+    'pillars.label':'02 / What I do <i>(3)</i>',
     'pillars.h':'Three ways<br>to make you<br>visible.',
     'p1.t':'Website<br>creation',
     'p1.d':'A complete site, designed and coded from scratch. Design, development, launch. Built to convert, not just to decorate.',
@@ -705,7 +742,7 @@ const I18N = {
     'offer.scarce':'Few projects accepted at a time.<br><b>That’s what protects the deadline.</b>',
     'offer.cta':'Check my availability',
 
-    'work.label':'05 / Work',
+    'work.label':'05 / Work <i>(3)</i>',
     'work.h':'Three sites delivered.<br>Three happy clients.',
     'w1.t':'Heihere Lodge','w1.m':'Holiday rental · Moorea',
     'w2.t':'Raiko Glow','w2.m':'Online store · LED',
@@ -781,6 +818,7 @@ function afterLangChange(){
   $$('.hero__title .ln>span, .fin__t .ln>span').forEach(s => { s.style.transform = 'translate(0px,0px)'; });
   const kin = $('.kin i'); if (kin) kin.style.transform = 'scaleX(1)';
   mission();
+  if (window.__rebuildTicker) window.__rebuildTicker();
   if (hasGSAP()){
     ScrollTrigger.getAll().forEach(t => { if (t.trigger && t.trigger.closest && t.trigger.closest('#story')) t.refresh(); });
     ScrollTrigger.refresh();
@@ -804,6 +842,8 @@ function boot(){
     work();
     finalCta();
     chrome();
+    ticker();
+    clock();
     flourish();
     resizing();
     if (hasGSAP()) ScrollTrigger.refresh();

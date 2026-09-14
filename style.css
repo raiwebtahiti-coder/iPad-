@@ -85,22 +85,78 @@ button{font:inherit}
   100%{transform:translate(0,0)}
 }
 
-/* ---------- PRELOADER ---------- */
-.pre{display:none}
-html.js .pre{
-  position:fixed;inset:0;z-index:9997;background:var(--ink-deep);
-  display:flex;flex-direction:column;justify-content:flex-end;
+/* ---------- LOGO ---------- */
+.lg{display:block;width:100%;height:auto;color:var(--red)}
+.lg .lg-orbit__a,.lg .lg-orbit__b{transform-box:fill-box;transform-origin:center}
+
+.brand{
+  position:fixed;top:clamp(.9rem,2.4vw,1.8rem);left:clamp(1rem,3vw,2.2rem);z-index:94;
+  width:clamp(128px,13vw,186px);opacity:0;transform:translateY(-14px) scale(.94);
+  transition:opacity .5s var(--e-out),transform .5s var(--e-out),filter .35s;
+  filter:drop-shadow(0 0 0 rgba(230,32,43,0));
+}
+.brand.is-on{opacity:1;transform:none}
+.brand:hover{filter:drop-shadow(0 0 22px rgba(230,32,43,.55))}
+.brand .lg{color:var(--red)}
+
+/* ---------- INTRO ---------- */
+.intro{display:none}
+html.js .intro{
+  position:fixed;inset:0;z-index:9997;display:flex;flex-direction:column;
+  justify-content:flex-end;background:var(--ink-deep);overflow:hidden;
   padding:var(--gutter);
 }
-.pre.is-done{pointer-events:none}
-.pre__inner{display:flex;align-items:flex-end;justify-content:space-between;gap:2rem;overflow:hidden}
-.pre__label{font-size:var(--t-label);letter-spacing:.26em;color:var(--ash-dim);text-transform:uppercase;padding-bottom:.9rem}
-.pre__num{
-  font-family:var(--ff-d);font-size:clamp(5rem,19vw,17rem);line-height:.78;
+.intro__field{position:absolute;inset:0;pointer-events:none}
+.intro__glow{
+  position:absolute;left:50%;top:50%;width:min(150vw,1400px);aspect-ratio:1;
+  transform:translate(-50%,-50%) scale(.5);border-radius:50%;opacity:0;
+  background:radial-gradient(circle,rgba(230,32,43,.34) 0%,rgba(142,15,22,.14) 34%,transparent 66%);
+  filter:blur(46px);
+}
+.intro__stage{
+  position:absolute;inset:0;display:grid;place-items:center;
+  padding-inline:var(--gutter);
+}
+.intro__seed{
+  grid-area:1/1;width:min(78vw,1000px);height:2px;border-radius:3px;
+  background:linear-gradient(90deg,transparent,var(--red-deep) 10%,var(--red) 42%,var(--ember) 50%,var(--red) 58%,var(--red-deep) 90%,transparent);
+  box-shadow:0 0 60px 10px rgba(230,32,43,.5);transform:scaleX(0);
+}
+.intro__logo{
+  grid-area:1/1;position:relative;width:min(84vw,940px);
+  opacity:0;overflow:hidden;
+}
+.intro__logo .lg-orbit__a,.intro__logo .lg-orbit__b{opacity:0}
+.intro__logo .lg-word{opacity:0}
+.intro__logo .lg-agency{opacity:0}
+.intro__sweep{
+  position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,.5) 50%,transparent 62%);
+  mix-blend-mode:overlay;transform:translateX(-130%);
+}
+.intro__foot{
+  position:relative;display:flex;align-items:flex-end;justify-content:space-between;
+  gap:2rem;overflow:hidden;
+}
+.intro__tag{
+  font-size:var(--t-label);letter-spacing:.26em;text-transform:uppercase;
+  color:var(--ash-dim);padding-bottom:1rem;opacity:0;
+}
+.intro__num{
+  font-family:var(--ff-d);font-size:clamp(4rem,15vw,13rem);line-height:.78;
   color:var(--white);font-variant-numeric:tabular-nums;letter-spacing:-.02em;
 }
-.pre__bar{height:2px;background:var(--ink-line);margin-top:1.6rem;overflow:hidden}
-.pre__bar i{display:block;height:100%;width:100%;background:var(--grad);transform:scaleX(0);transform-origin:left}
+.intro__bar{position:relative;height:2px;background:var(--ink-line);margin-top:1.4rem;overflow:hidden}
+.intro__bar i{display:block;height:100%;width:100%;background:var(--grad);transform:scaleX(0);transform-origin:left}
+.intro__skip{
+  position:absolute;top:clamp(1rem,3vw,2rem);right:clamp(1rem,3vw,2rem);
+  background:none;border:1px solid rgba(255,255,255,.18);border-radius:var(--r-pill);
+  color:var(--ash);font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;
+  padding:.7rem 1.2rem;min-height:44px;cursor:pointer;opacity:0;
+  transition:color .3s,border-color .3s,background .3s;
+}
+.intro__skip:hover{color:var(--white);border-color:var(--red);background:rgba(230,32,43,.12)}
+.intro__curtain{position:absolute;inset:0;background:var(--ink);transform:scaleY(0);transform-origin:bottom;pointer-events:none}
 html.is-loading,html.is-loading body{overflow:hidden;height:100%}
 
 /* ---------- CURSOR ---------- */
@@ -430,23 +486,12 @@ html.js .wrow{opacity:0}
 
 /* ================= FOOTER ================= */
 .ft{position:relative;background:var(--ink);padding-top:clamp(3rem,8vh,6rem);overflow:hidden}
-.ft__mark{padding-inline:var(--gutter);line-height:.8;--mx:50%;--my:50%}
-.ft__mark span{
-  display:block;font-family:var(--ff-d);text-transform:uppercase;
-  font-size:clamp(2.4rem,13.6vw,15rem);letter-spacing:-.025em;white-space:nowrap;
-  color:var(--ink-line);
-  background:var(--grad);-webkit-background-clip:text;background-clip:text;
-  -webkit-text-fill-color:transparent;
-  mask-image:radial-gradient(circle 170px at var(--mx) var(--my),#000 0%,transparent 100%);
-  -webkit-mask-image:radial-gradient(circle 170px at var(--mx) var(--my),#000 0%,transparent 100%);
-  position:relative;
+.ft__mark{padding-inline:var(--gutter);--mx:50%;--my:50%}
+.ft__mark .lg{
+  width:100%;color:var(--ink-line);
+  transition:color .45s var(--e-out),filter .45s var(--e-out);
 }
-.ft__mark::before{
-  content:"RAI WEB DESIGN";display:block;position:absolute;
-  font-family:var(--ff-d);text-transform:uppercase;
-  font-size:clamp(2.4rem,13.6vw,15rem);letter-spacing:-.025em;white-space:nowrap;
-  color:var(--ink-line);z-index:-1;
-}
+.ft__mark:hover .lg{color:var(--red);filter:drop-shadow(0 0 40px rgba(230,32,43,.4))}
 .ft__cols{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(1.5rem,3vw,3rem);padding-block:clamp(2.5rem,6vh,4.5rem);border-top:1px solid var(--ink-line);margin-top:clamp(2rem,5vh,3.5rem)}
 .ft__col h4{font-size:var(--t-label);letter-spacing:.22em;text-transform:uppercase;color:var(--ash-dim);font-weight:500;margin-bottom:1.1rem}
 .ft__col a,.ft__col p{display:block;color:var(--bone);padding:.28rem 0;font-size:.95rem;position:relative;width:fit-content}
@@ -485,19 +530,10 @@ html.js .wrow{opacity:0}
 }
 
 /* ================= REDUCED MOTION ================= */
-@media (prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
-  .grain{animation:none}
-  .ln>span{transform:none!important}
-  .reveal-up,.stat,.card,.chk li,.wrow{opacity:1!important;transform:none!important}
-  .kin i{transform:scaleX(1)!important}
-  .mission__txt w{color:var(--bone)!important}
-  .mission__txt w.hot{color:var(--red)!important}
-  .cur,.cur-ring,.peek{display:none!important}
-  .cine__stage{height:auto;padding-block:6rem}
-  .beat{opacity:1;position:relative;grid-area:auto;margin-block:2rem}
-  .cine__beats{position:relative;display:block;padding-block:4rem}
-  .fb__grid,.fb__panels,.fb__horizon{opacity:.5}
+/* Respect de « réduire les animations ».
+   Neutralisé quand CONFIG.motion.force est vrai : le script pose alors
+   .force-motion sur <html> et ces règles ne s'appliquent plus. */
+@media (prefers-reduced-motion:reduce){html:not(.force-motion) *, html:not(.force-motion) *::before, html:not(.force-motion) *::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}html:not(.force-motion) .grain{animation:none}html:not(.force-motion) .ln>span{transform:none!important}html:not(.force-motion) .reveal-up, html:not(.force-motion) .stat, html:not(.force-motion) .card, html:not(.force-motion) .chk li, html:not(.force-motion) .wrow{opacity:1!important;transform:none!important}html:not(.force-motion) .kin i{transform:scaleX(1)!important}html:not(.force-motion) .mission__txt w{color:var(--bone)!important}html:not(.force-motion) .mission__txt w.hot{color:var(--red)!important}html:not(.force-motion) .cur, html:not(.force-motion) .cur-ring, html:not(.force-motion) .peek{display:none!important}html:not(.force-motion) .cine__stage{height:auto;padding-block:6rem}html:not(.force-motion) .beat{opacity:1;position:relative;grid-area:auto;margin-block:2rem}html:not(.force-motion) .cine__beats{position:relative;display:block;padding-block:4rem}html:not(.force-motion) .fb__grid, html:not(.force-motion) .fb__panels, html:not(.force-motion) .fb__horizon{opacity:.5}
 }
 
 /* perf */

@@ -8,9 +8,9 @@
 /* ---------- CONFIG — À REMPLACER ---------- */
 const CONFIG = {
   // Numéro WhatsApp au format international, sans "+" ni espaces. Ex : '68987123456'
-  whatsapp: '68900000000',
+  whatsapp: '68989374886',
   message : "Bonjour Rai, je souhaite créer un site web.",
-  email   : 'contact@raiweb.design',
+  email   : 'rai.web.tahiti@gmail.com',
   // Mettre à true une fois assets/video/sequence-1080.mp4 généré
   video   : { enabled:false, hd:'assets/video/sequence-1080.mp4', sd:'assets/video/sequence-720.mp4' }
 };
@@ -279,7 +279,8 @@ function stats(){
 function mission(){
   const el = $('[data-split]');
   if (!el) return;
-  const raw = el.textContent.trim();
+  const raw = (el.dataset.raw || el.textContent).trim();
+  el.dataset.raw = raw;
   el.setAttribute('aria-label', raw);
   const hot = (el.dataset.hot||'').split('|').filter(Boolean).map(s=>s.toLowerCase());
   const norm = w => w.toLowerCase().replace(/[^a-zà-ÿ]/g,'');
@@ -291,6 +292,7 @@ function mission(){
   const words = $$('w', el);
   if (!hasGSAP() || reduced){ words.forEach(w=>w.classList.add('on')); return; }
 
+  ScrollTrigger.getAll().forEach(t => { if (t.trigger === el) t.kill(); });
   ScrollTrigger.create({
     trigger: el, start:'top 78%', end:'bottom 45%', scrub:.4,
     onUpdate(self){
@@ -474,6 +476,151 @@ function resizing(){
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(()=>ScrollTrigger.refresh());
 }
 
+/* ============================================================
+   I18N — FR (par défaut, dans le HTML) / EN
+   ============================================================ */
+const I18N = {
+  en: {
+    'skip':'Skip to content',
+    'fab':'Let’s talk',
+    'hero.eyebrow':'Independent web studio · Tahiti · since 2026',
+    'hero.l1':'Your website',
+    'hero.l2':'shouldn’t just',
+    'hero.l3':'exist.',
+    'hero.l4':'It should <em class="kin">convince<i></i></em>',
+    'hero.sub':'I design, code and ship websites people actually want to stay on. One person to talk to. Delivered in two weeks.',
+    'hero.cta1':'Start my project',
+    'hero.cta2':'See my work',
+    'hero.scroll':'Scroll',
+
+    'beat.1a':'Your current site','beat.1b':'says nothing.',
+    'beat.2a':'I build it.','beat.2b':'Line by line.',
+    'beat.3a':'And it works','beat.3b':'for you.',
+
+    'stat.1t':'Sites delivered','stat.1s':'more in production',
+    'stat.2t':'Client satisfaction','stat.2s':'no exceptions',
+    'stat.3t':'Weeks','stat.3s':'average delivery time',
+    'stat.4t':'PageSpeed score','stat.4s':'on every delivery',
+
+    'mission.label':'01 — My mission',
+    'mission.txt':"Too many great businesses are invisible online. I build the site that makes them impossible to ignore — one that brings in clients, and makes their brand feel obvious.",
+    'mission.hot':'invisible|impossible|ignore|clients|obvious',
+    'mission.sig':'— Rai, founder',
+
+    'pillars.label':'02 — What I do',
+    'pillars.h':'Three ways<br>to make you<br>visible.',
+    'p1.t':'Website<br>creation',
+    'p1.d':'A complete site, designed and coded from scratch. Design, development, launch. Built to convert, not just to decorate.',
+    'p2.t':'Modernising<br>an existing site',
+    'p2.d':'Your site exists but it has aged. I bring it back up to standard: design, speed, mobile, credibility. Without starting over.',
+    'p3.t':'Hosting<br>&amp; evolution',
+    'p3.d':'I put your site online and host it. Future changes are priced by their scope. Nothing locked in, nothing hidden.',
+
+    'story.label':'03 — The story',
+    'ch1.k':'High school',
+    'ch1.t':'I’ve been coding since high school. Not a career switch, not a crash course. Years of breaking things to understand how they hold together.',
+    'ch2.k':'Tahiti',
+    'ch2.t':'Based in Tahiti. I work with clients everywhere. The ocean around me changes nothing about how fast the code ships.',
+    'ch3.k':'June 2026',
+    'ch3.t':'Rai Web Design opens. One founding rule: few projects at a time. That’s what makes two-week delivery possible without cutting corners.',
+    'ch4.k':'Today',
+    'ch4.t':'You talk to the person who designs, codes and ships your site. No middleman. No salesperson. No outsourcing.',
+
+    'offer.label':'04 — The offer',
+    'offer.h':'One package.<br>Everything in it.',
+    'offer.inc':'What’s included',
+    'offer.i1':'Custom design — no templates',
+    'offer.i2':'Full development, clean code',
+    'offer.i3':'100 % responsive — mobile first',
+    'offer.i4':'Performance &amp; technical SEO optimisation',
+    'offer.i5':'Launch + domain name',
+    'offer.i6':'Managed hosting',
+    'offer.i7':'Delivered in 2 weeks',
+    'offer.aft':'What happens next?',
+    'offer.p1':'Your site grows with you. Future changes are priced by their scope: a small tweak stays a small tweak. A big change is quoted before anything starts.',
+    'offer.p2':'You always know what you’re paying for.',
+    'offer.scarce':'Few projects accepted at a time.<br><b>That’s what protects the deadline.</b>',
+    'offer.cta':'Check my availability',
+
+    'work.label':'05 — Work',
+    'work.h':'Three sites delivered.<br>Three happy clients.',
+    'w1.t':'Project one','w2.t':'Project two','w3.t':'Project three',
+    'w.new':'Full build','w.mod':'Modernisation',
+    'work.more':'+ more projects currently in production',
+
+    'fin.l1':'Let’s','fin.l2':'talk.',
+    'fin.sub':'Tell me what you want to build. I answer personally, on WhatsApp, usually within the hour.',
+    'fin.cta':'Message me on WhatsApp',
+    'fin.micro':'No endless form. No salesperson. Just a conversation.',
+
+    'ft.contact':'Contact','ft.nav':'Navigation','ft.studio':'Studio','ft.mail':'Email',
+    'ft.n1':'Mission','ft.n2':'Services','ft.n3':'Work','ft.n4':'Contact',
+    'ft.s1':'Tahiti, French Polynesia','ft.s2':'Clients all over the world','ft.s3':'Founded June 2026',
+    'ft.made':'Designed and coded in Tahiti',
+
+    'meta.title':'Rai Web Design — Website creation &amp; redesign · Tahiti',
+    'meta.desc':'Independent web studio in Tahiti. Custom website creation and redesign, hosting included, delivered in 2 weeks. One person to talk to: the one who writes the code.',
+    'wa.msg':'Hi Rai, I’d like to build a website.'
+  }
+};
+
+/* Les valeurs FR sont celles déjà écrites dans le HTML : on les mémorise au boot. */
+function i18nInit(){
+  const box = $('#lang');
+  const store = { fr:{}, en:I18N.en };
+  $$('[data-i18n]').forEach(el => { store.fr[el.dataset.i18n] = el.innerHTML; });
+  const mis = $('[data-i18n-mission]');
+  store.fr['mission.txt'] = mis ? mis.dataset.raw || mis.textContent.trim() : '';
+  store.fr['mission.hot'] = mis ? mis.dataset.hot : '';
+  store.fr['meta.title'] = document.title;
+  store.fr['meta.desc'] = ($('meta[name="description"]')||{}).content || '';
+  store.fr['wa.msg'] = CONFIG.message;
+  if (mis) mis.dataset.raw = store.fr['mission.txt'];
+
+  const apply = (lang, first) => {
+    const d = store[lang]; if (!d) return;
+    document.documentElement.lang = lang;
+    $$('[data-i18n]').forEach(el => {
+      const v = d[el.dataset.i18n];
+      if (v != null) el.innerHTML = v;
+    });
+    if (mis){
+      mis.dataset.raw = d['mission.txt'];
+      mis.dataset.hot = d['mission.hot'];
+    }
+    document.title = decodeEnt(d['meta.title']);
+    const md = $('meta[name="description"]'); if (md) md.content = decodeEnt(d['meta.desc']);
+    const og = $('meta[property="og:description"]'); if (og) og.content = decodeEnt(d['meta.desc']);
+    CONFIG.message = decodeEnt(d['wa.msg']);
+    links();
+    $$('button[data-lang]', box).forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
+    try { localStorage.setItem('rwd-lang', lang); } catch(e){}
+    if (!first) afterLangChange();
+  };
+
+  const stored = (() => { try { return localStorage.getItem('rwd-lang'); } catch(e){ return null; } })();
+  const auto = (navigator.language || 'fr').toLowerCase().startsWith('fr') ? 'fr' : 'en';
+  const lang = stored || auto;
+
+  if (box) $$('button[data-lang]', box).forEach(b =>
+    b.addEventListener('click', () => { if (document.documentElement.lang !== b.dataset.lang) apply(b.dataset.lang); }));
+
+  apply(lang, true);
+}
+const decodeEnt = s => { const t = document.createElement('textarea'); t.innerHTML = s; return t.value; };
+
+/* Après un changement de langue : on remet les éléments animés dans leur état final
+   et on recalcule ce qui dépend du texte. */
+function afterLangChange(){
+  $$('.hero__title .ln>span, .fin__t .ln>span').forEach(s => { s.style.transform = 'translate(0px,0px)'; });
+  const kin = $('.kin i'); if (kin) kin.style.transform = 'scaleX(1)';
+  mission();
+  if (hasGSAP()){
+    ScrollTrigger.getAll().forEach(t => { if (t.trigger && t.trigger.closest && t.trigger.closest('#story')) t.refresh(); });
+    ScrollTrigger.refresh();
+  }
+}
+
 /* ---------- BOOT ---------- */
 function boot(){
   links();
@@ -491,6 +638,7 @@ function boot(){
     finalCta();
     chrome();
     resizing();
+    i18nInit();
     if (hasGSAP()) ScrollTrigger.refresh();
   });
 }

@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rai Web Design — Création &amp; modernisation de sites web · Tahiti</title>
+<meta name="description" content="Studio web indépendant à Tahiti. Création et modernisation de sites web sur mesure, hébergement inclus, livré en 2 semaines. Un seul interlocuteur : celui qui code.">
+<link rel="canonical" href="https://raiweb.design/">
+<meta name="theme-color" content="#060607">
+<meta name="color-scheme" content="dark">
+<script>document.documentElement.className+=" js";</script>
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fr_PF">
+<meta property="og:site_name" content="Rai Web Design">
+<meta property="og:title" content="Rai Web Design — Votre site ne doit pas juste exister.">
+<meta property="og:description" content="Studio web indépendant à Tahiti. Création et modernisation de sites web sur mesure. Livré en 2 semaines. Un seul interlocuteur : celui qui code.">
+<meta property="og:image" content="assets/img/og-image.jpg">
+<meta property="og:url" content="https://raiweb.design/">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Inter+Tight:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="style.css">
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"ProfessionalService",
+  "name":"Rai Web Design",
+  "description":"Studio web indépendant basé à Tahiti. Création et modernisation de sites web sur mesure, hébergement et maintenance.",
+  "url":"https://raiweb.design/",
+  "foundingDate":"2026-06",
+  "serviceType":["Création de site web","Modernisation de site web","Hébergement web"],
+  "areaServed":{"@type":"Place","name":"Worldwide"},
+  "address":{"@type":"PostalAddress","addressLocality":"Tahiti","addressCountry":"PF"},
+  "aggregateRating":{"@type":"AggregateRating","ratingValue":"5","bestRating":"5","ratingCount":"3"}
+}
+</script>
+</head>
+
+<body>
+<a class="skip" href="#hero">Aller au contenu</a>
+
+<!-- ============ GRAIN ============ -->
+<div class="grain" aria-hidden="true"></div>
+
+<!-- ============ PRELOADER ============ -->
+<div class="pre" id="pre" aria-hidden="true">
+  <div class="pre__inner">
+    <span class="pre__label">RAI WEB DESIGN</span>
+    <span class="pre__num" id="preNum">00</span>
+  </div>
+  <div class="pre__bar"><i id="preBar"></i></div>
+</div>
+
+<!-- ============ CURSOR ============ -->
+<div class="cur" id="cur" aria-hidden="true"><span class="cur__dot"></span></div>
+<div class="cur-ring" id="curRing" aria-hidden="true"><span>VOIR</span></div>
+
+<!-- ============ SCROLL PROGRESS ============ -->
+<div class="prog" aria-hidden="true"><i id="progBar"></i></div>
+
+<!-- ============ FLOATING CTA ============ -->
+<a class="fab" id="fab" data-wa href="#" target="_blank" rel="noopener noreferrer" aria-label="Démarrer mon projet sur WhatsApp">
+  <span>Parlons-en</span>
+  <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</a>
+
+<main>
+
+<!-- ================= HERO ================= -->
+<section class="hero" id="hero">
+  <div class="hero__bg" aria-hidden="true">
+    <span class="hero__glow"></span>
+    <span class="hero__line"></span>
+  </div>
+
+  <div class="wrap hero__wrap">
+    <p class="eyebrow reveal-up">Studio web indépendant · Tahiti · depuis 2026</p>
+
+    <h1 class="hero__title">
+      <span class="ln"><span>Votre site</span></span>
+      <span class="ln"><span>ne doit pas juste</span></span>
+      <span class="ln"><span>exister.</span></span>
+      <span class="ln"><span>Il doit <em class="kin">convaincre<i></i></em></span></span>
+    </h1>
+
+    <p class="hero__sub reveal-up">Je conçois, je code et je mets en ligne des sites web qui donnent envie de rester. Un seul interlocuteur. Livré en deux semaines.</p>
+
+    <div class="hero__cta reveal-up">
+      <a class="btn btn--p" data-wa href="#" target="_blank" rel="noopener noreferrer" aria-label="Démarrer mon projet sur WhatsApp">
+        Démarrer mon projet
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a class="btn btn--s" href="#work">Voir mes réalisations</a>
+    </div>
+  </div>
+
+  <div class="hero__scroll" aria-hidden="true"><i></i><span>Scroll</span></div>
+</section>
+
+<!-- ================= CINEMA ================= -->
+<section class="cine" id="cine">
+  <div class="cine__stage" id="cineStage">
+
+    <video class="cine__video" id="cineVideo" playsinline muted preload="none"
+           disablepictureinpicture poster="assets/img/poster.jpg" aria-hidden="true"></video>
+
+    <!-- Fallback cinématique CSS/DOM, piloté par le même scrub -->
+    <div class="cine__fb" id="cineFb" aria-hidden="true">
+      <span class="fb__void"></span>
+      <span class="fb__seed"></span>
+      <span class="fb__grid"></span>
+      <span class="fb__panels">
+        <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      </span>
+      <span class="fb__horizon"></span>
+      <span class="fb__embers" id="fbEmbers"></span>
+    </div>
+
+    <div class="cine__vig" aria-hidden="true"></div>
+
+    <div class="cine__beats">
+      <p class="beat" data-beat="0"><span>Votre site actuel</span><span>ne dit rien.</span></p>
+      <p class="beat" data-beat="1"><span>Je le construis.</span><span>Ligne par ligne.</span></p>
+      <p class="beat" data-beat="2"><span>Et il travaille</span><span>pour vous.</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= STATS ================= -->
+<section class="stats" id="stats" aria-label="Chiffres clés">
+  <div class="stats__row">
+    <div class="stat"><b class="stat__n" data-to="3" data-pad="2">0</b><span class="stat__l">Sites livrés<em>d'autres en production</em></span></div>
+    <div class="stat"><b class="stat__n" data-to="100" data-suf="%">0</b><span class="stat__l">Clients satisfaits<em>sans exception</em></span></div>
+    <div class="stat"><b class="stat__n" data-to="2">0</b><span class="stat__l">Semaines<em>délai moyen de livraison</em></span></div>
+    <div class="stat"><b class="stat__n" data-to="90" data-suf="+">0</b><span class="stat__l">Score PageSpeed<em>sur chaque livraison</em></span></div>
+  </div>
+</section>
+
+<!-- ================= MISSION ================= -->
+<section class="sec mission" id="mission">
+  <div class="wrap">
+    <p class="label">01 — Ma mission</p>
+    <p class="mission__txt" data-split
+       data-hot="invisibles|impossibles|ignorer|clients|évidence">Trop d'entreprises formidables sont invisibles en ligne. Je construis le site qui les rend impossibles à ignorer — qui attire des clients, et qui installe leur image comme une évidence.</p>
+    <p class="mission__sig reveal-up">— Rai, fondateur</p>
+  </div>
+</section>
+
+<!-- ================= PILLARS ================= -->
+<section class="sec pillars" id="services">
+  <div class="wrap">
+    <p class="label">02 — Ce que je fais</p>
+    <h2 class="h1 reveal-up">Trois façons<br>de vous rendre<br>visible.</h2>
+
+    <div class="grid3" id="pillars">
+      <article class="card">
+        <span class="card__n">01</span>
+        <h3 class="card__t">Création<br>de site web</h3>
+        <p class="card__d">Un site complet, conçu et codé sur mesure. Design, développement, mise en ligne. Pensé pour convertir, pas juste pour décorer.</p>
+        <span class="card__edge"></span>
+      </article>
+      <article class="card">
+        <span class="card__n">02</span>
+        <h3 class="card__t">Modernisation<br>de site existant</h3>
+        <p class="card__d">Votre site existe mais il a vieilli. Je le remets au niveau : design, vitesse, mobile, crédibilité. Sans repartir de zéro.</p>
+        <span class="card__edge"></span>
+      </article>
+      <article class="card">
+        <span class="card__n">03</span>
+        <h3 class="card__t">Hébergement<br>&amp; évolution</h3>
+        <p class="card__d">Je mets votre site en ligne et je l'héberge. Les modifications futures sont tarifées selon leur ampleur. Rien de figé, rien de caché.</p>
+        <span class="card__edge"></span>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= STORY ================= -->
+<section class="story" id="story">
+  <div class="story__pin" id="storyPin">
+    <div class="wrap story__head">
+      <p class="label">03 — L'histoire</p>
+    </div>
+    <div class="story__track" id="storyTrack">
+      <article class="ch">
+        <span class="ch__k">Le lycée</span>
+        <p class="ch__t">Je code depuis le lycée. Pas une reconversion, pas une formation accélérée. Des années à casser des choses pour comprendre comment elles tiennent.</p>
+      </article>
+      <article class="ch">
+        <span class="ch__k">Tahiti</span>
+        <p class="ch__t">Basé à Tahiti. Je travaille avec des clients partout. L'océan autour ne change rien à la vitesse du code.</p>
+      </article>
+      <article class="ch">
+        <span class="ch__k">Juin 2026</span>
+        <p class="ch__t">Rai Web Design ouvre. Une règle fondatrice : peu de projets à la fois. C'est ce qui permet de livrer en deux semaines sans jamais bâcler.</p>
+      </article>
+      <article class="ch">
+        <span class="ch__k">Aujourd'hui</span>
+        <p class="ch__t">Vous parlez à la personne qui conçoit, code et met en ligne votre site. Pas d'intermédiaire. Pas de commercial. Pas de sous-traitance.</p>
+      </article>
+    </div>
+    <div class="story__rail" aria-hidden="true"><i id="storyRail"></i></div>
+  </div>
+</section>
+
+<!-- ================= OFFER ================= -->
+<section class="sec offer" id="offer">
+  <div class="wrap">
+    <p class="label">04 — L'offre</p>
+    <h2 class="h1 reveal-up">Un seul pack.<br>Tout dedans.</h2>
+
+    <div class="offer__grid">
+      <div class="panel">
+        <h3 class="panel__t">Ce qui est inclus</h3>
+        <ul class="chk" id="chk">
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5.2 5.2L20 7"/></svg>Design sur mesure — aucun template</li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5.2 5.2L20 7"/></svg>Développement complet, code propre</li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5.2 5.2L20 7"/></svg>100 % responsive — mobile d'abord</li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5.2 5.2L20 7"/></svg>Optimisation performance &amp; SEO technique</li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5.2 5.2L20 7"/></svg>Mise en ligne + nom de domaine</li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5.2 5.2L20 7"/></svg>Hébergement géré</li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5.2 5.2L20 7"/></svg>Livraison en 2 semaines</li>
+        </ul>
+      </div>
+
+      <div class="panel panel--alt">
+        <h3 class="panel__t">Et après ?</h3>
+        <p class="panel__p">Votre site évolue avec vous. Les modifications futures sont tarifées selon leur ampleur : une petite retouche reste une petite retouche. Un gros changement est chiffré avant d'être lancé.</p>
+        <p class="panel__p panel__p--hi">Vous savez toujours ce que vous payez.</p>
+
+        <div class="scarce">
+          <span class="scarce__dot" aria-hidden="true"></span>
+          <p>Peu de projets acceptés à la fois.<br><b>C'est ce qui garantit le délai.</b></p>
+        </div>
+
+        <a class="btn btn--p" data-wa href="#" target="_blank" rel="noopener noreferrer" aria-label="Vérifier les disponibilités sur WhatsApp">
+          Vérifier mes disponibilités
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= WORK ================= -->
+<section class="sec work" id="work">
+  <div class="wrap">
+    <p class="label">05 — Réalisations</p>
+    <h2 class="h1 reveal-up">Trois sites livrés.<br>Trois fois satisfait.</h2>
+
+    <div class="wlist" id="wlist">
+      <a class="wrow" href="#" data-img="assets/img/work-01.jpg">
+        <span class="wrow__n">01</span>
+        <span class="wrow__t">Projet un</span>
+        <span class="wrow__m">Création complète</span>
+        <span class="wrow__y">2026</span>
+        <svg class="wrow__a" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <img class="wrow__inline" src="assets/img/work-01.jpg" alt="" loading="lazy" decoding="async" width="680" height="440">
+      </a>
+      <a class="wrow" href="#" data-img="assets/img/work-02.jpg">
+        <span class="wrow__n">02</span>
+        <span class="wrow__t">Projet deux</span>
+        <span class="wrow__m">Modernisation</span>
+        <span class="wrow__y">2026</span>
+        <svg class="wrow__a" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <img class="wrow__inline" src="assets/img/work-02.jpg" alt="" loading="lazy" decoding="async" width="680" height="440">
+      </a>
+      <a class="wrow" href="#" data-img="assets/img/work-03.jpg">
+        <span class="wrow__n">03</span>
+        <span class="wrow__t">Projet trois</span>
+        <span class="wrow__m">Création complète</span>
+        <span class="wrow__y">2026</span>
+        <svg class="wrow__a" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <img class="wrow__inline" src="assets/img/work-03.jpg" alt="" loading="lazy" decoding="async" width="680" height="440">
+      </a>
+    </div>
+    <p class="work__more reveal-up">+ d'autres projets actuellement en production</p>
+  </div>
+  <figure class="peek" id="peek" aria-hidden="true"><img src="" alt="" decoding="async"></figure>
+</section>
+
+<!-- ================= FINAL CTA ================= -->
+<section class="fin" id="contact">
+  <span class="fin__halo" aria-hidden="true"></span>
+  <div class="wrap fin__wrap">
+    <h2 class="fin__t">
+      <span class="ln"><span>On en</span></span>
+      <span class="ln"><span>parle ?</span></span>
+    </h2>
+    <p class="fin__sub reveal-up">Dites-moi ce que vous voulez construire. Je vous réponds personnellement, sur WhatsApp, généralement dans l'heure.</p>
+    <a class="mag" id="mag" data-wa href="#" target="_blank" rel="noopener noreferrer" aria-label="Écrire à Rai Web Design sur WhatsApp">
+      <span class="mag__in">
+        Écrire sur WhatsApp
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+    </a>
+    <p class="fin__micro reveal-up">Pas de formulaire à rallonge. Pas de commercial. Juste une conversation.</p>
+  </div>
+</section>
+
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer class="ft" id="ft">
+  <div class="ft__mark" id="ftMark" aria-hidden="true"><span>RAI WEB DESIGN</span></div>
+  <div class="wrap ft__cols">
+    <div class="ft__col">
+      <h4>Contact</h4>
+      <a data-wa href="#" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+      <a data-mail href="#">Email</a>
+    </div>
+    <div class="ft__col">
+      <h4>Navigation</h4>
+      <a href="#mission">Mission</a>
+      <a href="#services">Services</a>
+      <a href="#work">Réalisations</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="ft__col">
+      <h4>Studio</h4>
+      <p>Tahiti, Polynésie française</p>
+      <p>Clients partout dans le monde</p>
+      <p>Fondé en juin 2026</p>
+    </div>
+  </div>
+  <div class="wrap ft__base">
+    <span>© 2026 Rai Web Design</span>
+    <span>Conçu et codé à Tahiti</span>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js" defer></script>
+<script src="script.js" defer></script>
+</body>
+</html>

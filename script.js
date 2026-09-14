@@ -11,8 +11,9 @@ const CONFIG = {
   whatsapp: '68989374886',
   message : "Bonjour Rai, je souhaite créer un site web.",
   email   : 'rai.web.tahiti@gmail.com',
-  // Passer à true une fois les 2 fichiers déposés dans assets/video/
-  video   : { enabled:false, hd:'assets/video/sequence-hd.mp4', sd:'assets/video/sequence-sd.mp4' },
+  // Rien à configurer : si les deux fichiers sont présents dans assets/video/
+  // la vidéo est utilisée, sinon la scène CSS équivalente prend le relais.
+  video   : { auto:true, hd:'assets/video/sequence-hd.mp4', sd:'assets/video/sequence-sd.mp4' },
 
   // Intro : durée totale en millisecondes. once:true = une seule fois par onglet.
   intro   : { duration:8000, once:false },
@@ -212,15 +213,47 @@ function cinema(){
 
   // vidéo optionnelle
   let useVideo = false;
-  if (CONFIG.video.enabled && vid){
-    const src = document.createElement('source');
-    src.src = (mobile ? CONFIG.video.sd : CONFIG.video.hd); src.type='video/mp4';
-    vid.appendChild(src); vid.preload='auto'; vid.load();
-    vid.addEventListener('loadedmetadata', ()=>{ useVideo=true; stage.classList.add('has-video'); }, {once:true});
+
+  // On vérifie d'abord que le fichier est là : sans ça, un 404 apparaît dans la
+  // console de chaque visiteur tant que la vidéo n'est pas déposée.
+  const attachVideo = async () => {
+    const src = mobile ? CONFIG.video.sd : CONFIG.video.hd;
+    try {
+      const head = await fetch(src, { method:'HEAD' });
+      if (!head.ok) return;
+    } catch(e){ return; }
+
+    const el = document.createElement('source');
+    el.src = src; el.type = 'video/mp4';
+    vid.appendChild(el);
+    vid.preload = 'auto';
+    vid.load();
+
+    vid.addEventListener('loadedmetadata', ()=>{
+      useVideo = true; stage.classList.add('has-video');
+      // Un fichier sans index de navigation ne peut pas être parcouru : le scrub
+      // afficherait une image figée. On repasse alors sur la scène CSS.
+      setTimeout(()=>{
+        const ok = vid.seekable.length && vid.seekable.end(vid.seekable.length-1) > 0.5;
+        if (!ok){
+          useVideo = false;
+          stage.classList.remove('has-video');
+          render(ScrollTrigger.getAll().find(t => t.pin && t.trigger === stage.parentElement)?.progress || 0);
+        }
+      }, 1200);
+    }, { once:true });
+
+    vid.addEventListener('error', ()=>{
+      useVideo = false; stage.classList.remove('has-video');
+    }, { once:true });
+
+    // Safari refuse de décoder avant une première lecture : on la déclenche au
+    // premier geste du visiteur, puis on remet en pause aussitôt.
     const unlock = () => { vid.play().then(()=>vid.pause()).catch(()=>{}); };
-    addEventListener('touchstart', unlock, {once:true, passive:true});
-    addEventListener('click', unlock, {once:true});
-  }
+    addEventListener('touchstart', unlock, { once:true, passive:true });
+    addEventListener('click', unlock, { once:true });
+  };
+  if (CONFIG.video.auto && vid) attachVideo();
 
   // rendu d'un état de progression p ∈ [0,1]
   const seed = $('.fb__seed'), grid = $('.fb__grid'),
@@ -301,6 +334,18 @@ function cinema(){
   render(0);
 }
 
+/* déclenche fn une seule fois : à l'entrée, ou tout de suite si la section
+   est déjà passée (rechargement en milieu de page, arrivée par une ancre) */
+function onceInView(trigger, start, fn){
+  let fired = false;
+  const run = () => { if (!fired){ fired = true; fn(); } };
+  ScrollTrigger.create({
+    trigger, start,
+    onEnter: run,
+    onRefresh(self){ if (self.progress > 0) run(); }
+  });
+}
+
 /* ---------- 7. STATS ---------- */
 function stats(){
   const cells = $$('.stat');
@@ -310,16 +355,13 @@ function stats(){
 
   if (!hasGSAP() || reduced){ show(); return; }
 
-  ScrollTrigger.create({
-    trigger:'#stats', start:'top 82%', once:true,
-    onEnter(){
-      gsap.to(cells,{ opacity:1, y:0, duration:.9, stagger:.08, ease:'expo.out' });
-      cells.forEach(c=>{
-        const n = $('.stat__n',c), to = +n.dataset.to, o = { v:0 };
-        gsap.to(o,{ v:to, duration:1.7, ease:'power3.out',
-          onUpdate(){ n.innerHTML = fmt(Math.round(o.v), n.dataset); }});
-      });
-    }
+  onceInView('#stats', 'top 82%', () => {
+    gsap.to(cells,{ opacity:1, y:0, duration:.9, stagger:.08, ease:'expo.out' });
+    cells.forEach(c=>{
+      const n = $('.stat__n',c), to = +n.dataset.to, o = { v:0 };
+      gsap.to(o,{ v:to, duration:1.7, ease:'power3.out',
+        onUpdate(){ n.innerHTML = fmt(Math.round(o.v), n.dataset); }});
+    });
   });
   // parallaxe latérale
   gsap.fromTo('.stats__row',{ xPercent:1.4 },{ xPercent:-1.4, ease:'none',
@@ -409,10 +451,10 @@ function offer(){
     items.forEach(i=>{i.style.opacity='1';i.style.transform='none';$('svg path',i)&&($('svg',i).style.strokeDashoffset='0');});
     return;
   }
-  ScrollTrigger.create({ trigger:'#chk', start:'top 82%', once:true, onEnter(){
+  onceInView('#chk', 'top 82%', () => {
     gsap.to(items,{ opacity:1, y:0, duration:.7, stagger:.055, ease:'expo.out' });
     gsap.to('#chk svg',{ strokeDashoffset:0, duration:.6, stagger:.055, ease:'power2.out', delay:.12 });
-  }});
+  });
   gsap.utils.toArray('.offer .h1, .offer .btn').forEach(el=>{
     gsap.fromTo(el,{opacity:0,y:28},{opacity:1,y:0,duration:.9,ease:'expo.out',
       scrollTrigger:{trigger:el,start:'top 88%',once:true}});
@@ -539,19 +581,6 @@ function flourish(){
 
   if (!hasGSAP() || reduced) return;
 
-  // l'orbite du logo de pied de page se referme à l'arrivée
-  const foot = $('.lg--foot');
-  if (foot){
-    gsap.from($$('.lg-orbit__a, .lg-orbit__b', foot), {
-      opacity:0, rotate:-40, scale:.86, duration:1.3, stagger:.12, ease:'expo.out',
-      scrollTrigger:{ trigger:'.ft__mark', start:'top 88%', once:true }
-    });
-    gsap.from($$('.lg-word, .lg-agency', foot), {
-      opacity:0, yPercent:30, duration:1, stagger:.1, ease:'expo.out',
-      scrollTrigger:{ trigger:'.ft__mark', start:'top 88%', once:true }
-    });
-  }
-
   // le hero se retire en douceur quand on quitte le haut de page
   gsap.to('.hero__wrap', {
     yPercent:-12, opacity:.25, ease:'none',
@@ -567,16 +596,20 @@ function flourish(){
   // aimantation des deux appels à l'action du hero
   $$('.hero__cta .btn').forEach(b => magnetize(b, { x:.22, y:.34, maxX:16, maxY:10 }));
 
-  // la page s'incline légèrement avec la vitesse de défilement
-  const shell = $('main');
-  if (shell){
+  // La page s'incline légèrement avec la vitesse de défilement.
+  // Volontairement appliqué section par section : un transform sur un ancêtre
+  // d'un élément épinglé casse le position:fixed de ScrollTrigger, ce qui
+  // gèle la séquence cinéma et la timeline. #cine et #story sont donc exclus.
+  const tilt = $$('#stats, #mission, #services, #offer, #work, #contact, .ft');
+  if (tilt.length){
     let prev = scrollY, sk = 0, tgt = 0;
     addEventListener('scroll', () => {
-      tgt = clamp((scrollY - prev) * 0.10, -3.2, 3.2); prev = scrollY;
+      tgt = clamp((scrollY - prev) * 0.10, -3, 3); prev = scrollY;
     }, { passive:true });
     const raf = () => {
       sk = lerp(sk, tgt, .1); tgt = lerp(tgt, 0, .08);
-      shell.style.transform = Math.abs(sk) < .02 ? '' : `skewY(${sk.toFixed(3)}deg)`;
+      const v = Math.abs(sk) < .02 ? '' : `skewY(${sk.toFixed(3)}deg)`;
+      tilt.forEach(el => { el.style.transform = v; });
       requestAnimationFrame(raf);
     };
     requestAnimationFrame(raf);
@@ -586,7 +619,10 @@ function flourish(){
 /* ---------- 16. RESIZE ---------- */
 function resizing(){
   if (!hasGSAP()) return;
-  ScrollTrigger.config({ limitCallbacks:true, ignoreMobileResize:true });
+  // limitCallbacks est volontairement absent : il supprime les callbacks quand le
+  // scroll saute par-dessus un déclencheur, ce qui laissait les compteurs à zéro et
+  // la checklist invisible après un rechargement en milieu de page ou une ancre.
+  ScrollTrigger.config({ ignoreMobileResize:true });
   addEventListener('resize', debounce(()=>ScrollTrigger.refresh(), 220));
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(()=>ScrollTrigger.refresh());
 }

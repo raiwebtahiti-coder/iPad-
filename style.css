@@ -491,12 +491,23 @@ html.js .wrow{opacity:0}
 
 /* ================= FOOTER ================= */
 .ft{position:relative;background:var(--ink);padding-top:clamp(3rem,8vh,6rem);overflow:hidden}
-.ft__mark{padding-inline:var(--gutter);--mx:50%;--my:50%}
-.ft__mark .lg{
-  width:100%;color:var(--ink-line);
-  transition:color .45s var(--e-out),filter .45s var(--e-out);
+.ft__mark{padding-inline:var(--gutter);line-height:.8;--mx:50%;--my:50%}
+.ft__mark span{
+  display:block;font-family:var(--ff-d);text-transform:uppercase;
+  font-size:clamp(2.4rem,13.6vw,15rem);letter-spacing:-.025em;white-space:nowrap;
+  color:var(--ink-line);
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+  mask-image:radial-gradient(circle 170px at var(--mx) var(--my),#000 0%,transparent 100%);
+  -webkit-mask-image:radial-gradient(circle 170px at var(--mx) var(--my),#000 0%,transparent 100%);
+  position:relative;
 }
-.ft__mark:hover .lg{color:var(--red);filter:drop-shadow(0 0 40px rgba(230,32,43,.4))}
+.ft__mark::before{
+  content:"RAI WEB DESIGN";display:block;position:absolute;
+  font-family:var(--ff-d);text-transform:uppercase;
+  font-size:clamp(2.4rem,13.6vw,15rem);letter-spacing:-.025em;white-space:nowrap;
+  color:var(--ink-line);z-index:-1;
+}
 .ft__cols{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(1.5rem,3vw,3rem);padding-block:clamp(2.5rem,6vh,4.5rem);border-top:1px solid var(--ink-line);margin-top:clamp(2rem,5vh,3.5rem)}
 .ft__col h4{font-size:var(--t-label);letter-spacing:.22em;text-transform:uppercase;color:var(--ash-dim);font-weight:500;margin-bottom:1.1rem}
 .ft__col a,.ft__col p{display:block;color:var(--bone);padding:.28rem 0;font-size:.95rem;position:relative;width:fit-content}

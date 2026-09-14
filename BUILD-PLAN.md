@@ -4,8 +4,8 @@
 > **Projet :** Refonte cinématique du portfolio `raiweb.design`
 > **Type :** Portfolio / Studio indépendant (one-man studio)
 > **Livrable :** Site statique `index.html` + `style.css` + `script.js` + `/assets`
-> **Langue du site :** Français (FR-PF)
-> **Version du plan :** 1.0
+> **Langues du site :** Français (par défaut) + Anglais — bascule FR/EN
+> **Version du plan :** 1.1
 
 ---
 
@@ -148,11 +148,12 @@ Un noir d'encre absolu, presque sans rivage, traversé par une seule ligne d'én
 | Paramètre | Valeur |
 |---|---|
 | Modèle | **Higgsfield Seedance 2.0** |
-| Résolution | **1080p (1920×1080)** |
-| Durée par clip | **8–12 secondes** |
+| Résolution | **720p (1280×720)** — révisé, voir note ci-dessous |
+| Durée par clip | **5 secondes** — révisé, voir note ci-dessous |
 | Ratio | 16:9 |
 | FPS | 24 (rendu cinéma) — ré-encodé en 30fps pour le scrubbing |
-| Mode | **Séquence continue** — les 3 clips s'enchaînent comme un plan-séquence unique |
+| Mode | **Séquence continue** — chaînage par `start_image` : la dernière image de chaque clip devient la première du suivant |
+| Variante | `mode: fast` (Seedance 2.0) |
 | Style global | Cinématique, anamorphique, noir profond, rim light rouge, grain de pellicule |
 | Audio | Aucun (les vidéos sont muettes, scrub-driven) |
 
@@ -216,6 +217,23 @@ ffmpeg -i assets/video/sequence-1080.mp4 -vframes 1 -q:v 2 assets/img/poster.jpg
 > **`-g 15 -keyint_min 15 -sc_threshold 0` est obligatoire.** Un keyframe toutes les 15 frames est ce qui rend le scrubbing fluide. Sans ça, le scroll saccade.
 
 **Budget cible :** `sequence-1080.mp4` ≤ 8 Mo · `sequence-720.mp4` ≤ 3,5 Mo.
+
+### ⚙️ Révision v1.1 — arbitrage crédits
+
+Le plan d'origine (1080p, 3 × 10 s, Seedance 2.0 `std`) coûtait **~270 crédits**. La vidéo étant un **fond plein écran vignetté, recouvert de grain et de typographie géante, et parcouru au scroll** (jamais lu à vitesse réelle), la résolution et la durée natives ne sont pas perçues : le scrubbing étire 15 s de source sur 3 écrans de scroll.
+
+Configuration retenue : **Seedance 2.0 `mode: fast`, 720p, 5 s, `generate_audio: false`, 16:9.**
+
+| Configuration | Coût 3 plans |
+|---|---|
+| Seedance 2.0 Mini 720p 5 s | 37,5 cr |
+| **Seedance 2.0 `fast` 720p 5 s** | **52,5 cr** ← retenu |
+| Seedance 2.0 `std` 1080p 5 s | 135 cr |
+| Seedance 2.0 `std` 1080p 10 s (plan v1.0) | ~270 cr |
+
+**Économie : ~80 % pour une différence invisible à l'écran.**
+
+Validation du plan 1 par analyse d'image (dernière frame) : 88,8 % de pixels sous la luminance 20, moyenne R=13,8 / G=7,4 / B=7,9 (rouge dominant), luminance max 100 (aucune haute lumière brûlée). La direction « Encre et Braise » est respectée.
 
 **Fallback image-sequence (si le scrubbing vidéo pose problème sur iOS) :**
 ```bash
@@ -1069,13 +1087,39 @@ Une ligne de 2 px collée à droite (`position: fixed; right: 24px; top: 20vh; h
 
 ---
 
-## 17. ÉLÉMENTS À FOURNIR
+## 17. BILINGUE FR / EN
+
+Le site est entièrement bilingue, en **rendu client, sans rechargement de page**.
+
+**Mécanique :**
+- Chaque chaîne visible porte un attribut `data-i18n="clé"`.
+- Le **français reste écrit en dur dans le HTML** : c'est la version servie aux moteurs de recherche, et celle qui s'affiche si JavaScript est désactivé. Aucune régression SEO.
+- Le dictionnaire **anglais** vit dans `script.js` (objet `I18N.en`, ~85 clés). Les valeurs françaises sont mémorisées au démarrage depuis le DOM — il n'y a donc qu'une seule source de vérité par langue.
+
+**Ce que la bascule met à jour :**
+- Tout le contenu textuel des 10 sections
+- L'attribut `<html lang>`
+- Le `<title>`, la `meta description` et `og:description`
+- Le **message WhatsApp pré-rempli** (FR : « Bonjour Rai, je souhaite créer un site web. » / EN : « Hi Rai, I'd like to build a website. »)
+- Le découpage mot par mot de la section Mission, recalculé, avec ses mots-clés rouges propres à chaque langue
+
+**Choix de la langue :**
+1. Préférence enregistrée (`localStorage`, clé `rwd-lang`)
+2. Sinon `navigator.language` — `fr*` → français, tout le reste → anglais
+
+**Interface :** pastille `FR | EN` fixe en haut à droite, fond flouté, soulignement gradient sur la langue active, `aria-pressed` correct sur chaque bouton.
+
+**Après bascule :** les lignes du hero et du CTA final sont remises dans leur état final (pas de rejeu d'animation, pas de clignotement) et `ScrollTrigger.refresh()` recalcule les positions, le texte anglais n'ayant pas la même hauteur.
+
+---
+
+## 18. ÉLÉMENTS À FOURNIR
 
 | # | Élément | Statut | Bloquant ? |
 |---|---|---|---|
 | 1 | Image de référence d'identité `Media/reference.jpg` | ❌ Absente du dépôt | Non — scènes écrites sans personnage |
-| 2 | Numéro WhatsApp international | ❌ Manquant | Non — placeholder posé |
-| 3 | Adresse email de contact | ❌ Manquant | Non — placeholder posé |
+| 2 | Numéro WhatsApp international | ✅ `+689 89 37 48 86` | — |
+| 3 | Adresse email de contact | ✅ `rai.web.tahiti@gmail.com` | — |
 | 4 | Noms + secteurs des 3 projets livrés | ❌ Manquant | Non — placeholders posés |
 | 5 | 3 captures d'écran de projets | ❌ Manquant | Non — placeholders générés |
 | 6 | Contenu du site actuel `raiweb.design` | ⚠️ Site bloqué par le proxy réseau | Non — copy réécrite de zéro |
@@ -1084,4 +1128,4 @@ Aucun de ces éléments ne bloque la construction. Le site sera livré **complet
 
 ---
 
-*Fin du Master Build Plan — Rai Web Design v1.0*
+*Fin du Master Build Plan — Rai Web Design v1.1*

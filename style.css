@@ -370,7 +370,7 @@ html.js .stat{opacity:0;transform:translateY(28px)}
 .card{
   position:relative;overflow:hidden;border-radius:var(--r-lg);
   background:var(--ink-soft);box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
-  padding:clamp(1.8rem,3.4vw,3rem);min-height:clamp(320px,40vh,440px);
+  padding:clamp(1.8rem,3.4vw,3rem);
   display:flex;flex-direction:column;
   transition:transform .55s var(--e-out),opacity .4s,filter .45s;
   will-change:transform;
@@ -525,32 +525,83 @@ html.js .wrow{opacity:0}
 .ft__col p{color:var(--ash)}
 .ft__base{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;padding-block:1.6rem clamp(1.6rem,5vh,3rem);border-top:1px solid var(--ink-line);font-size:.8rem;color:var(--ash-dim)}
 
-/* ================= RESPONSIVE ================= */
-@media (max-width:1024px){
-  .grid3{grid-template-columns:1fr}
-  .offer__grid{grid-template-columns:1fr}
-  .stats__row{grid-template-columns:repeat(2,1fr)}
-  .stat:nth-child(3){border-left:0}
-  .stat:nth-child(n+3){border-top:1px solid var(--ink-line)}
-  .prog{display:none}
+/* ================= RESPONSIVE : MOBILE D'ABORD =================
+   La base ci-dessus est la version téléphone. Deux paliers s'ajoutent :
+   700px pour la tablette portrait, 1025px pour la tablette paysage et
+   l'ordinateur. Aucune règle en max-width, tout est additif.            */
+
+/* ---- BASE TÉLÉPHONE (jusqu'à 699px) ---- */
+:root{--t-hero:clamp(2.1rem,11.5vw,3.6rem)}
+.grid3,.offer__grid,.stats__row,.ft__cols{grid-template-columns:1fr}
+.stat{border-left:0}
+.stat+.stat{border-top:1px solid var(--ink-line)}
+.hero__cta{flex-direction:column;align-items:stretch}
+.btn{justify-content:center}
+.fab{left:clamp(1rem,4vw,2rem);right:clamp(1rem,4vw,2rem);justify-content:center}
+.wrow{grid-template-columns:auto 1fr auto}
+.wrow__m,.wrow__a{display:none}
+.wrow__inline{display:block}
+.prog{display:none}
+.grain{animation:none}
+.beat{font-size:clamp(1.7rem,8.4vw,3rem)}
+.story__track{flex-direction:column;gap:clamp(2.5rem,8vw,4rem)}
+.ch{flex:none;width:100%;opacity:1}
+.ft__mark span,.ft__mark::before{
+  mask-image:none;-webkit-mask-image:none;-webkit-text-fill-color:initial;
+  background:none;color:var(--ink-line);
 }
-@media (max-width:600px){
-  :root{--t-hero:clamp(1.85rem,9vw,3.3rem)}
-  .stats__row{grid-template-columns:1fr}
-  .stat{border-left:0}
-  .stat+.stat{border-top:1px solid var(--ink-line)}
-  .hero__cta{flex-direction:column;align-items:stretch}
-  .btn{justify-content:center}
-  .fab{left:clamp(1rem,4vw,2rem);right:clamp(1rem,4vw,2rem);justify-content:center}
-  .wrow{grid-template-columns:auto 1fr auto}
-  .wrow__m,.wrow__a{display:none}
-  .wrow__inline{display:block}
-  .ft__cols{grid-template-columns:1fr}
-  .ft__mark span,.ft__mark::before{mask-image:none;-webkit-mask-image:none;-webkit-text-fill-color:initial;background:none;color:var(--ink-line)}
-  .story__track{flex-direction:column;gap:clamp(2.5rem,8vw,4rem)}
-  .ch{flex:none;width:100%;opacity:1}
-  .grain{animation:none}
-  .beat{font-size:clamp(1.7rem,8.5vw,3rem)}
+
+/* cibles tactiles : 44px minimum partout */
+.lang button{min-width:44px;min-height:44px}
+.brand{min-height:44px;display:flex;align-items:center}
+.ft__col a{padding-block:.62rem;min-height:44px;min-width:44px;display:flex;align-items:center}
+@media (hover:hover) and (pointer:fine){
+  .ft__col a{padding-block:.28rem;min-height:0;display:block}
+}
+
+/* ---- TABLETTE PORTRAIT (700px et plus) ---- */
+@media (min-width:700px){
+  :root{--t-hero:clamp(3.1rem,7.9vw,5.4rem)}
+  .grid3{grid-template-columns:repeat(2,1fr)}
+  .grid3 .card:last-child{grid-column:1/-1}
+  .stats__row{grid-template-columns:repeat(2,1fr)}
+  .stat:nth-child(odd){border-left:0}
+  .stat:nth-child(n+3){border-top:1px solid var(--ink-line)}
+  .ft__cols{grid-template-columns:repeat(3,1fr)}
+  .hero__cta{flex-direction:row;align-items:center}
+  .btn{justify-content:flex-start}
+  .fab{left:auto}
+  .wrow{grid-template-columns:auto 1fr auto auto}
+  .wrow__m{display:block}
+  .wrow__inline{display:none}
+  .beat{font-size:clamp(2.4rem,6.2vw,4.4rem)}
+  .ft__mark span{
+    background:var(--grad);-webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;
+    mask-image:radial-gradient(circle 170px at var(--mx) var(--my),#000 0%,transparent 100%);
+    -webkit-mask-image:radial-gradient(circle 170px at var(--mx) var(--my),#000 0%,transparent 100%);
+  }
+}
+
+/* ---- TABLETTE PAYSAGE ET ORDINATEUR (1025px et plus) ---- */
+@media (min-width:1025px){
+  :root{--t-hero:clamp(4.4rem,6.3vw,7.1rem)}
+  .grid3{grid-template-columns:repeat(3,1fr)}
+  .card{min-height:clamp(320px,38vh,430px)}
+  .grid3 .card:last-child{grid-column:auto}
+  .offer__grid{grid-template-columns:1fr 1fr}
+  .stats__row{grid-template-columns:repeat(4,1fr)}
+  .stat:nth-child(odd){border-left:1px solid var(--ink-line)}
+  .stat:first-child{border-left:0}
+  .stat:nth-child(n+3){border-top:0}
+  .prog{display:block}
+  .grain{animation:grainShift 7s steps(9) infinite}
+  .wrow{grid-template-columns:auto 1fr auto auto auto}
+  .wrow__a{display:block}
+  .story__track{flex-direction:row;gap:clamp(1.5rem,4vw,4.5rem)}
+  .ch{flex:0 0 min(78vw,560px);width:auto;opacity:.35}
+  .ch.act{opacity:1}
+  .beat{font-size:clamp(3rem,4.9vw,4.9rem)}
 }
 
 /* ================= REDUCED MOTION ================= */

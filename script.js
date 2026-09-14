@@ -33,7 +33,10 @@ const FORCE_MOTION = CONFIG.motion.force;
 const reduced = FORCE_MOTION ? false : matchMedia('(prefers-reduced-motion: reduce)').matches;
 if (FORCE_MOTION) document.documentElement.classList.add('force-motion');
 const fine    = matchMedia('(hover:hover) and (pointer:fine)').matches;
-const mobile  = matchMedia('(max-width:600px)').matches;
+const phone   = matchMedia('(max-width:699px)').matches;   // téléphone
+const narrow  = matchMedia('(max-width:1024px)').matches;  // téléphone + tablette portrait
+const coarse  = matchMedia('(pointer:coarse)').matches;    // écran tactile
+const mobile  = phone;                                     // conservé pour la vidéo légère
 const hasGSAP = () => typeof window.gsap !== 'undefined' && typeof window.ScrollTrigger !== 'undefined';
 const debounce = (fn,ms=200) => { let t; return (...a)=>{clearTimeout(t);t=setTimeout(()=>fn(...a),ms);}; };
 
@@ -185,7 +188,7 @@ function cinema(){
   // embers du fallback
   const wrapE = $('#fbEmbers');
   if (wrapE && !reduced){
-    const n = mobile ? 22 : 46;
+    const n = phone ? 22 : narrow ? 34 : 46;
     for (let i=0;i<n;i++){
       const b = document.createElement('b');
       b.style.left = (Math.random()*100).toFixed(2)+'%';
@@ -300,7 +303,7 @@ function cinema(){
   ScrollTrigger.create({
     trigger: stage.parentElement,
     start: 'top top',
-    end: () => '+=' + (innerHeight * (mobile ? 1.9 : 3.2)),
+    end: () => '+=' + (innerHeight * (phone ? 1.9 : narrow ? 2.3 : 3.2)),
     pin: stage,
     pinSpacing: true,
     scrub: 0.6,
@@ -364,7 +367,7 @@ function mission(){
   const hot = (el.dataset.hot||'').split('|').filter(Boolean).map(s=>s.toLowerCase());
   const norm = w => w.toLowerCase().replace(/[^a-zà-ÿ]/g,'');
 
-  el.innerHTML = raw.split(/\s+/).map(w =>
+  el.innerHTML = raw.split(/\s+/).filter(Boolean).map(w =>
     `<w${hot.includes(norm(w))?' class="hot"':''}>${w}</w> `
   ).join('');
 
@@ -374,7 +377,9 @@ function mission(){
   ScrollTrigger.getAll().forEach(t => { if (t.trigger === el) t.kill(); });
   ScrollTrigger.create({
     trigger: el, start:'top 78%', end:'bottom 45%', scrub:.4,
+    onLeave(){ words.forEach(w => w.classList.add('on')); },
     onUpdate(self){
+      if (self.progress > .97){ words.forEach(w => w.classList.add('on')); return; }
       const k = self.progress * words.length * 1.12;
       words.forEach((w,i)=> w.classList.toggle('on', i < k));
     }
@@ -405,28 +410,45 @@ function story(){
   const chs = $$('.ch');
   if (!pin || !track) return;
 
-  if (!hasGSAP() || reduced || mobile){
-    chs.forEach(c=>c.classList.add('act'));
-    if (rail) rail.style.transform='scaleX(1)';
-    return;
-  }
+  const flat = () => {
+    chs.forEach(c => c.classList.add('act'));
+    if (rail) rail.style.transform = 'scaleX(1)';
+  };
 
-  const dist = () => Math.max(0, track.scrollWidth - innerWidth + parseFloat(getComputedStyle(track).paddingLeft));
+  if (!hasGSAP() || reduced){ flat(); return; }
 
-  const tl = gsap.timeline({
-    scrollTrigger:{
-      trigger:'#story', start:'top top',
-      end: () => '+=' + (dist() + innerHeight*0.5),
-      pin: pin, scrub:1, invalidateOnRefresh:true,
-      onUpdate(self){
-        if (rail) rail.style.transform = `scaleX(${self.progress})`;
-        const c = innerWidth/2;
-        chs.forEach(ch=>{ const r=ch.getBoundingClientRect();
-          ch.classList.toggle('act', r.left < c && r.right > c*0.35); });
+  const dist = () => Math.max(0, track.scrollWidth - innerWidth
+                                 + parseFloat(getComputedStyle(track).paddingLeft));
+
+  // gsap.matchMedia crée le pin au-dessus de 1025px et le démonte en dessous.
+  // C'est ce qui fait que la rotation d'un iPad bascule proprement entre la
+  // timeline horizontale et la version verticale, sans rechargement.
+  const mm = gsap.matchMedia();
+
+  mm.add('(min-width:1025px)', () => {
+    track.style.transform = '';
+    const tl = gsap.timeline({
+      scrollTrigger:{
+        trigger:'#story', start:'top top',
+        end: () => '+=' + (dist() + innerHeight * 0.5),
+        pin: pin, scrub:1, invalidateOnRefresh:true,
+        onUpdate(self){
+          if (rail) rail.style.transform = `scaleX(${self.progress})`;
+          const c = innerWidth / 2;
+          chs.forEach(ch => { const r = ch.getBoundingClientRect();
+            ch.classList.toggle('act', r.left < c && r.right > c * 0.35); });
+        }
       }
-    }
+    });
+    tl.to(track, { x: () => -dist(), ease:'none' });
+    return () => { track.style.transform = ''; chs.forEach(c=>c.classList.remove('act')); };
   });
-  tl.to(track,{ x: () => -dist(), ease:'none' });
+
+  mm.add('(max-width:1024px)', () => {
+    track.style.transform = '';
+    flat();
+    return () => { chs.forEach(c=>c.classList.remove('act')); };
+  });
 }
 
 /* ---------- 11. OFFER ---------- */
@@ -586,7 +608,10 @@ function flourish(){
   // Volontairement appliqué section par section : un transform sur un ancêtre
   // d'un élément épinglé casse le position:fixed de ScrollTrigger, ce qui
   // gèle la séquence cinéma et la timeline. #cine et #story sont donc exclus.
-  const tilt = $$('#stats, #mission, #services, #offer, #work, #contact, .ft');
+  // Sur tactile, réécrire le transform de sept grandes sections à chaque image
+  // pendant un défilement natif provoque des repaints coûteux et un ressenti
+  // saccadé, en particulier sur iPad. L'effet reste réservé à la souris.
+  const tilt = coarse ? [] : $$('#stats, #mission, #services, #offer, #work, #contact, .ft');
   if (tilt.length){
     let prev = scrollY, sk = 0, tgt = 0;
     addEventListener('scroll', () => {

@@ -115,63 +115,44 @@ button{font:inherit}
 
 /* ---------- INTRO ---------- */
 .intro{display:none}
-html.js .intro{
-  position:fixed;inset:0;z-index:9997;display:flex;flex-direction:column;
-  justify-content:flex-end;background:var(--ink-deep);overflow:hidden;
-  padding:var(--gutter);
+html.js .intro{display:block;position:fixed;inset:0;z-index:9997;background:var(--ink-deep);overflow:hidden}
+/* la feuille claire, decoupee par clip-path : le bord suit la main du personnage */
+.intro__sheet{
+  position:absolute;inset:0;background:#f3f1ec;color:#0d0d0d;
+  clip-path:inset(0 100% 0 0);
 }
-.intro__field{position:absolute;inset:0;pointer-events:none}
-.intro__glow{
-  position:absolute;left:50%;top:50%;width:min(150vw,1400px);aspect-ratio:1;
-  transform:translate(-50%,-50%) scale(.5);border-radius:50%;opacity:0;
-  background:radial-gradient(circle,rgba(230,32,43,.34) 0%,rgba(142,15,22,.14) 34%,transparent 66%);
-  filter:blur(46px);
-}
-.intro__stage{position:absolute;inset:0;display:grid;place-items:center;padding-inline:var(--gutter)}
-.intro__seed{
-  grid-area:1/1;width:min(78vw,1000px);height:2px;border-radius:3px;
-  background:linear-gradient(90deg,transparent,var(--red-deep) 10%,var(--red) 42%,var(--ember) 50%,var(--red) 58%,var(--red-deep) 90%,transparent);
-  box-shadow:0 0 60px 10px rgba(230,32,43,.5);transform:scaleX(0);
-}
-/* le nom : deux lignes qui montent depuis un masque, comme le hero */
+/* le nom, tres gras et serre, comme le logotype HUYML */
 .intro__name{
-  grid-area:1/1;position:relative;z-index:2;text-align:center;
-  font-family:var(--ff-d);font-weight:var(--d-wght);font-stretch:var(--d-wdth);
-  text-transform:uppercase;font-size:clamp(3.2rem,12.5vw,13.5rem);
-  line-height:.9;letter-spacing:-.035em;color:var(--white);
-  transform:translateY(-4vh);
+  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-family:var(--ff-d);font-weight:900;font-stretch:80%;
+  text-transform:uppercase;font-size:clamp(3.6rem,15vw,15.5rem);
+  line-height:.84;letter-spacing:-.045em;color:#0d0d0d;
+  transform:translateY(-2vh);
 }
-.intro__name .ln{padding-bottom:.14em;margin-bottom:-.1em}
-html.js .intro__name .ln>span{transform:translateY(110%)}
-/* le personnage, en bas a gauche du nom, entre par la gauche */
+.intro__name sup{
+  font-size:.22em;font-stretch:100%;letter-spacing:0;line-height:1;vertical-align:top;
+  position:relative;top:.22em;margin-left:.08em;color:var(--red);
+}
+/* le personnage : GSAP anime le conteneur, l'image est en miroir (il regarde a droite) */
 .intro__char{
-  grid-area:1/1;justify-self:start;align-self:end;z-index:3;
-  width:auto;height:clamp(150px,30vh,340px);
-  margin-left:clamp(0px,6vw,9rem);margin-bottom:clamp(6rem,14vh,10rem);
-  opacity:0;transform:translate(-40%,10%);
-  pointer-events:none;user-select:none;
+  --ch:clamp(200px,44vh,470px);
+  position:absolute;left:0;top:50%;z-index:3;height:var(--ch);margin-top:calc(var(--ch) / -2);
+  transform:translateX(-120vw);pointer-events:none;user-select:none;
 }
+.intro__char img{display:block;height:100%;width:auto;transform:scaleX(-1)}
 /* libelles en coins, mono, comme huyml.co */
 .intro__corner{
   position:absolute;z-index:4;display:flex;flex-direction:column;gap:.2rem;
   font-family:var(--ff-mono);font-size:clamp(.62rem,.8vw,.72rem);letter-spacing:.12em;
   text-transform:uppercase;line-height:1.5;opacity:0;
 }
-.intro__corner span{color:var(--bone)}
-.intro__corner em{font-style:normal;color:var(--ash-dim)}
-.intro__corner i{font-style:normal;color:var(--ash);font-variant-numeric:tabular-nums}
+.intro__corner span{color:#0d0d0d}
+.intro__corner em{font-style:normal;color:#77746c}
+.intro__corner i{font-style:normal;color:#0d0d0d;font-variant-numeric:tabular-nums}
 .intro__corner--tl{top:clamp(1.1rem,3vw,2.2rem);left:var(--gutter)}
 .intro__corner--bl{bottom:clamp(4.6rem,10vh,6.4rem);left:var(--gutter)}
 .intro__corner--br{bottom:clamp(4.6rem,10vh,6.4rem);right:var(--gutter);text-align:right}
-.intro__manifesto{
-  position:absolute;left:var(--gutter);right:var(--gutter);
-  bottom:clamp(7.6rem,17vh,10.6rem);
-  margin:0;text-align:center;opacity:0;
-  font-family:var(--ff-mono);font-size:clamp(.66rem,1.3vw,.82rem);
-  letter-spacing:.14em;text-transform:uppercase;color:var(--ash);
-  max-width:44ch;margin-inline:auto;line-height:1.7;
-}
-.intro__bar{position:absolute;left:var(--gutter);right:var(--gutter);bottom:clamp(1.4rem,4vh,2.6rem);height:2px;background:var(--ink-line);overflow:hidden}
+.intro__bar{position:absolute;left:var(--gutter);right:var(--gutter);bottom:clamp(1.4rem,4vh,2.6rem);height:2px;background:rgba(13,13,13,.12);overflow:hidden}
 .intro__bar i{display:block;height:100%;width:100%;background:var(--grad);transform:scaleX(0);transform-origin:left}
 .intro__skip{
   font-family:var(--ff-mono);
@@ -180,9 +161,9 @@ html.js .intro__name .ln>span{transform:translateY(110%)}
   color:var(--ash);font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;
   padding:.7rem 1.2rem;min-height:44px;cursor:pointer;opacity:0;
   transition:color .3s,border-color .3s,background .3s;
+  mix-blend-mode:difference;color:#fff;border-color:rgba(255,255,255,.55);
 }
-.intro__skip:hover{color:var(--white);border-color:var(--red);background:rgba(230,32,43,.12)}
-.intro__curtain{position:absolute;inset:0;background:var(--ink);transform:scaleY(0);transform-origin:bottom;pointer-events:none}
+.intro__skip:hover{border-color:#fff;background:rgba(255,255,255,.14)}
 html.is-loading,html.is-loading body{overflow:hidden;height:100%}
 
 /* ---------- CURSOR ---------- */
@@ -261,15 +242,6 @@ body.has-cur .lang button{cursor:none}
 .btn--s{border:1px solid rgba(255,255,255,.18);color:var(--bone)}
 .btn--s:hover{background:rgba(255,255,255,.06);border-color:var(--red);color:var(--white);transform:translateY(-2px)}
 
-/* ---------- MANIFESTE DE L'INTRO ---------- */
-.intro__manifesto{
-  position:absolute;left:var(--gutter);right:var(--gutter);
-  top:calc(50% + clamp(9rem,22vh,15rem));
-  margin:0;text-align:center;opacity:0;
-  font-family:var(--ff-mono);font-size:clamp(.68rem,1.5vw,.86rem);
-  letter-spacing:.14em;text-transform:uppercase;color:var(--ash);
-  max-width:44ch;margin-inline:auto;line-height:1.7;
-}
 
 /* ---------- BANDEAU DEFILANT ---------- */
 .ticker{
@@ -650,9 +622,8 @@ html.js .wrow{opacity:0}
 }
 
 @media (max-width:699px){
-  .intro__char{height:clamp(120px,22vh,200px);justify-self:end;margin-left:0;margin-right:0;margin-bottom:clamp(7.5rem,20vh,10rem)}
-  .intro__manifesto{right:auto;width:56%;max-width:none;margin-inline:0;text-align:left}
-  .intro__name{font-size:clamp(2.9rem,15vw,4.6rem);transform:translateY(-8vh)}
+  .intro__char{--ch:clamp(150px,34vh,300px)}
+  .intro__name{font-size:clamp(3rem,18vw,5.4rem);transform:translateY(-6vh)}
   .intro__corner--br{display:none}
 }
 

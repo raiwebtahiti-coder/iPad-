@@ -77,33 +77,28 @@
 
 <!-- ============ INTRO ============ -->
 <div class="intro" id="intro" role="status" aria-label="Chargement du site">
-  <div class="intro__field" aria-hidden="true"><span class="intro__glow"></span></div>
-
-  <!-- petits libellés en coins, comme sur huyml.co -->
-  <div class="intro__corner intro__corner--tl" aria-hidden="true">
-    <span>Rai Web Design</span><em data-i18n="intro.c1">Studio web indépendant</em>
-  </div>
-  <div class="intro__corner intro__corner--bl" aria-hidden="true">
-    <span>Tahiti</span><em>UTC−10 · <i id="introClock">--:--</i></em>
-  </div>
-  <div class="intro__corner intro__corner--br" aria-hidden="true">
-    <span data-i18n="intro.c3">Ouverture</span><em data-i18n="intro.c4">Un seul interlocuteur</em>
-  </div>
-
-  <div class="intro__stage">
-    <span class="intro__seed" aria-hidden="true"></span>
-    <div class="intro__name" aria-label="Rai Web Design">
-      <span class="ln"><span>Rai Web</span></span>
-      <span class="ln"><span>Design<b>.</b></span></span>
+  <!-- la feuille claire : le personnage pousse le noir vers la droite et la revele -->
+  <div class="intro__sheet" id="introSheet" aria-hidden="true">
+    <div class="intro__corner intro__corner--tl">
+      <span>Rai Web Design</span><em data-i18n="intro.c1">Studio web indépendant</em>
     </div>
-    <img class="intro__char" id="introChar" src="assets/img/character.webp" alt="" width="640" height="640" decoding="async" onerror="this.remove()">
+    <div class="intro__corner intro__corner--bl">
+      <span>Tahiti</span><em>UTC−10 · <i id="introClock">--:--</i></em>
+    </div>
+    <div class="intro__corner intro__corner--br">
+      <span data-i18n="intro.c3">Ouverture</span><em data-i18n="intro.c4">Un seul interlocuteur</em>
+    </div>
+    <div class="intro__name" aria-label="Rai Web Design">
+      <span>Rai Web</span>
+      <span>Design<sup>©</sup></span>
+    </div>
+    <div class="intro__bar"><i id="introBar"></i></div>
   </div>
 
-  <p class="intro__manifesto" data-i18n="intro.manifesto">Un seul interlocuteur. Du premier croquis à la mise en ligne.</p>
-  <div class="intro__bar" aria-hidden="true"><i id="introBar"></i></div>
-
+  <div class="intro__char" id="introChar" aria-hidden="true">
+    <img src="assets/img/character.webp" alt="" width="640" height="900" decoding="async" onerror="this.parentNode.remove()">
+  </div>
   <button class="intro__skip" id="introSkip" type="button">Passer</button>
-  <span class="intro__curtain" aria-hidden="true"></span>
 </div>
 
 <!-- ============ CURSOR ============ -->

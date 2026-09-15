@@ -82,7 +82,7 @@ function smooth(){
 function intro(done){
   const box = $('#intro');
   if (!box) return done();
-  const bar = $('#introBar'), skip = $('#introSkip');
+  const skip = $('#introSkip'), sheet = $('#introSheet'), char = $('#introChar');
   const seen = (() => { try { return sessionStorage.getItem('rwd-intro'); } catch(e){ return null; } })();
 
   const leave = () => {
@@ -98,34 +98,36 @@ function intro(done){
   document.documentElement.classList.add('is-loading');
 
   const D = CONFIG.intro.duration / 1000;   // 6 s
-  const char = $('#introChar');
+
+  // Le personnage pousse le noir vers la droite : le bord de la feuille claire
+  // suit sa main (a ~80 % de sa largeur, il regarde a droite).
+  const edge = { p: 0 };
+  const cw = () => char ? (char.offsetWidth || char.offsetHeight * 640 / 900) : innerWidth * .18;
+  const paint = () => {
+    const vw = innerWidth, w = cw();
+    const x = -w * 1.15 + edge.p * (vw + w * 1.15);      // depart hors champ a gauche, sortie a droite
+    const hand = x + w * .8;
+    sheet.style.clipPath = `inset(0 ${Math.max(0, Math.min(100, (1 - hand / vw) * 100))}% 0 0)`;
+    if (char) gsap.set(char, { x });
+  };
+  paint();
+
   const tl = gsap.timeline({ defaults:{ ease:'expo.out' }, onComplete: leave });
-
-  tl // 1. la ligne rouge naît du néant
-    .fromTo('.intro__seed', { scaleX:0, opacity:1 }, { scaleX:1, duration:.7, ease:'expo.inOut' }, 0)
-    .to('.intro__glow', { opacity:1, scale:1, duration:1.8, ease:'power2.out' }, .15)
-    .to('.intro__skip', { opacity:1, duration:.5 }, .5)
-
-    // 2. la ligne se retire, le nom monte ligne par ligne
-    .to('.intro__seed', { scaleX:1.2, opacity:0, duration:.5, ease:'power2.in' }, .62)
-    .to('.intro__name .ln>span', { y:0, duration:1.1, stagger:.12 }, .75)
-
-    // 3. le personnage entre par la gauche et vient se poser près du nom
-    .to('.intro__corner', { opacity:1, duration:.7, stagger:.08 }, 1.2);
+  tl.to('.intro__skip', { opacity:1, duration:.5 }, .4)
+    // 1. il entre, pousse, et ressort a droite : le nom se decouvre derriere lui
+    .to(edge, { p:1, duration:3.1, ease:'power2.inOut', onUpdate: paint }, .45);
   if (char) tl
-    .to(char, { opacity:1, x:0, y:0, duration:1.05, ease:'back.out(1.4)' }, 1.15)
-    .to(char, { y:-10, rotate:-2, duration:1.4, ease:'sine.inOut', yoyo:true, repeat:1 }, 2.25);
+    .to(char, { y:-9, duration:.17, ease:'sine.inOut', yoyo:true, repeat:17 }, .45)      // il marche
+    .to(char, { rotate:8, duration:.5, ease:'power2.out' }, .45)                         // il se penche en avant pour pousser
+    .to(char, { rotate:0, duration:.6, ease:'power2.inOut' }, 3.0);
   tl
-    .fromTo('.intro__manifesto', { opacity:0, y:14 }, { opacity:1, y:0, duration:.9 }, 2.0)
-    .to('#introBar', { scaleX:1, duration: D - 1.5, ease:'power1.inOut' }, .6)
+    .to('.intro__corner', { opacity:1, duration:.7, stagger:.08 }, 2.3)
+    .to('#introBar', { scaleX:1, duration: D - 1.4, ease:'power1.inOut' }, .45)
+    // 2. sortie : la feuille remonte et decouvre le site
+    .to(sheet, { yPercent:-100, duration:.85, ease:'expo.inOut' }, D - .95)
+    .to(box, { opacity:0, duration:.3, ease:'power2.out' }, D - .3);
 
-    // 4. sortie : le personnage bondit vers le haut et emporte le rideau avec lui
-    .to(char || {}, { y:-innerHeight*1.2, rotate:6, duration:.85, ease:'power3.in' }, D - 1.45)
-    .to('.intro__name', { yPercent:-40, opacity:0, duration:.7, ease:'power2.in' }, D - 1.25)
-    .to(['.intro__corner','.intro__manifesto','.intro__bar','.intro__skip','.intro__glow'], { opacity:0, duration:.45 }, D - 1.2)
-    .to('.intro__curtain', { scaleY:1, duration:.6, ease:'expo.inOut' }, D - 1.05)
-    .to(box, { opacity:0, duration:.38, ease:'power2.out' }, D - .38);
-
+  addEventListener('resize', paint, { passive:true });
   skip.addEventListener('click', () => { tl.pause(); gsap.to(box,{opacity:0,duration:.35,onComplete:leave}); });
   addEventListener('keydown', e => { if (e.key === 'Escape') skip.click(); }, { once:true });
 }

@@ -597,13 +597,14 @@ const I18N_TICKER = {
 
 /* ---------- 16. HEURE LOCALE DE TAHITI ---------- */
 function clock(){
-  const el = $('#clock');
-  if (!el) return;
+  const els = $$('#clock, #topClock');
+  if (!els.length) return;
   const tick = () => {
     // Tahiti est à UTC-10 toute l'année, sans heure d'été.
     const d = new Date(Date.now() - 10 * 3600 * 1000);
-    el.textContent = String(d.getUTCHours()).padStart(2,'0') + ':' +
-                     String(d.getUTCMinutes()).padStart(2,'0');
+    const t = String(d.getUTCHours()).padStart(2,'0') + ':' +
+              String(d.getUTCMinutes()).padStart(2,'0');
+    els.forEach(el => el.textContent = t);
   };
   tick();
   setInterval(tick, 20000);
@@ -616,10 +617,11 @@ function introClock(){
 
 /* ---------- 17. FIORITURES ---------- */
 function flourish(){
-  // marque fixe : elle apparaît une fois le hero passé
-  const brand = $('#brand');
-  if (brand){
-    const on = () => brand.classList.toggle('is-on', scrollY > innerHeight * 0.7);
+  // la bannière descend une fois le chargement terminé, puis se densifie au défilement
+  const topbar = $('#topbar');
+  if (topbar){
+    requestAnimationFrame(() => setTimeout(() => topbar.classList.add('is-on'), 120));
+    const on = () => topbar.classList.toggle('is-scrolled', scrollY > 40);
     addEventListener('scroll', on, { passive:true }); on();
   }
 
@@ -683,14 +685,15 @@ const I18N = {
     'fab':'Let’s talk',
     'cur.view':'View',
     'intro.manifesto':'One person to talk to. From the first sketch to launch.',
-    'intro.c1':'Independent web studio','intro.c3':'Opening','intro.c4':'One person to talk to',
+    'top.meta':'Independent web studio',
+  'intro.c1':'Independent web studio','intro.c3':'Opening','intro.c4':'One person to talk to',
     'ft.avail':'available',
     'hero.eyebrow':'Independent web studio · Tahiti · since 2026',
-    'hero.l1':'Your website',
-    'hero.l2':'shouldn’t just',
-    'hero.l3':'exist.',
-    'hero.l4':'It should <em class="kin">pay off<i></i></em>',
-    'hero.sub':'I design, build and launch your website. You deal with one person, from start to finish. Delivered in two weeks.',
+    'hero.l1':'My name is Rai.',
+    'hero.l2':'I design, I code',
+    'hero.l3':'and I ship',
+    'hero.l4':'websites that <em class="kin">hold up<i></i></em>',
+    'hero.sub':'A one person studio in Tahiti. You talk to the person who writes the code, from the first sketch to launch.',
     'hero.cta1':'Start my project',
     'hero.cta2':'See my work',
     'hero.scroll':'Scroll',

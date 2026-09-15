@@ -4,10 +4,15 @@
 
 /* ---------- TOKENS ---------- */
 :root{
-  --ink:#060607; --ink-deep:#000; --ink-soft:#0F0F12; --ink-line:#1C1C21;
-  --red:#E6202B; --red-hot:#FF3B30; --red-deep:#8E0F16; --ember:#FF7A45;
-  --white:#fff; --bone:#EDEAE6; --ash:#8A8A93; --ash-dim:#4A4A52;
-  --grad:linear-gradient(100deg,#8E0F16 0%,#E6202B 45%,#FF7A45 100%);
+  /* ENCRE ET CHAUX : noir encre, ivoire chaux, un seul vermillon terreux */
+  --ink:#0B0B0C; --ink-deep:#050506; --ink-soft:#131315; --ink-line:#222226;
+  --red:#E2442E; --red-hot:#F2543A; --red-deep:#A32A18; --ember:#EF8A4C;
+  --white:#fff; --bone:#F5F3EF; --ash:#8C8A85; --ash-dim:#55534E;
+  --grad:linear-gradient(100deg,#A32A18 0%,#E2442E 48%,#EF8A4C 100%);
+
+  /* la chaux : sections claires pleine page, meme matiere que la feuille de l'intro */
+  --sheet:#F2F0EB; --sheet-soft:#EAE7E0; --sheet-line:#D9D5CB;
+  --sheet-ink:#111113; --sheet-ash:#6E6B65;
 
   --s1:.5rem; --s2:1rem; --s3:1.5rem; --s4:2rem; --s5:3rem;
   --s6:4.5rem; --s7:7rem; --s8:10rem;
@@ -96,17 +101,43 @@ button{font:inherit}
   100%{transform:translate(0,0)}
 }
 
-/* ---------- NOM EN TEXTE (marque fixe) ---------- */
-.brand{
-  position:fixed;top:clamp(.9rem,2.4vw,1.8rem);left:clamp(1rem,3vw,2.2rem);z-index:94;
-  opacity:0;transform:translateY(-14px);
-  transition:opacity .5s var(--e-out),transform .5s var(--e-out);
+/* ---------- BANNIERE HAUTE (nom au centre, comme huyml.co) ---------- */
+.topbar{
+  position:fixed;top:0;left:0;right:0;z-index:95;
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  padding:clamp(.6rem,1.4vw,.95rem) clamp(.9rem,3vw,2.2rem);
+  background:rgba(9,9,11,.58);
+  -webkit-backdrop-filter:blur(16px) saturate(140%);backdrop-filter:blur(16px) saturate(140%);
+  border-bottom:1px solid var(--ink-line);
+  opacity:0;transform:translateY(-100%);
+  transition:opacity .7s var(--e-out),transform .8s var(--e-out),background .4s;
 }
-.brand.is-on{opacity:1;transform:none}
+.topbar.is-on{opacity:1;transform:none}
+.topbar.is-scrolled{background:rgba(9,9,11,.86)}
+/* le filet degrade qui souligne la banniere */
+.topbar::after{
+  content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;
+  background:var(--grad);opacity:.5;
+}
+.topbar__meta{
+  margin:0;display:flex;min-width:0;overflow:hidden;align-items:center;gap:.6rem;
+  font-family:var(--ff-mono);font-size:clamp(.6rem,.78vw,.7rem);
+  letter-spacing:.12em;text-transform:uppercase;color:var(--ash-dim);white-space:nowrap;
+}
+.topbar__dot{width:4px;height:4px;border-radius:50%;background:var(--red);flex:none}
+.topbar__time{font-style:normal;color:var(--ash);font-variant-numeric:tabular-nums}
+/* le nom reste au centre exact de la banniere, quoi qu'il y ait autour */
+.brand{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-decoration:none}
 .brand__name{
-  font-family:var(--ff-d);font-weight:var(--d-wght);font-stretch:var(--d-wdth);
-  text-transform:uppercase;font-size:clamp(.82rem,1.15vw,1rem);letter-spacing:-.01em;
-  color:var(--white);white-space:nowrap;
+  font-family:var(--ff-d);font-weight:900;font-stretch:80%;
+  text-transform:uppercase;font-size:clamp(.92rem,1.5vw,1.28rem);letter-spacing:-.03em;
+  color:var(--white);white-space:nowrap;line-height:1;
+  display:inline-block;transition:opacity .3s;
+}
+.brand:hover .brand__name{opacity:.72}
+.brand__name sup{
+  font-size:.34em;font-stretch:100%;letter-spacing:0;vertical-align:top;
+  position:relative;top:.16em;margin-left:.12em;color:var(--red);
 }
 .brand__name b,.intro__name b{
   background:var(--grad);-webkit-background-clip:text;background-clip:text;
@@ -118,7 +149,7 @@ button{font:inherit}
 html.js .intro{display:block;position:fixed;inset:0;z-index:9997;background:var(--ink-deep);overflow:hidden}
 /* la feuille claire, decoupee par clip-path : le bord suit la main du personnage */
 .intro__sheet{
-  position:absolute;inset:0;background:#f3f1ec;color:#0d0d0d;
+  position:absolute;inset:0;background:var(--sheet);color:var(--sheet-ink);
   clip-path:inset(0 100% 0 0);
 }
 /* le nom, tres gras et serre, comme le logotype HUYML */
@@ -126,7 +157,7 @@ html.js .intro{display:block;position:fixed;inset:0;z-index:9997;background:var(
   position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
   font-family:var(--ff-d);font-weight:900;font-stretch:80%;
   text-transform:uppercase;font-size:clamp(3.6rem,15vw,15.5rem);
-  line-height:.84;letter-spacing:-.045em;color:#0d0d0d;
+  line-height:.84;letter-spacing:-.045em;color:var(--sheet-ink);
   transform:translateY(-2vh);
 }
 .intro__name sup{
@@ -146,13 +177,13 @@ html.js .intro{display:block;position:fixed;inset:0;z-index:9997;background:var(
   font-family:var(--ff-mono);font-size:clamp(.62rem,.8vw,.72rem);letter-spacing:.12em;
   text-transform:uppercase;line-height:1.5;opacity:0;
 }
-.intro__corner span{color:#0d0d0d}
-.intro__corner em{font-style:normal;color:#77746c}
-.intro__corner i{font-style:normal;color:#0d0d0d;font-variant-numeric:tabular-nums}
+.intro__corner span{color:var(--sheet-ink)}
+.intro__corner em{font-style:normal;color:var(--sheet-ash)}
+.intro__corner i{font-style:normal;color:var(--sheet-ink);font-variant-numeric:tabular-nums}
 .intro__corner--tl{top:clamp(1.1rem,3vw,2.2rem);left:var(--gutter)}
 .intro__corner--bl{bottom:clamp(4.6rem,10vh,6.4rem);left:var(--gutter)}
 .intro__corner--br{bottom:clamp(4.6rem,10vh,6.4rem);right:var(--gutter);text-align:right}
-.intro__bar{position:absolute;left:var(--gutter);right:var(--gutter);bottom:clamp(1.4rem,4vh,2.6rem);height:2px;background:rgba(13,13,13,.12);overflow:hidden}
+.intro__bar{position:absolute;left:var(--gutter);right:var(--gutter);bottom:clamp(1.4rem,4vh,2.6rem);height:2px;background:rgba(17,17,19,.12);overflow:hidden}
 .intro__bar i{display:block;height:100%;width:100%;background:var(--grad);transform:scaleX(0);transform-origin:left}
 .intro__skip{
   font-family:var(--ff-mono);
@@ -203,13 +234,11 @@ body.has-cur,body.has-cur a,body.has-cur .wrow{cursor:none}
 .fab svg{transition:transform .3s var(--e-out)}
 .fab:hover svg{transform:translateX(5px)}
 
-/* ---------- SÉLECTEUR DE LANGUE ---------- */
+/* ---------- SÉLECTEUR DE LANGUE (dans la banniere) ---------- */
 .lang{
-  position:fixed;top:clamp(.9rem,2.4vw,1.8rem);right:clamp(.9rem,2.4vw,1.8rem);z-index:95;
-  display:flex;align-items:center;gap:.5rem;
-  padding:.4rem .75rem;border-radius:var(--r-pill);
-  background:rgba(12,12,15,.62);border:1px solid rgba(255,255,255,.1);
-  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  margin-left:auto;display:flex;align-items:center;gap:.5rem;
+  padding:.3rem .6rem;border-radius:var(--r-pill);
+  border:1px solid rgba(255,255,255,.12);
 }
 .lang span{width:1px;height:13px;background:rgba(255,255,255,.18)}
 .lang button{
@@ -226,6 +255,18 @@ body.has-cur,body.has-cur a,body.has-cur .wrow{cursor:none}
 }
 .lang button[aria-pressed="true"]::after{transform:scaleX(1)}
 body.has-cur .lang button{cursor:none}
+
+/* ---------- SECTION CLAIRE (chaux) ---------- */
+/* les jetons sont redefinis localement : tout ce qui est dedans suit sans etre reecrit */
+.sheet{
+  --ink:var(--sheet); --ink-deep:var(--sheet); --ink-soft:var(--sheet-soft); --ink-line:var(--sheet-line);
+  --white:var(--sheet-ink); --bone:var(--sheet-ink); --ash:var(--sheet-ash); --ash-dim:#9C9890;
+  background:var(--sheet);color:var(--sheet-ink);
+}
+/* les fonds translucides prevus pour le noir sont retournes pour la chaux */
+.sheet .panel{background:rgba(17,17,19,.035);box-shadow:inset 0 1px 0 rgba(17,17,19,.06)}
+.sheet .panel--alt{background:linear-gradient(160deg,rgba(226,68,46,.11),rgba(17,17,19,.02) 55%)}
+.sheet .scarce{background:rgba(255,255,255,.72);border-color:rgba(226,68,46,.3)}
 
 /* ---------- BUTTONS ---------- */
 .btn{
@@ -614,6 +655,9 @@ html.js .wrow{opacity:0}
 /* cibles tactiles : 44px minimum partout */
 .lang button{min-width:44px;min-height:44px}
 .brand{min-height:44px;display:flex;align-items:center}
+.topbar__meta{display:none}
+.topbar__lbl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topbar__lbl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ft__col a{padding-block:.62rem;min-height:44px;min-width:44px;display:flex;align-items:center}
 @media (hover:hover) and (pointer:fine){
   .ft__col a{padding-block:.28rem;min-height:0;display:block}
@@ -622,6 +666,9 @@ html.js .wrow{opacity:0}
 }
 
 @media (max-width:699px){
+  /* la banniere reste lisible : nom un peu plus petit, pastille de langue compacte */
+  .brand__name{font-size:.86rem}
+  .lang{gap:.3rem;padding:.22rem .42rem}
   .intro__char{--ch:clamp(150px,34vh,300px)}
   .intro__name{font-size:clamp(3rem,18vw,5.4rem);transform:translateY(-6vh)}
   .intro__corner--br{display:none}
@@ -630,6 +677,9 @@ html.js .wrow{opacity:0}
 /* ---- TABLETTE PORTRAIT (700px et plus) ---- */
 @media (min-width:700px){
   :root{--t-hero:clamp(3.1rem,7.9vw,5.4rem)}
+  .topbar__meta{display:flex}
+  .topbar__lbl,.topbar__dot{display:none}
+  .topbar__lbl,.topbar__dot{display:none}
   .pillars .wrap{--indent:clamp(2rem,5vw,5rem)}
   .grid3{grid-template-columns:repeat(2,1fr)}
   .grid3 .card:last-child{grid-column:1/-1}
@@ -648,6 +698,10 @@ html.js .wrow{opacity:0}
 
 /* ---- TABLETTE PAYSAGE ET ORDINATEUR (1025px et plus) ---- */
 @media (min-width:1025px){
+  .lang button{min-width:34px;min-height:34px;padding:.3rem .32rem}
+  .topbar__lbl,.topbar__dot{display:inline-flex}
+  .topbar__lbl,.topbar__dot{display:inline-flex}
+  .brand{min-height:0}
   :root{--t-hero:clamp(4.4rem,6.3vw,7.1rem)}
   .pillars .wrap{--indent:clamp(4rem,8vw,10rem)}
   .grid3{grid-template-columns:repeat(3,1fr)}
@@ -677,3 +731,15 @@ html.js .wrow{opacity:0}
 
 /* perf */
 .ft{content-visibility:auto;contain-intrinsic-size:auto 700px}
+
+/* tres petits ecrans : le nom se resserre pour ne jamais toucher la pastille de langue */
+@media (max-width:409px){
+  .brand__name{font-size:.7rem;letter-spacing:-.04em}
+  .lang{padding:.2rem .3rem;gap:.2rem}
+}
+
+/* tout ce qui se touche garde 44px sur les appareils tactiles */
+@media (pointer:coarse){
+  .lang button{min-width:44px;min-height:44px}
+  .brand{min-height:44px;display:flex;align-items:center}
+}

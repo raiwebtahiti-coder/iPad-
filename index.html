@@ -115,16 +115,24 @@
 </a>
 
 <!-- ============ MARQUE FIXE ============ -->
-<a class="brand" id="brand" href="#hero" aria-label="Rai Web Design, retour en haut">
-  <span class="brand__name">Rai Web Design<b>.</b></span>
-</a>
+<!-- ============ BANNIERE HAUTE ============ -->
+<header class="topbar" id="topbar">
+  <p class="topbar__meta" aria-hidden="true">
+    <span class="topbar__lbl" data-i18n="top.meta">Studio web indépendant</span>
+    <i class="topbar__dot"></i>
+    <span class="topbar__loc">Tahiti · UTC−10 · <i class="topbar__time" id="topClock">--:--</i></span>
+  </p>
 
-<!-- ============ LANGUE ============ -->
-<div class="lang" id="lang" role="group" aria-label="Langue / Language">
-  <button type="button" data-lang="fr" aria-pressed="true">FR</button>
-  <span aria-hidden="true"></span>
-  <button type="button" data-lang="en" aria-pressed="false">EN</button>
-</div>
+  <a class="brand" id="brand" href="#hero" aria-label="Rai Web Design, retour en haut">
+    <span class="brand__name">Rai Web Design<sup>©</sup></span>
+  </a>
+
+  <div class="lang" id="lang" role="group" aria-label="Langue / Language">
+    <button type="button" data-lang="fr" aria-pressed="true">FR</button>
+    <span aria-hidden="true"></span>
+    <button type="button" data-lang="en" aria-pressed="false">EN</button>
+  </div>
+</header>
 
 <main>
 
@@ -139,13 +147,13 @@
     <p class="eyebrow reveal-up" data-i18n="hero.eyebrow">Studio web indépendant · Tahiti · depuis 2026</p>
 
     <h1 class="hero__title">
-      <span class="ln"><span data-i18n="hero.l1">Votre site</span></span>
-      <span class="ln"><span data-i18n="hero.l2">ne doit pas juste</span></span>
-      <span class="ln"><span data-i18n="hero.l3">exister.</span></span>
-      <span class="ln"><span data-i18n="hero.l4">Il doit <em class="kin">rapporter<i></i></em></span></span>
+      <span class="ln"><span data-i18n="hero.l1">Je m’appelle Rai.</span></span>
+      <span class="ln"><span data-i18n="hero.l2">Je dessine, je code</span></span>
+      <span class="ln"><span data-i18n="hero.l3">et je mets en ligne</span></span>
+      <span class="ln"><span data-i18n="hero.l4">des sites qui <em class="kin">tiennent<i></i></em></span></span>
     </h1>
 
-    <p class="hero__sub reveal-up" data-i18n="hero.sub">Je conçois, je code et je mets en ligne votre site. Vous parlez à une seule personne, du début à la fin. Livré en deux semaines.</p>
+    <p class="hero__sub reveal-up" data-i18n="hero.sub">Studio d’une personne à Tahiti. Vous parlez au type qui écrit le code, du premier croquis à la mise en ligne.</p>
 
     <div class="hero__cta reveal-up">
       <a class="btn btn--p" data-wa href="#" target="_blank" rel="noopener noreferrer" aria-label="Démarrer mon projet sur WhatsApp">
@@ -204,7 +212,7 @@
 </div>
 
 <!-- ================= MISSION ================= -->
-<section class="sec mission" id="mission">
+<section class="sec mission sheet" id="mission">
   <div class="wrap">
     <p class="label" data-i18n="mission.label">01 / Ma mission</p>
     <p class="mission__txt" data-split data-i18n-mission
@@ -271,7 +279,7 @@
 </section>
 
 <!-- ================= OFFER ================= -->
-<section class="sec offer" id="offer">
+<section class="sec offer sheet" id="offer">
   <div class="wrap">
     <p class="label" data-i18n="offer.label">04 / L'offre</p>
     <h2 class="h1 reveal-up" data-i18n="offer.h">Une offre.<br>Tout compris.</h2>

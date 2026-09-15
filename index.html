@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Rai Web Design · Création &amp; modernisation de sites web · Tahiti</title>
-<meta name="description" content="Rai, studio web d'une personne à Tahiti. Je dessine, je code et je mets en ligne des sites qui tiennent. Hébergement inclus, livré en deux semaines, un seul interlocuteur.">
+<meta name="description" content="Rai, studio web d'une personne à Tahiti. Je dessine, je code et je mets en ligne des sites qui tiennent. Hébergement inclus, livré en deux semaines, une seule personne du début à la fin.">
 <link rel="canonical" href="https://raiweb.design/">
 <meta name="theme-color" content="#0B0B0C">
 <meta name="robots" content="index, follow, max-image-preview:large">
@@ -86,7 +86,7 @@
       <span>Tahiti</span><em>UTC−10 · <i id="introClock">--:--</i></em>
     </div>
     <div class="intro__corner intro__corner--br">
-      <span data-i18n="intro.c3">Ouverture</span><em data-i18n="intro.c4">Un seul interlocuteur</em>
+      <span data-i18n="intro.c3">Ouverture</span><em data-i18n="intro.c4">Une seule personne</em>
     </div>
     <div class="intro__name" aria-label="Rai Web Design">
       <span>Rai Web</span>
@@ -116,22 +116,46 @@
 
 <!-- ============ BANNIERE HAUTE ============ -->
 <header class="topbar" id="topbar">
-  <p class="topbar__meta" aria-hidden="true">
-    <span class="topbar__lbl" data-i18n="top.meta">Studio web indépendant</span>
-    <i class="topbar__dot"></i>
-    <span class="topbar__loc">Tahiti · UTC−10 · <i class="topbar__time" id="topClock">--:--</i></span>
-  </p>
+  <button class="mbtn" id="menuBtn" type="button" aria-expanded="false" aria-controls="menu">
+    <span class="mbtn__o" data-i18n="menu.open">Menu</span>
+    <span class="mbtn__c" data-i18n="menu.close">Fermer</span>
+    <i class="mbtn__dots" aria-hidden="true"><b></b><b></b><b></b><b></b></i>
+  </button>
 
   <a class="brand" id="brand" href="#hero" aria-label="Rai Web Design, retour en haut">
-    <span class="brand__name">Rai Web Design<sup>©</sup></span>
+    <span class="brand__name">Rai Web Design<sup>&copy;</sup></span>
   </a>
 
-  <div class="lang" id="lang" role="group" aria-label="Langue / Language">
-    <button type="button" data-lang="fr" aria-pressed="true">FR</button>
-    <span aria-hidden="true"></span>
-    <button type="button" data-lang="en" aria-pressed="false">EN</button>
+  <div class="topbar__right">
+    <div class="lang" id="lang" role="group" aria-label="Langue / Language">
+      <button type="button" data-lang="fr" aria-pressed="true">FR</button>
+      <span aria-hidden="true"></span>
+      <button type="button" data-lang="en" aria-pressed="false">EN</button>
+    </div>
+    <a class="tcall" data-wa href="#" target="_blank" rel="noopener noreferrer">
+      <span data-i18n="top.call">Demander un appel</span>
+    </a>
   </div>
 </header>
+
+<!-- ============ MENU PLEIN ECRAN ============ -->
+<div class="menu sheet" id="menu" hidden>
+  <div class="menu__inner">
+    <p class="menu__label" data-i18n="menu.label">Navigation</p>
+    <nav class="menu__nav" aria-label="Menu principal">
+      <a href="#mission"><i>01</i><em data-i18n="menu.n1">Ma mission</em></a>
+      <a href="#services"><i>02</i><em data-i18n="menu.n2">Ce que je fais</em></a>
+      <a href="#work"><i>03</i><em data-i18n="menu.n3">Réalisations</em></a>
+      <a href="#offer"><i>04</i><em data-i18n="menu.n4">L’offre</em></a>
+      <a href="#contact"><i>05</i><em data-i18n="menu.n5">Contact</em></a>
+    </nav>
+    <div class="menu__foot">
+      <a class="menu__link" data-wa href="#" target="_blank" rel="noopener noreferrer">WhatsApp +689 89 37 48 86</a>
+      <a class="menu__link" data-mail href="#">rai.web.tahiti@gmail.com</a>
+      <p class="menu__loc">Tahiti · UTC−10 · <i id="menuClock">--:--</i></p>
+    </div>
+  </div>
+</div>
 
 <main>
 
@@ -321,36 +345,33 @@
   <div class="wrap">
     <p class="label" data-i18n="work.label">05 / Réalisations <i>(3)</i></p>
     <h2 class="h1 reveal-up" data-i18n="work.h">Trois sites livrés.<br>Trois clients satisfaits.</h2>
+    <p class="work__hint reveal-up" data-i18n="work.hint">Cliquez sur un projet pour l’ouvrir en ligne, le site s’affiche en entier dans un nouvel onglet.</p>
 
     <div class="wlist" id="wlist">
-      <a class="wrow" href="https://heiherelodge.com" target="_blank" rel="noopener noreferrer" data-img="assets/img/work-01.jpg">
+      <a class="wrow" href="https://heiherelodge.com" target="_blank" rel="noopener noreferrer">
         <span class="wrow__n">01</span>
         <span class="wrow__t" data-i18n="w1.t">Heihere Lodge</span>
         <span class="wrow__m" data-i18n="w1.m">Location de vacances · Moorea</span>
         <span class="wrow__y">2026</span>
         <svg class="wrow__a" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <img class="wrow__inline" src="assets/img/work-01.jpg" alt="" loading="lazy" decoding="async" width="680" height="440">
       </a>
-      <a class="wrow" href="https://raikoglow.com" target="_blank" rel="noopener noreferrer" data-img="assets/img/work-02.jpg">
+      <a class="wrow" href="https://raikoglow.com" target="_blank" rel="noopener noreferrer">
         <span class="wrow__n">02</span>
         <span class="wrow__t" data-i18n="w2.t">Raiko Glow</span>
         <span class="wrow__m" data-i18n="w2.m">Boutique en ligne · LED</span>
         <span class="wrow__y">2026</span>
         <svg class="wrow__a" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <img class="wrow__inline" src="assets/img/work-02.jpg" alt="" loading="lazy" decoding="async" width="680" height="440">
       </a>
-      <div class="wrow wrow--soon" data-img="assets/img/work-03.jpg">
+      <a class="wrow" href="https://moanahitilodge.com" target="_blank" rel="noopener noreferrer">
         <span class="wrow__n">03</span>
-        <span class="wrow__t" data-i18n="w3.t">Troisième projet</span>
-        <span class="wrow__m" data-i18n="w3.m">Détails à venir</span>
+        <span class="wrow__t" data-i18n="w3.t">Moanahiti Lodge</span>
+        <span class="wrow__m" data-i18n="w3.m">Hébergement · Polynésie française</span>
         <span class="wrow__y">2026</span>
-        <span class="wrow__dot" aria-hidden="true"></span>
-        <img class="wrow__inline" src="assets/img/work-03.jpg" alt="" loading="lazy" decoding="async" width="680" height="440">
-      </div>
+        <svg class="wrow__a" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
     </div>
-    <p class="work__more reveal-up" data-i18n="work.more">+ d'autres projets actuellement en production</p>
+    <p class="work__more reveal-up" data-i18n="work.more">+ d’autres projets actuellement en production</p>
   </div>
-  <figure class="peek" id="peek" aria-hidden="true"><img src="" alt="" decoding="async"></figure>
 </section>
 
 <!-- ================= FINAL CTA ================= -->

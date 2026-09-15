@@ -467,7 +467,7 @@ function offer(){
 
 /* ---------- 12. WORK ---------- */
 function work(){
-  const list = $('#wlist'), peek = $('#peek');
+  const list = $('#wlist');
   const rows = $$('.wrow', list || document.createElement('i'));
   if (!rows.length) return;
 
@@ -475,33 +475,18 @@ function work(){
   else gsap.to(rows,{ opacity:1, duration:.8, stagger:.09, ease:'expo.out',
         scrollTrigger:{ trigger:list, start:'top 82%', once:true }});
 
-  if (!fine || !peek || reduced) return;
-  const img = $('img', peek);
-  let px=0,py=0,tx=0,ty=0,lx=0,vis=false;
-
+  if (!fine) return;
+  // la ligne survolee passe devant, les autres s'effacent
   rows.forEach(r=>{
     r.addEventListener('pointerenter',()=>{
       list.classList.add('dim'); rows.forEach(x=>x.classList.toggle('act',x===r));
-      img.src = r.dataset.img; vis=true; peek.style.opacity='1';
     });
   });
   list.addEventListener('pointerleave',()=>{
     list.classList.remove('dim'); rows.forEach(x=>x.classList.remove('act'));
-    vis=false; peek.style.opacity='0';
   });
-  addEventListener('pointermove', e=>{ tx=e.clientX+28; ty=e.clientY-90; }, {passive:true});
-
-  const raf = ()=>{ 
-    const nx = lerp(px,tx,.12), ny = lerp(py,ty,.12);
-    const rot = clamp((nx-px)*0.55,-7,7);
-    px=nx; py=ny; lx=rot;
-    if (vis) peek.style.transform = `translate3d(${px}px,${py}px,0) rotate(${lx.toFixed(2)}deg)`;
-    requestAnimationFrame(raf);
-  };
-  requestAnimationFrame(raf);
 }
 
-/* ---------- 13. CTA FINAL ---------- */
 function finalCta(){
   const lines = $$('.fin__t .ln > span'), rest = $$('.fin .reveal-up'), mag = $('#mag');
   if (!hasGSAP() || reduced){
@@ -590,14 +575,14 @@ function ticker(){
 }
 const I18N_TICKER = {
   fr: ['Création de site web','Modernisation','Hébergement géré','Livré en 2 semaines',
-       'Un seul interlocuteur','Tahiti · clients partout'],
+       'Une seule personne','Tahiti · clients partout'],
   en: ['Website creation','Modernisation','Managed hosting','Delivered in 2 weeks',
-       'One person to talk to','Tahiti · clients everywhere']
+       'One person, start to finish','Tahiti · clients everywhere']
 };
 
 /* ---------- 16. HEURE LOCALE DE TAHITI ---------- */
 function clock(){
-  const els = $$('#clock, #topClock');
+  const els = $$('#clock, #menuClock');
   if (!els.length) return;
   const tick = () => {
     // Tahiti est à UTC-10 toute l'année, sans heure d'été.
@@ -613,6 +598,47 @@ function introClock(){
   const el = $('#introClock'); if (!el) return;
   const d = new Date(Date.now() - 10*3600*1000);
   el.textContent = String(d.getUTCHours()).padStart(2,'0')+':'+String(d.getUTCMinutes()).padStart(2,'0');
+}
+
+/* ---------- 16 bis. MENU PLEIN ECRAN ---------- */
+function menu(){
+  const btn = $('#menuBtn'), panel = $('#menu');
+  if (!btn || !panel) return;
+  const root = document.documentElement;
+  let timer = null;
+
+  const open = () => {
+    clearTimeout(timer);
+    panel.hidden = false;
+    requestAnimationFrame(() => root.classList.add('menu-open'));
+    btn.setAttribute('aria-expanded','true');
+    if (lenis) lenis.stop(); else document.body.style.overflow = 'hidden';
+  };
+  const close = () => {
+    root.classList.remove('menu-open');
+    btn.setAttribute('aria-expanded','false');
+    if (lenis) lenis.start(); else document.body.style.overflow = '';
+    timer = setTimeout(() => { panel.hidden = true; }, 800);
+  };
+  const isOpen = () => root.classList.contains('menu-open');
+
+  btn.addEventListener('click', () => isOpen() ? close() : open());
+
+  // un lien ferme le rideau puis emmene a la section
+  $$('.menu__nav a', panel).forEach(a => {
+    a.addEventListener('click', e => {
+      const t = $(a.getAttribute('href'));
+      if (!t) return;
+      e.preventDefault();
+      close();
+      setTimeout(() => {
+        if (lenis) lenis.scrollTo(t, { offset:0, duration:1.2, force:true });
+        else t.scrollIntoView({ behavior:'smooth', block:'start' });
+      }, 140);
+    });
+  });
+  $$('.menu__foot a', panel).forEach(a => a.addEventListener('click', close));
+  addEventListener('keydown', e => { if (e.key === 'Escape' && isOpen()) close(); });
 }
 
 /* ---------- 17. FIORITURES ---------- */
@@ -631,12 +657,6 @@ function flourish(){
   gsap.to('.hero__wrap', {
     yPercent:-12, opacity:.25, ease:'none',
     scrollTrigger:{ trigger:'.hero', start:'top top', end:'bottom top', scrub:.6 }
-  });
-
-  // les captures de projets respirent au défilement
-  $$('.wrow__inline').forEach(img => {
-    gsap.fromTo(img, { yPercent:-5 }, { yPercent:5, ease:'none',
-      scrollTrigger:{ trigger:img, start:'top bottom', end:'bottom top', scrub:true }});
   });
 
   // aimantation des deux appels à l'action du hero
@@ -684,11 +704,13 @@ const I18N = {
     'skip':'Skip to content',
     'fab':'Let’s talk',
     'cur.view':'View',
-    'intro.manifesto':'One person to talk to. From the first sketch to launch.',
-    'top.meta':'Independent web studio',
-  'intro.c1':'Independent web studio','intro.c3':'Opening','intro.c4':'One person to talk to',
+    'intro.manifesto':'One person, from the first sketch to launch.',
+      'intro.c1':'Independent web studio','intro.c3':'Opening','intro.c4':'One person, start to finish',
     'ft.avail':'available',
     'hero.eyebrow':'Independent web studio · Tahiti · since 2026',
+    'menu.open':'Menu','menu.close':'Close','menu.label':'Navigation',
+    'menu.n1':'My mission','menu.n2':'What I do','menu.n3':'Work','menu.n4':'The offer','menu.n5':'Contact',
+    'top.call':'Request a call',
     'hero.l1':'My name is Rai.',
     'hero.l2':'I design, I code',
     'hero.l3':'and I ship',
@@ -749,9 +771,10 @@ const I18N = {
 
     'work.label':'05 / Work <i>(3)</i>',
     'work.h':'Three sites delivered.<br>Three happy clients.',
+    'work.hint':'Click a project to open it live, the whole site loads in a new tab.',
     'w1.t':'Heihere Lodge','w1.m':'Holiday rental · Moorea',
     'w2.t':'Raiko Glow','w2.m':'Online store · LED',
-    'w3.t':'Third project','w3.m':'Details to come',
+    'w3.t':'Moanahiti Lodge','w3.m':'Accommodation · French Polynesia',
     'work.more':'+ more projects currently in production',
 
     'fin.l1':'Let’s','fin.l2':'talk.',
@@ -765,7 +788,7 @@ const I18N = {
     'ft.made':'Designed and coded in Tahiti',
 
     'meta.title':'Rai Web Design · Website creation &amp; redesign · Tahiti',
-    'meta.desc':'Independent web studio in Tahiti. I design, build and launch your website. Hosting included, delivered in two weeks. You deal with one person, from start to finish.',
+    'meta.desc':'Rai, a one person web studio in Tahiti. I design, I code and I ship websites that hold up. Hosting included, delivered in two weeks.',
     'wa.msg':'Hi Rai, I’d like to build a website.'
   }
 };
@@ -848,6 +871,7 @@ function boot(){
     work();
     finalCta();
     chrome();
+    menu();
     ticker();
     clock();
     flourish();

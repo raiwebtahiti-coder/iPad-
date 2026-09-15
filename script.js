@@ -98,6 +98,7 @@ function intro(done){
   document.documentElement.classList.add('is-loading');
 
   const D = CONFIG.intro.duration / 1000;   // 6 s
+  const char = $('#introChar');
   const tl = gsap.timeline({ defaults:{ ease:'expo.out' }, onComplete: leave });
 
   tl // 1. la ligne rouge naît du néant
@@ -105,31 +106,24 @@ function intro(done){
     .to('.intro__glow', { opacity:1, scale:1, duration:1.8, ease:'power2.out' }, .15)
     .to('.intro__skip', { opacity:1, duration:.5 }, .5)
 
-    // 2. elle se disperse, l'orbite se referme autour du vide
-    .to('.intro__seed', { scaleX:1.2, opacity:0, duration:.55, ease:'power2.in' }, .68)
-    .set('.intro__logo', { opacity:1 }, .68)
-    .fromTo('.intro__logo .lg-orbit__a', { opacity:0, rotate:-48, scale:.84 },
-                                         { opacity:1, rotate:0, scale:1, duration:1.15 }, .72)
-    .fromTo('.intro__logo .lg-orbit__b', { opacity:0, rotate:-48, scale:.84 },
-                                         { opacity:1, rotate:0, scale:1, duration:1.15 }, .84)
+    // 2. la ligne se retire, le nom monte ligne par ligne
+    .to('.intro__seed', { scaleX:1.2, opacity:0, duration:.5, ease:'power2.in' }, .62)
+    .to('.intro__name .ln>span', { y:0, duration:1.1, stagger:.12 }, .75)
 
-    // 3. le mot se lève derrière l'orbite
-    .fromTo('.intro__logo .lg-word',   { opacity:0, yPercent:32 },
-                                       { opacity:1, yPercent:0, duration:1 }, 1.35)
-    .fromTo('.intro__logo .lg-agency', { opacity:0, x:22 },
-                                       { opacity:1, x:0, duration:.7 }, 1.95)
-    .to('.intro__tag', { opacity:1, duration:.6 }, 1.8)
-    .fromTo('.intro__manifesto', { opacity:0, y:14 }, { opacity:1, y:0, duration:.9 }, 2.15)
+    // 3. le personnage entre par la gauche et vient se poser près du nom
+    .to('.intro__corner', { opacity:1, duration:.7, stagger:.08 }, 1.2);
+  if (char) tl
+    .to(char, { opacity:1, x:0, y:0, duration:1.05, ease:'back.out(1.4)' }, 1.15)
+    .to(char, { y:-10, rotate:-2, duration:1.4, ease:'sine.inOut', yoyo:true, repeat:1 }, 2.25);
+  tl
+    .fromTo('.intro__manifesto', { opacity:0, y:14 }, { opacity:1, y:0, duration:.9 }, 2.0)
+    .to('#introBar', { scaleX:1, duration: D - 1.5, ease:'power1.inOut' }, .6)
 
-    // 4. la barre se remplit sur toute la durée, le logo respire
-    .to(bar, { scaleX:1, duration: D - 1.5, ease:'power1.inOut' }, .6)
-    .to('.intro__logo', { scale:1.035, duration: D - 3.3, ease:'sine.inOut' }, 2.3)
-
-    // 5. sortie : le logo se retire, le rideau s'ouvre sur le site
-    .to('.intro__logo', { scale:1.12, opacity:0, filter:'blur(8px)', duration:.7, ease:'power2.in' }, D - 1.35)
-    .to('.intro__glow', { opacity:0, duration:.6 }, D - 1.35)
-    .to(['.intro__foot','.intro__bar','.intro__skip','.intro__manifesto'], { opacity:0, y:22, duration:.5 }, D - 1.3)
-    .to('.intro__curtain', { scaleY:1, duration:.55, ease:'expo.inOut' }, D - .8)
+    // 4. sortie : le personnage bondit vers le haut et emporte le rideau avec lui
+    .to(char || {}, { y:-innerHeight*1.2, rotate:6, duration:.85, ease:'power3.in' }, D - 1.45)
+    .to('.intro__name', { yPercent:-40, opacity:0, duration:.7, ease:'power2.in' }, D - 1.25)
+    .to(['.intro__corner','.intro__manifesto','.intro__bar','.intro__skip','.intro__glow'], { opacity:0, duration:.45 }, D - 1.2)
+    .to('.intro__curtain', { scaleY:1, duration:.6, ease:'expo.inOut' }, D - 1.05)
     .to(box, { opacity:0, duration:.38, ease:'power2.out' }, D - .38);
 
   skip.addEventListener('click', () => { tl.pause(); gsap.to(box,{opacity:0,duration:.35,onComplete:leave}); });
@@ -612,6 +606,11 @@ function clock(){
   tick();
   setInterval(tick, 20000);
 }
+function introClock(){
+  const el = $('#introClock'); if (!el) return;
+  const d = new Date(Date.now() - 10*3600*1000);
+  el.textContent = String(d.getUTCHours()).padStart(2,'0')+':'+String(d.getUTCMinutes()).padStart(2,'0');
+}
 
 /* ---------- 17. FIORITURES ---------- */
 function flourish(){
@@ -682,6 +681,7 @@ const I18N = {
     'fab':'Let’s talk',
     'cur.view':'View',
     'intro.manifesto':'One person to talk to. From the first sketch to launch.',
+    'intro.c1':'Independent web studio','intro.c3':'Opening','intro.c4':'One person to talk to',
     'ft.avail':'available',
     'hero.eyebrow':'Independent web studio · Tahiti · since 2026',
     'hero.l1':'Your website',
@@ -828,6 +828,7 @@ function afterLangChange(){
 /* ---------- BOOT ---------- */
 function boot(){
   links();
+  introClock();
   intro(() => {
     smooth();
     i18nInit();   // avant hero() : la langue doit être posée avant que

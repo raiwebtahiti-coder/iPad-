@@ -96,20 +96,22 @@ button{font:inherit}
   100%{transform:translate(0,0)}
 }
 
-/* ---------- LOGO ---------- */
-.lg{display:block;width:100%;height:auto;color:var(--red)}
-.lg text{font-family:var(--ff-logo);font-weight:400;font-stretch:normal}
-.lg .lg-orbit__a,.lg .lg-orbit__b{transform-box:fill-box;transform-origin:center}
-
+/* ---------- NOM EN TEXTE (marque fixe) ---------- */
 .brand{
   position:fixed;top:clamp(.9rem,2.4vw,1.8rem);left:clamp(1rem,3vw,2.2rem);z-index:94;
-  width:clamp(128px,13vw,186px);opacity:0;transform:translateY(-14px) scale(.94);
-  transition:opacity .5s var(--e-out),transform .5s var(--e-out),filter .35s;
-  filter:drop-shadow(0 0 0 rgba(230,32,43,0));
+  opacity:0;transform:translateY(-14px);
+  transition:opacity .5s var(--e-out),transform .5s var(--e-out);
 }
 .brand.is-on{opacity:1;transform:none}
-.brand:hover{filter:drop-shadow(0 0 22px rgba(230,32,43,.55))}
-.brand .lg{color:var(--red)}
+.brand__name{
+  font-family:var(--ff-d);font-weight:var(--d-wght);font-stretch:var(--d-wdth);
+  text-transform:uppercase;font-size:clamp(.82rem,1.15vw,1rem);letter-spacing:-.01em;
+  color:var(--white);white-space:nowrap;
+}
+.brand__name b,.intro__name b{
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;font-weight:inherit;
+}
 
 /* ---------- INTRO ---------- */
 .intro{display:none}
@@ -125,28 +127,51 @@ html.js .intro{
   background:radial-gradient(circle,rgba(230,32,43,.34) 0%,rgba(142,15,22,.14) 34%,transparent 66%);
   filter:blur(46px);
 }
-.intro__stage{
-  position:absolute;inset:0;display:grid;place-items:center;
-  padding-inline:var(--gutter);
-}
+.intro__stage{position:absolute;inset:0;display:grid;place-items:center;padding-inline:var(--gutter)}
 .intro__seed{
   grid-area:1/1;width:min(78vw,1000px);height:2px;border-radius:3px;
   background:linear-gradient(90deg,transparent,var(--red-deep) 10%,var(--red) 42%,var(--ember) 50%,var(--red) 58%,var(--red-deep) 90%,transparent);
   box-shadow:0 0 60px 10px rgba(230,32,43,.5);transform:scaleX(0);
 }
-.intro__logo{
-  grid-area:1/1;position:relative;width:min(84vw,940px);
-  opacity:0;overflow:hidden;
+/* le nom : deux lignes qui montent depuis un masque, comme le hero */
+.intro__name{
+  grid-area:1/1;position:relative;z-index:2;text-align:center;
+  font-family:var(--ff-d);font-weight:var(--d-wght);font-stretch:var(--d-wdth);
+  text-transform:uppercase;font-size:clamp(3.2rem,12.5vw,13.5rem);
+  line-height:.9;letter-spacing:-.035em;color:var(--white);
+  transform:translateY(-4vh);
 }
-.intro__logo .lg-orbit__a,.intro__logo .lg-orbit__b{opacity:0}
-.intro__logo .lg-word{opacity:0}
-.intro__logo .lg-agency{opacity:0}
-.intro__foot{position:relative;display:flex;align-items:flex-end;gap:2rem;overflow:hidden}
-.intro__tag{
-  font-family:var(--ff-mono);font-size:var(--t-label);letter-spacing:.18em;text-transform:uppercase;
-  color:var(--ash-dim);padding-bottom:.2rem;opacity:0;
+.intro__name .ln{padding-bottom:.14em;margin-bottom:-.1em}
+html.js .intro__name .ln>span{transform:translateY(110%)}
+/* le personnage, en bas a gauche du nom, entre par la gauche */
+.intro__char{
+  grid-area:1/1;justify-self:start;align-self:end;z-index:3;
+  width:auto;height:clamp(150px,30vh,340px);
+  margin-left:clamp(0px,6vw,9rem);margin-bottom:clamp(6rem,14vh,10rem);
+  opacity:0;transform:translate(-40%,10%);
+  pointer-events:none;user-select:none;
 }
-.intro__bar{position:relative;height:2px;background:var(--ink-line);margin-top:1.4rem;overflow:hidden}
+/* libelles en coins, mono, comme huyml.co */
+.intro__corner{
+  position:absolute;z-index:4;display:flex;flex-direction:column;gap:.2rem;
+  font-family:var(--ff-mono);font-size:clamp(.62rem,.8vw,.72rem);letter-spacing:.12em;
+  text-transform:uppercase;line-height:1.5;opacity:0;
+}
+.intro__corner span{color:var(--bone)}
+.intro__corner em{font-style:normal;color:var(--ash-dim)}
+.intro__corner i{font-style:normal;color:var(--ash);font-variant-numeric:tabular-nums}
+.intro__corner--tl{top:clamp(1.1rem,3vw,2.2rem);left:var(--gutter)}
+.intro__corner--bl{bottom:clamp(4.6rem,10vh,6.4rem);left:var(--gutter)}
+.intro__corner--br{bottom:clamp(4.6rem,10vh,6.4rem);right:var(--gutter);text-align:right}
+.intro__manifesto{
+  position:absolute;left:var(--gutter);right:var(--gutter);
+  bottom:clamp(7.6rem,17vh,10.6rem);
+  margin:0;text-align:center;opacity:0;
+  font-family:var(--ff-mono);font-size:clamp(.66rem,1.3vw,.82rem);
+  letter-spacing:.14em;text-transform:uppercase;color:var(--ash);
+  max-width:44ch;margin-inline:auto;line-height:1.7;
+}
+.intro__bar{position:absolute;left:var(--gutter);right:var(--gutter);bottom:clamp(1.4rem,4vh,2.6rem);height:2px;background:var(--ink-line);overflow:hidden}
 .intro__bar i{display:block;height:100%;width:100%;background:var(--grad);transform:scaleX(0);transform-origin:left}
 .intro__skip{
   font-family:var(--ff-mono);
@@ -622,6 +647,13 @@ html.js .wrow{opacity:0}
   .ft__col a{padding-block:.28rem;min-height:0;display:block}
   .ft__logotype span:last-child{display:block}
   .ft__logotype span{opacity:.34}
+}
+
+@media (max-width:699px){
+  .intro__char{height:clamp(120px,22vh,200px);justify-self:end;margin-left:0;margin-right:0;margin-bottom:clamp(7.5rem,20vh,10rem)}
+  .intro__manifesto{right:auto;width:56%;max-width:none;margin-inline:0;text-align:left}
+  .intro__name{font-size:clamp(2.9rem,15vw,4.6rem);transform:translateY(-8vh)}
+  .intro__corner--br{display:none}
 }
 
 /* ---- TABLETTE PORTRAIT (700px et plus) ---- */

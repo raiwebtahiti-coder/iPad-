@@ -147,9 +147,10 @@
     <nav class="menu__nav" aria-label="Menu principal">
       <a href="#mission"><i>01</i><em data-i18n="menu.n1">Ma mission</em></a>
       <a href="#services"><i>02</i><em data-i18n="menu.n2">Ce que je fais</em></a>
-      <a href="#work"><i>03</i><em data-i18n="menu.n3">Réalisations</em></a>
-      <a href="#offer"><i>04</i><em data-i18n="menu.n4">L’offre</em></a>
-      <a href="#contact"><i>05</i><em data-i18n="menu.n5">Contact</em></a>
+      <a href="#offer"><i>03</i><em data-i18n="menu.n3">L’offre</em></a>
+      <a href="#steps"><i>04</i><em data-i18n="menu.n4">Comment ça se passe</em></a>
+      <a href="#work"><i>05</i><em data-i18n="menu.n5">Réalisations</em></a>
+      <a href="#contact"><i>06</i><em data-i18n="menu.n6">Contact</em></a>
     </nav>
     <div class="menu__foot">
       <a class="menu__link" data-wa href="#" target="_blank" rel="noopener noreferrer">WhatsApp +689 89 37 48 86</a>
@@ -276,6 +277,31 @@
 </section>
 
 <!-- ================= STORY ================= -->
+<!-- ================= AUDIT GRATUIT ================= -->
+<section class="audit" id="audit">
+  <div class="wrap audit__wrap">
+    <div class="audit__txt">
+      <p class="label" data-i18n="audit.label">Audit gratuit</p>
+      <h2 class="audit__t" data-i18n="audit.h">Votre site actuel mérite mieux&nbsp;?</h2>
+      <p class="audit__p" data-i18n="audit.p">Donnez moi son adresse. Je le regarde, je vous dis ce qui le freine et ce que je changerais. Gratuit, sans engagement.</p>
+    </div>
+
+    <form class="audit__form" id="auditForm" novalidate>
+      <div class="audit__row">
+        <span class="audit__pre" aria-hidden="true">https://</span>
+        <input class="audit__in" id="auditUrl" type="text" inputmode="url" autocomplete="url"
+               spellcheck="false" placeholder="monsite.pf" aria-describedby="auditNote"
+               aria-label="Adresse de votre site">
+        <button class="btn btn--p audit__go" type="submit">
+          <span data-i18n="audit.cta">Analyser</span>
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+      <p class="audit__note" id="auditNote" data-i18n="audit.note">Ça ouvre WhatsApp avec l’adresse déjà écrite. Réponse le jour même.</p>
+    </form>
+  </div>
+</section>
+
 <section class="story" id="story">
   <div class="story__pin" id="storyPin">
     <div class="wrap story__head">
@@ -328,9 +354,17 @@
         <p class="panel__p" data-i18n="offer.p1">Votre site évolue avec vous. Les modifications sont facturées selon le travail qu'elles demandent : une petite retouche reste une petite retouche. Un gros changement est chiffré avant d'être lancé.</p>
         <p class="panel__p panel__p--hi" data-i18n="offer.p2">Vous savez toujours ce que vous payez.</p>
 
-        <div class="scarce">
-          <span class="scarce__dot" aria-hidden="true"></span>
-          <p data-i18n="offer.scarce">Peu de projets acceptés à la fois.<br><b>C'est ce qui garantit le délai.</b></p>
+        <div class="slots" id="slots">
+          <p class="slots__head">
+            <span data-i18n="slots.next">Prochain créneau</span>
+            <b id="slotsMonth">Novembre 2026</b>
+          </p>
+          <div class="slots__bar" aria-hidden="true"><i id="slotsFill"></i></div>
+          <p class="slots__foot">
+            <span class="slots__dot" aria-hidden="true"></span>
+            <span id="slotsCount">2 places sur 3 déjà prises</span>
+          </p>
+          <p class="slots__why" data-i18n="slots.why">Peu de projets à la fois, c’est ce qui garantit le délai de deux semaines.</p>
         </div>
 
         <a class="btn btn--p" data-wa href="#" target="_blank" rel="noopener noreferrer" aria-label="Vérifier les disponibilités sur WhatsApp">
@@ -342,10 +376,61 @@
   </div>
 </section>
 
+<!-- ================= DEROULE ================= -->
+<section class="sec steps" id="steps">
+  <div class="wrap">
+    <p class="label" data-i18n="steps.label">05 / Comment ça se passe</p>
+    <h2 class="h1 reveal-up" data-i18n="steps.h">De votre message<br>à la mise en ligne.</h2>
+
+    <ol class="steps__list" id="stepsList">
+      <li class="step">
+        <span class="step__n">01</span>
+        <div class="step__body">
+          <h3 class="step__t" data-i18n="steps.t1">On se parle</h3>
+          <p class="step__p" data-i18n="steps.p1">Vous m’écrivez sur WhatsApp. On fait le point sur votre activité, vos clients et ce dont vous avez besoin. Dix minutes suffisent.</p>
+        </div>
+        <span class="step__when" data-i18n="steps.w1">Jour 1</span>
+      </li>
+      <li class="step">
+        <span class="step__n">02</span>
+        <div class="step__body">
+          <h3 class="step__t" data-i18n="steps.t2">Je vous montre une maquette</h3>
+          <p class="step__p" data-i18n="steps.p2">Je dessine votre page d’accueil avec vos vrais textes et vos couleurs. Vous voyez le site avant que j’écrive la moindre ligne de code.</p>
+        </div>
+        <span class="step__when" data-i18n="steps.w2">Jours 2 à 4</span>
+      </li>
+      <li class="step">
+        <span class="step__n">03</span>
+        <div class="step__body">
+          <h3 class="step__t" data-i18n="steps.t3">Je code le site</h3>
+          <p class="step__p" data-i18n="steps.p3">Tout est écrit à la main, aucun template. Rapide sur téléphone, propre pour Google, et vous pouvez suivre l’avancement quand vous voulez.</p>
+        </div>
+        <span class="step__when" data-i18n="steps.w3">Jours 5 à 10</span>
+      </li>
+      <li class="step">
+        <span class="step__n">04</span>
+        <div class="step__body">
+          <h3 class="step__t" data-i18n="steps.t4">Vous relisez, j’ajuste</h3>
+          <p class="step__p" data-i18n="steps.p4">Vous testez le site sur votre téléphone et celui de vos proches. Vous me dites ce qui ne va pas, je corrige jusqu’à ce que ça vous plaise.</p>
+        </div>
+        <span class="step__when" data-i18n="steps.w4">Jours 11 à 13</span>
+      </li>
+      <li class="step">
+        <span class="step__n">05</span>
+        <div class="step__body">
+          <h3 class="step__t" data-i18n="steps.t5">Mise en ligne</h3>
+          <p class="step__p" data-i18n="steps.p5">Je mets le site en ligne avec votre nom de domaine, l’hébergement est compris. Vous êtes visible le jour même, et je reste joignable après.</p>
+        </div>
+        <span class="step__when" data-i18n="steps.w5">Jour 14</span>
+      </li>
+    </ol>
+  </div>
+</section>
+
 <!-- ================= WORK ================= -->
 <section class="sec work" id="work">
   <div class="wrap">
-    <p class="label" data-i18n="work.label">05 / Réalisations <i>(3)</i></p>
+    <p class="label" data-i18n="work.label">06 / Réalisations <i>(3)</i></p>
     <h2 class="h1 reveal-up" data-i18n="work.h">Trois sites livrés.<br>Trois clients satisfaits.</h2>
     <p class="work__hint reveal-up" data-i18n="work.hint">Cliquez sur un projet pour l’ouvrir en ligne, le site s’affiche en entier dans un nouvel onglet.</p>
 

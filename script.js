@@ -18,6 +18,10 @@ const CONFIG = {
   // Intro : durée totale en millisecondes. once:true = une seule fois par onglet.
   intro   : { duration:6000, once:false },
 
+  // Disponibilités affichées dans la section « offre ». À changer à la main :
+  // month = le prochain créneau libre, taken = places déjà prises sur total.
+  slots   : { monthFr:'Novembre 2026', monthEn:'November 2026', taken:2, total:3 },
+
   // force:true  -> les animations tournent même si le visiteur a activé
   //                « réduire les animations » sur son téléphone.
   // force:false -> le réglage système est respecté (recommandé pour l'accessibilité).
@@ -610,6 +614,70 @@ function introClock(){
   el.textContent = String(d.getUTCHours()).padStart(2,'0')+':'+String(d.getUTCMinutes()).padStart(2,'0');
 }
 
+/* ---------- 15 bis. AUDIT GRATUIT ---------- */
+function audit(){
+  const form = $('#auditForm'), field = $('#auditUrl'), box = $('#audit');
+  if (!form || !field) return;
+
+  // On accepte tout ce qu'un client peut taper : monsite.pf, www.monsite.pf,
+  // https://monsite.pf/contact. On ne garde que le domaine et le chemin.
+  const clean = raw => raw.trim().toLowerCase()
+    .replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\s+/g, '').replace(/\/+$/, '');
+  const looksLikeSite = v => /^[a-z0-9][a-z0-9.-]*\.[a-z]{2,}(\/.*)?$/.test(v);
+
+  const bad = () => {
+    box.classList.remove('is-bad');
+    void box.offsetWidth;            // relance l'animation
+    box.classList.add('is-bad');
+    field.focus();
+  };
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const site = clean(field.value);
+    if (!looksLikeSite(site)) return bad();
+    box.classList.remove('is-bad');
+    const en = document.documentElement.lang === 'en';
+    const msg = en
+      ? `Hi Rai, could you take a look at my site ${site} and tell me what you would change?`
+      : `Bonjour Rai, pouvez-vous regarder mon site ${site} et me dire ce que vous changeriez ?`;
+    window.open(`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
+  });
+  field.addEventListener('input', () => box.classList.remove('is-bad'));
+}
+
+/* ---------- 15 ter. DISPONIBILITES ---------- */
+function slots(){
+  const box = $('#slots'), month = $('#slotsMonth'), count = $('#slotsCount'), fill = $('#slotsFill');
+  if (!box || !month) return;
+  const c = CONFIG.slots, en = document.documentElement.lang === 'en';
+  const taken = clamp(c.taken, 0, c.total), left = c.total - taken;
+
+  month.textContent = en ? c.monthEn : c.monthFr;
+  count.textContent = en
+    ? `${taken} of ${c.total} slots already taken`
+    : `${taken} place${taken > 1 ? 's' : ''} sur ${c.total} déjà prise${taken > 1 ? 's' : ''}`;
+  box.setAttribute('aria-label', en
+    ? `Next slot ${c.monthEn}, ${left} of ${c.total} still free`
+    : `Prochain créneau ${c.monthFr}, ${left} place${left > 1 ? 's' : ''} encore libre${left > 1 ? 's' : ''}`);
+
+  const ratio = taken / c.total;
+  if (!hasGSAP() || reduced){ fill.style.transform = `scaleX(${ratio})`; return; }
+  onceInView('#slots', 'top 90%', () => {
+    gsap.to(fill, { scaleX:ratio, duration:1.2, ease:'expo.out' });
+  });
+}
+
+/* ---------- 15 quater. DEROULE EN 5 ETAPES ---------- */
+function steps(){
+  const items = $$('.step');
+  if (!items.length) return;
+  if (!hasGSAP() || reduced){ items.forEach(i => { i.style.opacity='1'; i.style.transform='none'; }); return; }
+  onceInView('#stepsList', 'top 85%', () => {
+    gsap.to(items, { opacity:1, y:0, duration:.85, stagger:.1, ease:'expo.out' });
+  });
+}
+
 /* ---------- 16 bis. MENU PLEIN ECRAN ---------- */
 function menu(){
   const btn = $('#menuBtn'), panel = $('#menu');
@@ -719,7 +787,7 @@ const I18N = {
     'ft.avail':'available',
     'hero.eyebrow':'Independent web studio · Tahiti · since 2026',
     'menu.open':'Menu','menu.close':'Close','menu.label':'Navigation',
-    'menu.n1':'My mission','menu.n2':'What I do','menu.n3':'Work','menu.n4':'The offer','menu.n5':'Contact',
+    'menu.n1':'My mission','menu.n2':'What I do','menu.n3':'The offer','menu.n4':'How it works','menu.n5':'Work','menu.n6':'Contact',
     'top.call':'Request a call',
     'hero.l1':'My name is Rai.',
     'hero.l2':'I design, I code',
@@ -776,10 +844,33 @@ const I18N = {
     'offer.aft':'What happens next?',
     'offer.p1':'Your site grows with you. Changes are billed by the work they take: a small tweak stays a small tweak. A big change is quoted before anything starts.',
     'offer.p2':'You always know what you’re paying for.',
-    'offer.scarce':'Few projects accepted at a time.<br><b>That’s what protects the deadline.</b>',
     'offer.cta':'Check my availability',
 
-    'work.label':'05 / Work <i>(3)</i>',
+    'work.label':'06 / Work <i>(3)</i>',
+    'audit.label':'Free audit',
+    'audit.h':'Your current site deserves better?',
+    'audit.p':'Give me its address. I look at it and tell you what is holding it back and what I would change. Free, no strings.',
+    'audit.cta':'Check my site',
+    'audit.note':'This opens WhatsApp with the address already written. Same day reply.',
+    'slots.next':'Next slot',
+    'slots.why':'Few projects at a time, that is what keeps the two week delivery.',
+    'steps.label':'05 / How it works',
+    'steps.h':'From your message<br>to going live.',
+    'steps.t1':'We talk',
+    'steps.p1':'You write to me on WhatsApp. We go over your business, your customers and what you actually need. Ten minutes is enough.',
+    'steps.w1':'Day 1',
+    'steps.t2':'I show you a mockup',
+    'steps.p2':'I design your home page with your real words and your colours. You see the site before I write a single line of code.',
+    'steps.w2':'Days 2 to 4',
+    'steps.t3':'I build the site',
+    'steps.p3':'Everything is written by hand, no template. Fast on a phone, clean for Google, and you can follow the progress whenever you want.',
+    'steps.w3':'Days 5 to 10',
+    'steps.t4':'You review, I adjust',
+    'steps.p4':'You test the site on your phone and on your friends phones. You tell me what is off, I fix it until you are happy.',
+    'steps.w4':'Days 11 to 13',
+    'steps.t5':'Going live',
+    'steps.p5':'I put the site online with your domain name, hosting included. You are visible the same day, and I stay reachable afterwards.',
+    'steps.w5':'Day 14',
     'work.h':'Three sites delivered.<br>Three happy clients.',
     'work.hint':'Click a project to open it live, the whole site loads in a new tab.',
     'w1.t':'Heihere Lodge','w1.m':'Holiday rental · Moorea',
@@ -856,6 +947,7 @@ function afterLangChange(){
   $$('.hero__title .ln>span, .fin__t .ln>span').forEach(s => { s.style.transform = 'translate(0px,0px)'; });
   const kin = $('.kin i'); if (kin) kin.style.transform = 'scaleX(1)';
   mission();
+  slots();   // mois et nombre de places sont calculés, pas de data-i18n
   if (window.__rebuildTicker) window.__rebuildTicker();
   if (hasGSAP()){
     ScrollTrigger.getAll().forEach(t => { if (t.trigger && t.trigger.closest && t.trigger.closest('#story')) t.refresh(); });
@@ -878,6 +970,9 @@ function boot(){
     pillars();
     story();
     offer();
+    audit();
+    slots();
+    steps();
     work();
     finalCta();
     chrome();

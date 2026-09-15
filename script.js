@@ -99,32 +99,42 @@ function intro(done){
 
   const D = CONFIG.intro.duration / 1000;   // 6 s
 
-  // Le personnage pousse le noir vers la droite : le bord de la feuille claire
-  // suit sa main (a ~80 % de sa largeur, il regarde a droite).
-  const edge = { p: 0 };
-  const cw = () => char ? (char.offsetWidth || char.offsetHeight * 640 / 900) : innerWidth * .18;
+  // La main du personnage pousse le noir : le bord de la feuille claire suit
+  // le point le plus avance de la pose affichee (mesure sur chaque image).
+  const HAND = { walk:.9, reach:.88, push:.99 };
+  const edge = { p:0 };
+  const cw = () => char ? char.getBoundingClientRect().width : innerWidth * .18;
   const paint = () => {
     const vw = innerWidth, w = cw();
-    const x = -w * 1.15 + edge.p * (vw + w * 1.15);      // depart hors champ a gauche, sortie a droite
-    const hand = x + w * .8;
+    const x = -w * 1.1 + edge.p * (vw + w * 1.1);
+    const hand = x + w * (HAND[char ? char.dataset.pose : 'push'] || .9);
     sheet.style.clipPath = `inset(0 ${Math.max(0, Math.min(100, (1 - hand / vw) * 100))}% 0 0)`;
     if (char) gsap.set(char, { x });
   };
+  const pose = p => { if (char) { char.dataset.pose = p; paint(); } };
   paint();
 
   const tl = gsap.timeline({ defaults:{ ease:'expo.out' }, onComplete: leave });
   tl.to('.intro__skip', { opacity:1, duration:.5 }, .4)
-    // 1. il entre, pousse, et ressort a droite : le nom se decouvre derriere lui
-    .to(edge, { p:1, duration:3.1, ease:'power2.inOut', onUpdate: paint }, .45);
+    // il traverse l'ecran et pousse le noir vers la droite
+    .to(edge, { p:1, duration:4, ease:'none', onUpdate: paint }, .5);
   if (char) tl
-    .to(char, { y:-9, duration:.17, ease:'sine.inOut', yoyo:true, repeat:17 }, .45)      // il marche
-    .to(char, { rotate:8, duration:.5, ease:'power2.out' }, .45)                         // il se penche en avant pour pousser
-    .to(char, { rotate:0, duration:.6, ease:'power2.inOut' }, 3.0);
+    // 1. il arrive en marchant
+    .call(() => pose('walk'), null, .5)
+    .to(char, { y:-10, duration:.2, ease:'sine.inOut', yoyo:true, repeat:9 }, .5)
+    // 2. il attrape le bord
+    .call(() => pose('reach'), null, 2.5)
+    .to(char, { y:0, rotate:3, duration:.35, ease:'power2.out' }, 2.5)
+    // 3. il pese dessus, l'effort se voit
+    .call(() => pose('push'), null, 2.95)
+    .to(char, { rotate:9, duration:.45, ease:'power2.out' }, 2.95)
+    .to(char, { rotate:7.4, duration:.3, ease:'sine.inOut', yoyo:true, repeat:4 }, 3.4)
+    .to(char, { rotate:0, duration:.5, ease:'power2.inOut' }, 4.1);
   tl
-    .to('.intro__corner', { opacity:1, duration:.7, stagger:.08 }, 2.3)
+    .to('.intro__corner', { opacity:1, duration:.7, stagger:.08 }, 2.7)
     .to('#introBar', { scaleX:1, duration: D - 1.4, ease:'power1.inOut' }, .45)
-    // 2. sortie : la feuille remonte et decouvre le site
-    .to(sheet, { yPercent:-100, duration:.85, ease:'expo.inOut' }, D - .95)
+    // la feuille remonte et decouvre le site
+    .to(sheet, { yPercent:-100, duration:.85, ease:'expo.inOut' }, D - 1)
     .to(box, { opacity:0, duration:.3, ease:'power2.out' }, D - .3);
 
   addEventListener('resize', paint, { passive:true });

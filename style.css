@@ -195,13 +195,21 @@ html.js .intro{display:block;position:fixed;inset:0;z-index:9997;background:var(
   font-size:.22em;font-stretch:100%;letter-spacing:0;line-height:1;vertical-align:top;
   position:relative;top:.22em;margin-left:.08em;color:var(--red);
 }
-/* le personnage : GSAP anime le conteneur, l'image est en miroir (il regarde a droite) */
+/* le personnage 3D : trois poses empilees, GSAP anime le conteneur */
 .intro__char{
   --ch:clamp(200px,44vh,470px);
-  position:absolute;left:0;top:50%;z-index:3;height:var(--ch);margin-top:calc(var(--ch) / -2);
+  position:absolute;left:0;top:50%;z-index:3;
+  height:var(--ch);aspect-ratio:460/600;margin-top:calc(var(--ch) / -2);
   transform:translateX(-120vw);pointer-events:none;user-select:none;
 }
-.intro__char img{display:block;height:100%;width:auto;transform:scaleX(-1)}
+.intro__char .pose{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:contain;transform:scaleX(-1);   /* il regarde vers la droite */
+  opacity:0;   /* coupe franche entre les poses, comme un flipbook */
+}
+.intro__char[data-pose="walk"]  .pose--walk,
+.intro__char[data-pose="reach"] .pose--reach,
+.intro__char[data-pose="push"]  .pose--push{opacity:1}
 /* libelles en coins, mono, comme huyml.co */
 .intro__corner{
   position:absolute;z-index:4;display:flex;flex-direction:column;gap:.2rem;

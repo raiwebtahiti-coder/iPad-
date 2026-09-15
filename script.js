@@ -125,10 +125,11 @@ function intro(done){
     .to('.intro__name .ln>span', { y:0, duration:1.4, stagger:.14, ease:'expo.out' }, .55)
     // respiration tres lente du nom pendant la tenue
     .fromTo('.intro__name', { scale:1.028 }, { scale:1, duration:3, ease:'sine.out' }, 1)
-    .to('.intro__corner', { opacity:1, duration:.9, stagger:.13, ease:'power2.out' }, 2.15)
+    .to('.intro__corner>*', { y:0, duration:.95, stagger:.09, ease:'expo.out' }, 2.15)
     .to('#introBar', { scaleX:1, duration: D - 1.6, ease:'power1.inOut' }, .4)
     // sortie : les libelles s'effacent, le nom part un peu plus vite que la feuille
-    .to(['.intro__corner','.intro__bar'], { opacity:0, duration:.5, ease:'power2.in' }, D - 1.2)
+    .to('.intro__corner>*', { y:'130%', duration:.55, stagger:.05, ease:'power2.in' }, D - 1.2)
+    .to('.intro__bar', { opacity:0, duration:.5, ease:'power2.in' }, D - 1.2)
     .to('.intro__name', { yPercent:-11, duration:1.1, ease:'expo.inOut' }, D - 1.1)
     .to(sheet, { yPercent:-100, duration:1.1, ease:'expo.inOut' }, D - 1.05)
     .to(box, { opacity:0, duration:.32, ease:'power2.out' }, D - .34);

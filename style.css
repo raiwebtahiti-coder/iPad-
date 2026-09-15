@@ -7,12 +7,12 @@
   /* ENCRE ET CHAUX : noir encre, ivoire chaux, un seul vermillon terreux */
   --ink:#0B0B0C; --ink-deep:#050506; --ink-soft:#131315; --ink-line:#222226;
   --red:#E2442E; --red-hot:#F2543A; --red-deep:#A32A18; --ember:#EF8A4C;
-  --white:#fff; --bone:#F5F3EF; --ash:#8C8A85; --ash-dim:#55534E;
+  --white:#fff; --bone:#F5F3EF; --ash:#9C9992; --ash-dim:#827F79;
   --grad:linear-gradient(100deg,#A32A18 0%,#E2442E 48%,#EF8A4C 100%);
 
   /* la chaux : sections claires pleine page, meme matiere que la feuille de l'intro */
   --sheet:#F2F0EB; --sheet-soft:#EAE7E0; --sheet-line:#D9D5CB;
-  --sheet-ink:#111113; --sheet-ash:#6E6B65;
+  --sheet-ink:#111113; --sheet-ash:#4F4C47;
 
   --s1:.5rem; --s2:1rem; --s3:1.5rem; --s4:2rem; --s5:3rem;
   --s6:4.5rem; --s7:7rem; --s8:10rem;
@@ -214,11 +214,14 @@ html.js .intro__name .ln>span{transform:translateY(106%)}
   pointer-events:none;
 }
 /* libelles en coins, mono, comme huyml.co */
+/* les libelles montent sous masque : jamais d'opacite animee sur du texte,
+   donc toujours au contraste plein, y compris en pleine animation */
 .intro__corner{
-  position:absolute;z-index:4;display:flex;flex-direction:column;gap:.2rem;
+  position:absolute;z-index:4;display:flex;flex-direction:column;gap:.2rem;overflow:hidden;
   font-family:var(--ff-mono);font-size:clamp(.62rem,.8vw,.72rem);letter-spacing:.12em;
-  text-transform:uppercase;line-height:1.5;opacity:0;
+  text-transform:uppercase;line-height:1.5;
 }
+html.js .intro__corner>*{transform:translateY(130%)}
 .intro__corner span{color:var(--sheet-ink)}
 .intro__corner em{font-style:normal;color:var(--sheet-ash)}
 .intro__corner i{font-style:normal;color:var(--sheet-ink);font-variant-numeric:tabular-nums}
@@ -234,9 +237,9 @@ html.js .intro__name .ln>span{transform:translateY(106%)}
   color:var(--ash);font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;
   padding:.7rem 1.2rem;min-height:44px;cursor:pointer;opacity:0;
   transition:color .3s,border-color .3s,background .3s;
-  mix-blend-mode:difference;color:#fff;border-color:rgba(255,255,255,.55);
+  background:rgba(11,11,12,.92);color:#F5F3EF;border-color:rgba(255,255,255,.22);
 }
-.intro__skip:hover{border-color:#fff;background:rgba(255,255,255,.14)}
+.intro__skip:hover{border-color:rgba(255,255,255,.55);background:#0B0B0C;color:#fff}
 html.is-loading,html.is-loading body{overflow:hidden;height:100%}
 
 /* ---------- CURSOR ---------- */
@@ -358,7 +361,7 @@ html.menu-open .menu__foot{opacity:1}
 /* les jetons sont redefinis localement : tout ce qui est dedans suit sans etre reecrit */
 .sheet{
   --ink:var(--sheet); --ink-deep:var(--sheet); --ink-soft:var(--sheet-soft); --ink-line:var(--sheet-line);
-  --white:var(--sheet-ink); --bone:var(--sheet-ink); --ash:var(--sheet-ash); --ash-dim:#9C9890;
+  --white:var(--sheet-ink); --bone:var(--sheet-ink); --ash:var(--sheet-ash); --ash-dim:#8A8680;
   background:var(--sheet);color:var(--sheet-ink);
 }
 /* les fonds translucides prevus pour le noir sont retournes pour la chaux */
@@ -461,7 +464,7 @@ html.js .kin i{transform:scaleX(0)}
 .hero__scroll{position:absolute;left:50%;bottom:clamp(1.4rem,4vh,2.6rem);transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.7rem;z-index:2}
 .hero__scroll i{width:1px;height:clamp(34px,6vh,58px);background:linear-gradient(to bottom,var(--red),transparent);animation:scrollPulse 2.1s ease-in-out infinite}
 @keyframes scrollPulse{0%,100%{opacity:.25;transform:scaleY(.45);transform-origin:top}50%{opacity:1;transform:scaleY(1);transform-origin:top}}
-.hero__scroll span{font-size:9.5px;letter-spacing:.28em;text-transform:uppercase;color:var(--ash-dim)}
+.hero__scroll span{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--ash)}
 html.js .reveal-up{opacity:0;transform:translateY(24px)}
 
 /* ================= CINEMA ================= */
@@ -819,7 +822,7 @@ html.js .wrow{opacity:0}
   filter:blur(6px);
 }
 .ft__cols{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(1.5rem,3vw,3rem);padding-block:clamp(2.5rem,6vh,4.5rem);border-top:1px solid var(--ink-line);margin-top:clamp(2rem,5vh,3.5rem)}
-.ft__col h4{font-family:var(--ff-mono);font-size:var(--t-label);letter-spacing:.16em;text-transform:uppercase;color:var(--ash-dim);font-weight:500;margin-bottom:1.1rem}
+.ft__col h3{font-family:var(--ff-mono);font-size:var(--t-label);letter-spacing:.16em;text-transform:uppercase;color:var(--ash-dim);font-weight:500;margin-bottom:1.1rem}
 .ft__col a,.ft__col p{display:block;color:var(--bone);padding:.28rem 0;font-size:.95rem;position:relative;width:fit-content}
 .ft__col a::after{content:"";position:absolute;left:0;right:0;bottom:.18rem;height:1px;background:var(--red);transform:scaleX(0);transform-origin:left;transition:transform .34s var(--e-out)}
 .ft__col a:hover::after{transform:scaleX(1)}

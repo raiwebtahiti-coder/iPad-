@@ -16,7 +16,8 @@ const CONFIG = {
   video   : { auto:true, hd:'assets/video/sequence-hd.mp4', sd:'assets/video/sequence-sd.mp4' },
 
   // Intro : durée totale en millisecondes. once:true = une seule fois par onglet.
-  intro   : { duration:6000, once:false },
+  // Ouverture : durée totale en millisecondes (4800 = 4,8 s).
+  intro   : { duration:4800, once:false },
 
   // Disponibilités affichées dans la section « offre ». À changer à la main :
   // month = le prochain créneau libre, taken = places déjà prises sur total.
@@ -86,7 +87,7 @@ function smooth(){
 function intro(done){
   const box = $('#intro');
   if (!box) return done();
-  const skip = $('#introSkip'), sheet = $('#introSheet'), char = $('#introChar');
+  const skip = $('#introSkip'), sheet = $('#introSheet');
   const seen = (() => { try { return sessionStorage.getItem('rwd-intro'); } catch(e){ return null; } })();
 
   const leave = () => {
@@ -101,45 +102,36 @@ function intro(done){
   }
   document.documentElement.classList.add('is-loading');
 
-  const D = CONFIG.intro.duration / 1000;   // 6 s
+  const D = CONFIG.intro.duration / 1000;   // 4,8 s par défaut
+  const edge = $('#introEdge');
 
-  // La main du personnage pousse le noir : le bord de la feuille claire suit
-  // le point le plus avance de la pose affichee (mesure sur chaque image).
-  const HAND = { walk:.9, reach:.88, push:.99 };
-  const edge = { p:0 };
-  const cw = () => char ? char.getBoundingClientRect().width : innerWidth * .18;
+  // Un seul geste : une ligne lumineuse traverse l'ecran et decouvre la feuille
+  // claire derriere elle. Le nom est dans la feuille, donc il se decouvre avec.
+  const wipe = { p:0 };
   const paint = () => {
-    const vw = innerWidth, w = cw();
-    const x = -w * 1.1 + edge.p * (vw + w * 1.1);
-    const hand = x + w * (HAND[char ? char.dataset.pose : 'push'] || .9);
-    sheet.style.clipPath = `inset(0 ${Math.max(0, Math.min(100, (1 - hand / vw) * 100))}% 0 0)`;
-    if (char) gsap.set(char, { x });
+    const p = wipe.p;
+    sheet.style.clipPath = `inset(0 ${((1 - p) * 100).toFixed(3)}% 0 0)`;
+    if (edge) gsap.set(edge, { x: p * innerWidth });
   };
-  const pose = p => { if (char) { char.dataset.pose = p; paint(); } };
   paint();
 
-  const tl = gsap.timeline({ defaults:{ ease:'expo.out' }, onComplete: leave });
-  tl.to('.intro__skip', { opacity:1, duration:.5 }, .4)
-    // il traverse l'ecran et pousse le noir vers la droite
-    .to(edge, { p:1, duration:4, ease:'none', onUpdate: paint }, .5);
-  if (char) tl
-    // 1. il arrive en marchant
-    .call(() => pose('walk'), null, .5)
-    .to(char, { y:-10, duration:.2, ease:'sine.inOut', yoyo:true, repeat:9 }, .5)
-    // 2. il attrape le bord
-    .call(() => pose('reach'), null, 2.5)
-    .to(char, { y:0, rotate:3, duration:.35, ease:'power2.out' }, 2.5)
-    // 3. il pese dessus, l'effort se voit
-    .call(() => pose('push'), null, 2.95)
-    .to(char, { rotate:9, duration:.45, ease:'power2.out' }, 2.95)
-    .to(char, { rotate:7.4, duration:.3, ease:'sine.inOut', yoyo:true, repeat:4 }, 3.4)
-    .to(char, { rotate:0, duration:.5, ease:'power2.inOut' }, 4.1);
-  tl
-    .to('.intro__corner', { opacity:1, duration:.7, stagger:.08 }, 2.7)
-    .to('#introBar', { scaleX:1, duration: D - 1.4, ease:'power1.inOut' }, .45)
-    // la feuille remonte et decouvre le site
-    .to(sheet, { yPercent:-100, duration:.85, ease:'expo.inOut' }, D - 1)
-    .to(box, { opacity:0, duration:.3, ease:'power2.out' }, D - .3);
+  const tl = gsap.timeline({ defaults:{ ease:'power2.out' }, onComplete: leave });
+  tl.to('.intro__skip', { opacity:1, duration:.7 }, .5)
+    // la ligne entre, puis emmene le balayage avec elle
+    .to(edge, { opacity:1, duration:.35, ease:'sine.out' }, .08)
+    .to(wipe, { p:1, duration:1.9, ease:'power3.inOut', onUpdate: paint }, .15)
+    .to(edge, { opacity:0, duration:.5, ease:'sine.inOut' }, 2)
+    // les deux lignes du nom montent juste derriere le bord
+    .to('.intro__name .ln>span', { y:0, duration:1.4, stagger:.14, ease:'expo.out' }, .55)
+    // respiration tres lente du nom pendant la tenue
+    .fromTo('.intro__name', { scale:1.028 }, { scale:1, duration:3, ease:'sine.out' }, 1)
+    .to('.intro__corner', { opacity:1, duration:.9, stagger:.13, ease:'power2.out' }, 2.15)
+    .to('#introBar', { scaleX:1, duration: D - 1.6, ease:'power1.inOut' }, .4)
+    // sortie : les libelles s'effacent, le nom part un peu plus vite que la feuille
+    .to(['.intro__corner','.intro__bar'], { opacity:0, duration:.5, ease:'power2.in' }, D - 1.2)
+    .to('.intro__name', { yPercent:-11, duration:1.1, ease:'expo.inOut' }, D - 1.1)
+    .to(sheet, { yPercent:-100, duration:1.1, ease:'expo.inOut' }, D - 1.05)
+    .to(box, { opacity:0, duration:.32, ease:'power2.out' }, D - .34);
 
   addEventListener('resize', paint, { passive:true });
   skip.addEventListener('click', () => { tl.pause(); gsap.to(box,{opacity:0,duration:.35,onComplete:leave}); });

@@ -77,7 +77,7 @@
 
 <!-- ============ INTRO ============ -->
 <div class="intro" id="intro" role="status" aria-label="Chargement du site">
-  <!-- la feuille claire : le personnage pousse le noir vers la droite et la revele -->
+  <!-- la feuille claire : un balayage la decouvre, et le nom avec elle -->
   <div class="intro__sheet" id="introSheet" aria-hidden="true">
     <div class="intro__corner intro__corner--tl">
       <span>Rai Web Design</span><em data-i18n="intro.c1">Studio web indépendant</em>
@@ -89,17 +89,13 @@
       <span data-i18n="intro.c3">Ouverture</span><em data-i18n="intro.c4">Une seule personne</em>
     </div>
     <div class="intro__name" aria-label="Rai Web Design">
-      <span>Rai Web</span>
-      <span>Design<sup>©</sup></span>
+      <span class="ln"><span>Rai Web</span></span>
+      <span class="ln"><span>Design<sup>©</sup></span></span>
     </div>
     <div class="intro__bar"><i id="introBar"></i></div>
   </div>
 
-  <div class="intro__char" id="introChar" data-pose="walk" aria-hidden="true">
-    <img class="pose pose--walk"  src="assets/img/char3d-walk.webp"  alt="" width="460" height="600" decoding="async" onerror="this.parentNode.remove()">
-    <img class="pose pose--reach" src="assets/img/char3d-reach.webp" alt="" width="460" height="600" decoding="async">
-    <img class="pose pose--push"  src="assets/img/char3d-push.webp"  alt="" width="460" height="600" decoding="async">
-  </div>
+  <span class="intro__edge" id="introEdge" aria-hidden="true"></span>
   <button class="intro__skip" id="introSkip" type="button">Passer</button>
 </div>
 

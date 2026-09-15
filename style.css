@@ -186,30 +186,33 @@ html.js .intro{display:block;position:fixed;inset:0;z-index:9997;background:var(
 /* le nom, tres gras et serre, comme le logotype HUYML */
 .intro__name{
   position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding-bottom:4vh;                       /* remonte optiquement, sans transform */
   font-family:var(--ff-d);font-weight:900;font-stretch:80%;
   text-transform:uppercase;font-size:clamp(3.6rem,15vw,15.5rem);
   line-height:.84;letter-spacing:-.045em;color:var(--sheet-ink);
-  transform:translateY(-2vh);
+  will-change:transform;
 }
+/* chaque ligne monte depuis son propre masque */
+.intro__name .ln{display:block;overflow:hidden;padding-bottom:.06em;margin-bottom:-.06em}
+.intro__name .ln>span{display:block}
+html.js .intro__name .ln>span{transform:translateY(106%)}
 .intro__name sup{
   font-size:.22em;font-stretch:100%;letter-spacing:0;line-height:1;vertical-align:top;
   position:relative;top:.22em;margin-left:.08em;color:var(--red);
 }
-/* le personnage 3D : trois poses empilees, GSAP anime le conteneur */
-.intro__char{
-  --ch:clamp(200px,44vh,470px);
-  position:absolute;left:0;top:50%;z-index:3;
-  height:var(--ch);aspect-ratio:460/600;margin-top:calc(var(--ch) / -2);
-  transform:translateX(-120vw);pointer-events:none;user-select:none;
+/* la ligne lumineuse qui mene le balayage */
+.intro__edge{
+  position:absolute;top:0;bottom:0;left:0;width:2px;z-index:5;opacity:0;
+  background:linear-gradient(to bottom,transparent,var(--red-deep) 12%,var(--red) 38%,var(--ember) 50%,var(--red) 62%,var(--red-deep) 88%,transparent);
+  box-shadow:0 0 34px 5px rgba(226,68,46,.34),0 0 90px 22px rgba(226,68,46,.12);
+  will-change:transform,opacity;pointer-events:none;
 }
-.intro__char .pose{
-  position:absolute;inset:0;width:100%;height:100%;
-  object-fit:contain;transform:scaleX(-1);   /* il regarde vers la droite */
-  opacity:0;   /* coupe franche entre les poses, comme un flipbook */
+/* la chaleur qui traine derriere la ligne, sur la partie deja decouverte */
+.intro__edge::before{
+  content:"";position:absolute;right:0;top:0;bottom:0;width:26vw;
+  background:linear-gradient(to left,rgba(226,68,46,.13),transparent 72%);
+  pointer-events:none;
 }
-.intro__char[data-pose="walk"]  .pose--walk,
-.intro__char[data-pose="reach"] .pose--reach,
-.intro__char[data-pose="push"]  .pose--push{opacity:1}
 /* libelles en coins, mono, comme huyml.co */
 .intro__corner{
   position:absolute;z-index:4;display:flex;flex-direction:column;gap:.2rem;
@@ -832,8 +835,7 @@ html.js .wrow{opacity:0}
   /* la banniere reste lisible : nom un peu plus petit, pastille de langue compacte */
   .brand__name{font-size:.86rem}
   .lang{gap:.3rem;padding:.22rem .42rem}
-  .intro__char{--ch:clamp(150px,34vh,300px)}
-  .intro__name{font-size:clamp(3rem,18vw,5.4rem);transform:translateY(-6vh)}
+  .intro__name{font-size:clamp(3rem,18vw,5.4rem);padding-bottom:6vh}
   .intro__corner--br{display:none}
 }
 

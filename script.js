@@ -600,11 +600,6 @@ function clock(){
   tick();
   setInterval(tick, 20000);
 }
-function introClock(){
-  const el = $('#introClock'); if (!el) return;
-  const d = new Date(Date.now() - 10*3600*1000);
-  el.textContent = String(d.getUTCHours()).padStart(2,'0')+':'+String(d.getUTCMinutes()).padStart(2,'0');
-}
 
 /* ---------- 15 bis. AUDIT GRATUIT ---------- */
 function audit(){
@@ -711,6 +706,29 @@ function menu(){
   addEventListener('keydown', e => { if (e.key === 'Escape' && isOpen()) close(); });
 }
 
+/* ---------- 16 ter. LOGOTYPE DU PIED DE PAGE ---------- */
+function footMark(){
+  const box = $('#ftMark'), type = $('#ftType'), deep = $('.ftl--deep');
+  if (!box || !type || !deep) return;
+
+  // On mesure le mot a une taille de reference, puis on calcule la taille exacte
+  // qui remplit la largeur disponible. Aucun debordement possible, quel que soit
+  // l'ecran ou la police de repli utilisee le temps qu'Anton arrive.
+  const fit = () => {
+    const cs = getComputedStyle(box);
+    const avail = box.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+    if (avail <= 0) return;
+    type.style.fontSize = '100px';
+    const w = deep.getBoundingClientRect().width;
+    if (!w) return;
+    type.style.fontSize = (100 * avail / w).toFixed(2) + 'px';
+  };
+
+  fit();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+  addEventListener('resize', debounce(fit, 160), { passive:true });
+}
+
 /* ---------- 17. FIORITURES ---------- */
 function flourish(){
   // la bannière descend une fois le chargement terminé, puis se densifie au défilement
@@ -775,7 +793,7 @@ const I18N = {
     'fab':'Let’s talk',
     'cur.view':'View',
     'intro.manifesto':'One person, from the first sketch to launch.',
-      'intro.c1':'Independent web studio','intro.c3':'Opening','intro.c4':'One person, start to finish',
+      'intro.c1':'Independent web studio','intro.c2':'French Polynesia','intro.c3':'Opening','intro.c4':'One person, start to finish',
     'ft.avail':'available',
     'hero.eyebrow':'Independent web studio · Tahiti · since 2026',
     'menu.open':'Menu','menu.close':'Close','menu.label':'Navigation',
@@ -950,11 +968,12 @@ function afterLangChange(){
 /* ---------- BOOT ---------- */
 function boot(){
   links();
-  introClock();
+  i18nInit();     // avant l'ouverture : ses libellés suivent la langue du visiteur,
+                  // et les innerHTML changent avant que les timelines ne prennent
+                  // leurs cibles dans le DOM
   intro(() => {
     smooth();
-    i18nInit();   // avant hero() : la langue doit être posée avant que
-    cursor();     // les timelines ne prennent leurs cibles dans le DOM
+    cursor();
     hero();
     cinema();
     stats();
@@ -971,6 +990,7 @@ function boot(){
     menu();
     ticker();
     clock();
+    footMark();
     flourish();
     resizing();
     if (hasGSAP()) ScrollTrigger.refresh();

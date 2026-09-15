@@ -765,27 +765,58 @@ html.js .wrow{opacity:0}
 
 /* ================= FOOTER ================= */
 .ft{position:relative;background:var(--ink);padding-top:clamp(3rem,8vh,6rem);overflow:hidden}
-.ft__mark{padding-inline:var(--gutter);line-height:.8;--mx:50%;--my:50%;position:relative}
-.ft__logotype{
-  display:block;font-family:var(--ff-logo);font-weight:400;font-stretch:normal;
-  text-transform:uppercase;font-size:clamp(2.4rem,13.6vw,15rem);
-  letter-spacing:-.025em;white-space:nowrap;position:relative;
+.ft__mark{
+  padding-inline:var(--gutter);position:relative;
+  --mx:50%;--my:38%;
+  padding-block:clamp(1rem,3vh,2.2rem) clamp(1.4rem,4vh,3rem);
 }
-/* Couche 1 : le gradient couvre tout le mot, en permanence. */
-.ft__logotype span{
-  display:block;
+/* le mot est mis a l'echelle par le script pour remplir la largeur, jamais plus */
+.ft__logotype{
+  display:block;position:relative;line-height:.78;
+  font-family:var(--ff-logo);font-weight:400;font-stretch:normal;
+  text-transform:uppercase;letter-spacing:-.025em;white-space:nowrap;
+  font-size:clamp(2rem,12vw,13rem);   /* valeur de repli avant la mise a l'echelle */
+  transform:perspective(1400px) rotateX(9deg);transform-origin:50% 100%;
+  will-change:transform;
+}
+/* la couche en flux est inline-block : sa boite epouse le mot, donc le script
+   mesure la vraie largeur du texte et non celle du conteneur */
+.ftl{display:block;white-space:nowrap}
+.ftl--deep{display:inline-block}
+/* 1. le corps extrude : une pile d'ombres qui descend, du vermillon brule au noir */
+.ftl--deep{
+  position:relative;color:#5E1B10;
+  text-shadow:
+    0 .009em 0 #571910, .002em .018em 0 #4E170E, .003em .027em 0 #45140C,
+    .004em .036em 0 #3C110A, .005em .045em 0 #330E08, .006em .054em 0 #2A0B06,
+    .007em .063em 0 #210805, .008em .072em 0 #180603,
+    0 .085em .05em rgba(0,0,0,.6), 0 .13em .12em rgba(0,0,0,.45);
+}
+/* 2. la face, en pleine intensite */
+.ftl--face{
+  position:absolute;inset:0;
   background:linear-gradient(96deg,
-    var(--red-deep) 0%, var(--red) 26%, var(--ember) 50%,
-    var(--red) 74%, var(--red-deep) 100%);
+    var(--red-deep) 0%, var(--red) 24%, var(--ember) 48%,
+    var(--red) 72%, var(--red-deep) 100%);
   -webkit-background-clip:text;background-clip:text;
   -webkit-text-fill-color:transparent;color:transparent;
-  opacity:.34;
 }
-/* Couche 2 : la même chose en pleine intensité, révélée sous le curseur. */
-.ft__logotype span:last-child{
-  position:absolute;inset:0;opacity:1;
-  mask-image:radial-gradient(circle 260px at var(--mx) var(--my),#000 0%,rgba(0,0,0,.45) 55%,transparent 100%);
-  -webkit-mask-image:radial-gradient(circle 260px at var(--mx) var(--my),#000 0%,rgba(0,0,0,.45) 55%,transparent 100%);
+/* 3. le reflet : lumiere haute fixe, et tache speculaire sous le curseur */
+.ftl--spec{
+  position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(circle 24vw at var(--mx) var(--my),rgba(255,236,224,.55),transparent 62%),
+    linear-gradient(to bottom,rgba(255,255,255,.34) 0%,rgba(255,255,255,.06) 34%,transparent 52%);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+  mix-blend-mode:screen;
+}
+/* l'ombre portee au sol, sous le mot */
+.ft__plinth{
+  position:absolute;left:var(--gutter);right:var(--gutter);bottom:clamp(.7rem,2.4vh,1.6rem);
+  height:clamp(10px,2.4vh,26px);pointer-events:none;
+  background:radial-gradient(60% 100% at 50% 0%,rgba(226,68,46,.16),transparent 70%);
+  filter:blur(6px);
 }
 .ft__cols{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(1.5rem,3vw,3rem);padding-block:clamp(2.5rem,6vh,4.5rem);border-top:1px solid var(--ink-line);margin-top:clamp(2rem,5vh,3.5rem)}
 .ft__col h4{font-family:var(--ff-mono);font-size:var(--t-label);letter-spacing:.16em;text-transform:uppercase;color:var(--ash-dim);font-weight:500;margin-bottom:1.1rem}
@@ -818,8 +849,6 @@ html.js .wrow{opacity:0}
 .story__track{flex-direction:column;gap:clamp(2.5rem,8vw,4rem)}
 .ch{flex:none;width:100%;opacity:1}
 /* sur petit écran, le gradient couvre tout sans révélation au curseur */
-.ft__logotype span{opacity:.6}
-.ft__logotype span:last-child{display:none}
 
 /* cibles tactiles : 44px minimum partout */
 .lang button{min-width:44px;min-height:44px}
@@ -827,8 +856,6 @@ html.js .wrow{opacity:0}
 .ft__col a{padding-block:.62rem;min-height:44px;min-width:44px;display:flex;align-items:center}
 @media (hover:hover) and (pointer:fine){
   .ft__col a{padding-block:.28rem;min-height:0;display:block}
-  .ft__logotype span:last-child{display:block}
-  .ft__logotype span{opacity:.34}
 }
 
 @media (max-width:699px){
@@ -836,6 +863,7 @@ html.js .wrow{opacity:0}
   .brand__name{font-size:.86rem}
   .lang{gap:.3rem;padding:.22rem .42rem}
   .intro__name{font-size:clamp(3rem,18vw,5.4rem);padding-bottom:6vh}
+  .ft__logotype{transform:perspective(900px) rotateX(6deg)}
   .intro__corner--br{display:none}
 }
 

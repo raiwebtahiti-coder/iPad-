@@ -385,7 +385,7 @@ html.js .reveal-up{opacity:0;transform:translateY(24px)}
   font-size:clamp(1.55rem,4.9vw,4.9rem);line-height:1.04;letter-spacing:-.018em;color:var(--white);
   text-shadow:0 6px 46px rgba(0,0,0,.95),0 0 120px rgba(0,0,0,.8);position:relative;
 }
-.beat span{display:block;overflow:hidden}
+.beat span{display:block;text-wrap:balance}
 .beat span+span{color:var(--red)}
 
 /* ================= STATS ================= */

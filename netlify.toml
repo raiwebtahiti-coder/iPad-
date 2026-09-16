@@ -1,38 +1,8 @@
 # Rai Web Design — configuration Netlify
 # Site statique : rien à compiler, le script prépare seulement le dossier publié.
+# Les en-têtes de cache et de sécurité sont dans dist/_headers, écrit par ce script,
+# pour qu'ils s'appliquent aussi à un dossier déposé à la main dans Netlify.
 
 [build]
   publish = "dist"
   command = "bash scripts/build.sh"
-
-# Les images, polices et vidéos ne changent pas sans changer de nom : 30 jours.
-[[headers]]
-  for = "/assets/*"
-  [headers.values]
-    Cache-Control = "public, max-age=2592000"
-
-# Le code et la page portent toujours le même nom, donc pas de cache figé :
-# le navigateur revalide, Netlify répond 304 si rien n'a bougé. Une mise en
-# ligne est visible immédiatement, sans recharger les fichiers inutilement.
-[[headers]]
-  for = "/index.html"
-  [headers.values]
-    Cache-Control = "public, max-age=0, must-revalidate"
-
-[[headers]]
-  for = "/style.css"
-  [headers.values]
-    Cache-Control = "public, max-age=0, must-revalidate"
-
-[[headers]]
-  for = "/script.js"
-  [headers.values]
-    Cache-Control = "public, max-age=0, must-revalidate"
-
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-    X-Frame-Options = "SAMEORIGIN"
-    Permissions-Policy = "geolocation=(), microphone=(), camera=(), interest-cohort=()"

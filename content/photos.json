@@ -1,0 +1,500 @@
+{
+  "_comment": "Photos de la cliente, issues de ses annonces Airbnb. `npm run photos` télécharge chaque `source` en pleine résolution et l'enregistre dans src/images/ en WebP (800 et 1600 px de large). Pour remplacer une photo : déposer le nouveau fichier WebP sous le même nom, ou changer `source`. `alt` : texte alternatif, à affiner une fois les photos regardées.",
+  "photos": [
+    {
+      "id": "fare-hani-exterieur-1",
+      "fare": "hani",
+      "room": "exterieur",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1761287419219506408/original/dc91b022-403e-4a9b-8378-0865e8aca5cb.jpeg",
+      "ratio": 1.1435,
+      "alt": "Fare Hani : l'extérieur (vue 1)",
+      "cover": true
+    },
+    {
+      "id": "fare-hani-exterieur-2",
+      "fare": "hani",
+      "room": "exterieur",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1761287419219506408/original/3db5e449-d81b-4fbd-9348-e6c1e485cf98.jpeg",
+      "ratio": 1.2247,
+      "alt": "Fare Hani : l'extérieur (vue 2)",
+      "cover": false
+    },
+    {
+      "id": "fare-hani-exterieur-3",
+      "fare": "hani",
+      "room": "exterieur",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1761287419219506408/original/f863114e-3ad0-41b5-9eb7-6ce234128bbe.jpeg",
+      "ratio": 1.321,
+      "alt": "Fare Hani : l'extérieur (vue 3)",
+      "cover": false
+    },
+    {
+      "id": "fare-hani-exterieur-5",
+      "fare": "hani",
+      "room": "exterieur",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1761287419219506408/original/8072eb44-2659-42b5-bea1-02bd5f651cbc.jpeg",
+      "ratio": 1.5504,
+      "alt": "Fare Hani : l'extérieur (vue 5)",
+      "cover": false
+    },
+    {
+      "id": "fare-hani-exterieur-6",
+      "fare": "hani",
+      "room": "exterieur",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1761287419219506408/original/84137c4d-106d-4451-979f-c1faef6a2d77.jpeg",
+      "ratio": 1.2783,
+      "alt": "Fare Hani : l'extérieur (vue 6)",
+      "cover": false
+    },
+    {
+      "id": "fare-hani-salon-1",
+      "fare": "hani",
+      "room": "salon",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1761287419219506408/original/de73b9fa-f8aa-42e3-8077-361c03a44ee0.jpeg",
+      "ratio": 1.3333,
+      "alt": "Fare Hani : le salon (vue 1)",
+      "cover": false
+    },
+    {
+      "id": "fare-hani-salon-2",
+      "fare": "hani",
+      "room": "salon",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1761287419219506408/original/858d5578-5474-4bb4-93b6-ae765354394b.jpeg",
+      "ratio": 0.6548,
+      "alt": "Fare Hani : le salon (vue 2)",
+      "cover": false
+    },
+    {
+      "id": "fare-hani-salon-3",
+      "fare": "hani",
+      "room": "salon",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1761287419219506408/original/6c6a4bf6-d1b9-49da-a591-1ea63a94f083.jpeg",
+      "ratio": 0.9662,
+      "alt": "Fare Hani : le salon (vue 3)",
+      "cover": false
+    },
+    {
+      "id": "fare-hani-cuisine",
+      "fare": "hani",
+      "room": "cuisine",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1756855168816982098/original/ec9f91e9-dc84-4422-85e1-ceb7e15b8c1a.jpeg",
+      "ratio": 1.3123,
+      "alt": "Fare Hani : la cuisine",
+      "cover": false
+    },
+    {
+      "id": "fare-hani-chambre",
+      "fare": "hani",
+      "room": "chambre",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1761287419219506408/original/9ee24732-636b-4d4a-9aba-4886d7b0cf84.jpeg",
+      "ratio": 0.8423,
+      "alt": "Fare Hani : la chambre climatisée",
+      "cover": false
+    },
+    {
+      "id": "fare-hani-salle-de-bain",
+      "fare": "hani",
+      "room": "salle-de-bain",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1761287419219506408/original/bc794ae4-3439-4e1e-bbe8-afebf308418b.jpeg",
+      "ratio": 1.0583,
+      "alt": "Fare Hani : la salle de bain",
+      "cover": false
+    },
+    {
+      "id": "fare-hani-jardin-1",
+      "fare": "hani",
+      "room": "jardin",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1761287419219506408/original/0f337ea5-6d57-428b-bd90-aae00d78a58c.jpeg",
+      "ratio": 1.3333,
+      "alt": "Fare Hani : le jardin (vue 1)",
+      "cover": false
+    },
+    {
+      "id": "fare-hani-jardin-2",
+      "fare": "hani",
+      "room": "jardin",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1761287419219506408/original/68423722-8529-4a58-8914-3522d2b68865.jpeg",
+      "ratio": 0.6687,
+      "alt": "Fare Hani : le jardin (vue 2)",
+      "cover": false
+    },
+    {
+      "id": "fare-hani-jardin-3",
+      "fare": "hani",
+      "room": "jardin",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1761287419219506408/original/06730ce8-9a91-4b7c-bd30-7e54ce484e7a.jpeg",
+      "ratio": 0.7499,
+      "alt": "Fare Hani : le jardin (vue 3)",
+      "cover": false
+    },
+    {
+      "id": "fare-hani-jardin-4",
+      "fare": "hani",
+      "room": "jardin",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1761287419219506408/original/a2103d51-54f9-43ae-86b4-9db271d5aabd.jpeg",
+      "ratio": 2.2216,
+      "alt": "Fare Hani : le jardin (vue 4)",
+      "cover": false
+    },
+    {
+      "id": "fare-hani-jardin-5",
+      "fare": "hani",
+      "room": "jardin",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1761287419219506408/original/74b3859e-efa4-471e-99b3-886ae3383293.jpeg",
+      "ratio": 1.3333,
+      "alt": "Fare Hani : le jardin (vue 5)",
+      "cover": false
+    },
+    {
+      "id": "fare-hani-jardin-6",
+      "fare": "hani",
+      "room": "jardin",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1761287419219506408/original/2c75c8c3-50a5-4820-921c-20108236a5c8.jpeg",
+      "ratio": 1.3333,
+      "alt": "Fare Hani : le jardin (vue 6)",
+      "cover": false
+    },
+    {
+      "id": "fare-hani-exterieur-4",
+      "fare": "hani",
+      "room": "exterieur",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1761287419219506408/original/24048e2f-b38a-4f7d-b38b-7498e6e040a8.jpeg",
+      "ratio": 0.75,
+      "alt": "Fare Hani : l'extérieur (vue 4)",
+      "cover": false
+    },
+    {
+      "id": "fare-hani-exterieur-7",
+      "fare": "hani",
+      "room": "exterieur",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1761287419219506408/original/20d059f0-5a32-4d98-9951-b11b92d3e558.jpeg",
+      "ratio": 1.3333,
+      "alt": "Fare Hani : l'extérieur (vue 7)",
+      "cover": false
+    },
+    {
+      "id": "fare-hani-exterieur-8",
+      "fare": "hani",
+      "room": "exterieur",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1761287419219506408/original/38e89df7-0057-4cc8-adfb-85ba5e6fe0d2.jpeg",
+      "ratio": 0.75,
+      "alt": "Fare Hani : l'extérieur (vue 8)",
+      "cover": false
+    },
+    {
+      "id": "fare-tahi-exterieur-1",
+      "fare": "tahi",
+      "room": "exterieur",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1756855168816982098/original/b453b1a4-a245-472a-b7c7-8e7d983d2f5e.jpeg",
+      "ratio": 1.0616,
+      "alt": "Fare Tahi : l'extérieur (vue 1)",
+      "cover": true
+    },
+    {
+      "id": "fare-tahi-exterieur-2",
+      "fare": "tahi",
+      "room": "exterieur",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1756855168816982098/original/70ded85a-20f5-4be2-8376-9e14439d3360.jpeg",
+      "ratio": 1.3908,
+      "alt": "Fare Tahi : l'extérieur (vue 2)",
+      "cover": false
+    },
+    {
+      "id": "fare-tahi-exterieur-3",
+      "fare": "tahi",
+      "room": "exterieur",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1756855168816982098/original/a7cafbf9-04ef-4074-86d3-10c5b051b450.jpeg",
+      "ratio": 1.3333,
+      "alt": "Fare Tahi : l'extérieur (vue 3)",
+      "cover": false
+    },
+    {
+      "id": "fare-tahi-exterieur-4",
+      "fare": "tahi",
+      "room": "exterieur",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1756855168816982098/original/73b5584d-0cc5-408e-8bb8-fad677b94412.jpeg",
+      "ratio": 1.4514,
+      "alt": "Fare Tahi : l'extérieur (vue 4)",
+      "cover": false
+    },
+    {
+      "id": "fare-tahi-exterieur-5",
+      "fare": "tahi",
+      "room": "exterieur",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1756855168816982098/original/8bd919db-106e-45e2-98f4-c902dee236a9.jpeg",
+      "ratio": 0.75,
+      "alt": "Fare Tahi : l'extérieur (vue 5)",
+      "cover": false
+    },
+    {
+      "id": "fare-tahi-salon-1",
+      "fare": "tahi",
+      "room": "salon",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1756855168816982098/original/86a50ba6-6b80-4748-9e41-ddd1b1685c60.jpeg",
+      "ratio": 1.3333,
+      "alt": "Fare Tahi : le salon (vue 1)",
+      "cover": false
+    },
+    {
+      "id": "fare-tahi-salon-2",
+      "fare": "tahi",
+      "room": "salon",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1756855168816982098/original/e22fba04-a868-409d-a1ef-8544dbd35453.jpeg",
+      "ratio": 0.966,
+      "alt": "Fare Tahi : le salon (vue 2)",
+      "cover": false
+    },
+    {
+      "id": "fare-tahi-salon-3",
+      "fare": "tahi",
+      "room": "salon",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1756855168816982098/original/7d1783fe-82a4-41fa-91d0-bf197ac43d2f.jpeg",
+      "ratio": 0.75,
+      "alt": "Fare Tahi : le salon (vue 3)",
+      "cover": false
+    },
+    {
+      "id": "fare-tahi-cuisine",
+      "fare": "tahi",
+      "room": "cuisine",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1756855168816982098/original/ec9f91e9-dc84-4422-85e1-ceb7e15b8c1a.jpeg",
+      "ratio": 1.3123,
+      "alt": "Fare Tahi : la cuisine",
+      "cover": false
+    },
+    {
+      "id": "fare-tahi-chambre",
+      "fare": "tahi",
+      "room": "chambre",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1756855168816982098/original/f784eefb-f545-4fac-9338-a4595f77729c.jpeg",
+      "ratio": 0.8423,
+      "alt": "Fare Tahi : la chambre climatisée",
+      "cover": false
+    },
+    {
+      "id": "fare-tahi-salle-de-bain",
+      "fare": "tahi",
+      "room": "salle-de-bain",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1756855168816982098/original/af26fd9f-3d0a-4a28-9ded-4e3fc3b239cb.jpeg",
+      "ratio": 1.0583,
+      "alt": "Fare Tahi : la salle de bain",
+      "cover": false
+    },
+    {
+      "id": "fare-tahi-jardin-1",
+      "fare": "tahi",
+      "room": "jardin",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1756855168816982098/original/a5dab309-aa61-46fc-8dfa-405ba95fc52d.jpeg",
+      "ratio": 1.3333,
+      "alt": "Fare Tahi : le jardin (vue 1)",
+      "cover": false
+    },
+    {
+      "id": "fare-tahi-jardin-2",
+      "fare": "tahi",
+      "room": "jardin",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1756855168816982098/original/2d0e07cd-4904-4f48-a846-e8ab2598c21a.jpeg",
+      "ratio": 0.6687,
+      "alt": "Fare Tahi : le jardin (vue 2)",
+      "cover": false
+    },
+    {
+      "id": "fare-tahi-jardin-3",
+      "fare": "tahi",
+      "room": "jardin",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1756855168816982098/original/cc93aa14-a50a-4caf-bd35-c131e8b8e5a5.jpeg",
+      "ratio": 0.7499,
+      "alt": "Fare Tahi : le jardin (vue 3)",
+      "cover": false
+    },
+    {
+      "id": "fare-tahi-jardin-4",
+      "fare": "tahi",
+      "room": "jardin",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1756855168816982098/original/e2e4bde6-16b2-4423-be4d-5f96a8dc02a5.jpeg",
+      "ratio": 2.2216,
+      "alt": "Fare Tahi : le jardin (vue 4)",
+      "cover": false
+    },
+    {
+      "id": "fare-tahi-jardin-5",
+      "fare": "tahi",
+      "room": "jardin",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1756855168816982098/original/9709b505-63c4-45fa-a2db-3913d8c78f26.jpeg",
+      "ratio": 1.3333,
+      "alt": "Fare Tahi : le jardin (vue 5)",
+      "cover": false
+    },
+    {
+      "id": "fare-tahi-jardin-6",
+      "fare": "tahi",
+      "room": "jardin",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1756855168816982098/original/53853438-df00-4728-8edf-713408d6df9b.jpeg",
+      "ratio": 1.2028,
+      "alt": "Fare Tahi : le jardin (vue 6)",
+      "cover": false
+    },
+    {
+      "id": "fare-tahi-jardin-7",
+      "fare": "tahi",
+      "room": "jardin",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1756855168816982098/original/5d868fd8-e9ca-4c20-9b6d-6823bd8f6cb6.jpeg",
+      "ratio": 1.3333,
+      "alt": "Fare Tahi : le jardin (vue 7)",
+      "cover": false
+    },
+    {
+      "id": "fare-tahi-exterieur-6",
+      "fare": "tahi",
+      "room": "exterieur",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1756855168816982098/original/23c2268a-389a-4bfb-8456-4e984bcddad7.jpeg",
+      "ratio": 1.3334,
+      "alt": "Fare Tahi : l'extérieur (vue 6)",
+      "cover": false
+    },
+    {
+      "id": "fare-tahi-exterieur-7",
+      "fare": "tahi",
+      "room": "exterieur",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1756855168816982098/original/7e34f4e0-7aab-4846-b907-c31ba33ee687.jpeg",
+      "ratio": 0.8892,
+      "alt": "Fare Tahi : l'extérieur (vue 7)",
+      "cover": false
+    },
+    {
+      "id": "fare-hiva-exterieur-1",
+      "fare": "hiva",
+      "room": "exterieur",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1756854739603374711/original/7a73a5a0-cb41-4518-8fac-de110e7df641.jpeg",
+      "ratio": 1.3333,
+      "alt": "Fare Hiva : l'extérieur (vue 1)",
+      "cover": true
+    },
+    {
+      "id": "fare-hiva-exterieur-3",
+      "fare": "hiva",
+      "room": "exterieur",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1756854739603374711/original/48598cfb-60c6-4eca-96ea-73ec33767992.jpeg",
+      "ratio": 1.3333,
+      "alt": "Fare Hiva : l'extérieur (vue 3)",
+      "cover": false
+    },
+    {
+      "id": "fare-hiva-chambre",
+      "fare": "hiva",
+      "room": "chambre",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1756854739603374711/original/39d22798-42ff-4c79-ba02-a0c063c73e3e.jpeg",
+      "ratio": 0.8423,
+      "alt": "Fare Hiva : la chambre climatisée",
+      "cover": false
+    },
+    {
+      "id": "fare-hiva-cuisine",
+      "fare": "hiva",
+      "room": "cuisine",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1756854739603374711/original/d96cc388-b5f7-4739-a704-661ba67d545c.jpeg",
+      "ratio": 1.3123,
+      "alt": "Fare Hiva : la cuisine",
+      "cover": false
+    },
+    {
+      "id": "fare-hiva-salon-2",
+      "fare": "hiva",
+      "room": "salon",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1756854739603374711/original/bc12a798-0e21-4e93-9833-a2772f740953.jpeg",
+      "ratio": 0.822,
+      "alt": "Fare Hiva : le salon (vue 2)",
+      "cover": false
+    },
+    {
+      "id": "fare-hiva-salon-1",
+      "fare": "hiva",
+      "room": "salon",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1756854739603374711/original/466bb399-d3c8-4a3b-abdd-4adaf8ffa359.jpeg",
+      "ratio": 1.3333,
+      "alt": "Fare Hiva : le salon (vue 1)",
+      "cover": false
+    },
+    {
+      "id": "fare-hiva-salon-3",
+      "fare": "hiva",
+      "room": "salon",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1756854739603374711/original/40a378d4-e7a7-466f-bf49-99b0e3c3abde.jpeg",
+      "ratio": 0.9662,
+      "alt": "Fare Hiva : le salon (vue 3)",
+      "cover": false
+    },
+    {
+      "id": "fare-hiva-salle-de-bain",
+      "fare": "hiva",
+      "room": "salle-de-bain",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1756854739603374711/original/bfd8c2e2-9fa3-429c-b6dc-7098c2064c7c.jpeg",
+      "ratio": 1.0583,
+      "alt": "Fare Hiva : la salle de bain",
+      "cover": false
+    },
+    {
+      "id": "fare-hiva-jardin-1",
+      "fare": "hiva",
+      "room": "jardin",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1756854739603374711/original/b0babd62-8d51-44b4-a2ea-2e543b6297dc.jpeg",
+      "ratio": 1.3333,
+      "alt": "Fare Hiva : le jardin (vue 1)",
+      "cover": false
+    },
+    {
+      "id": "fare-hiva-jardin-2",
+      "fare": "hiva",
+      "room": "jardin",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1756854739603374711/original/35d7a70d-183c-4ee1-9034-00302e7851fa.jpeg",
+      "ratio": 0.6687,
+      "alt": "Fare Hiva : le jardin (vue 2)",
+      "cover": false
+    },
+    {
+      "id": "fare-hiva-jardin-3",
+      "fare": "hiva",
+      "room": "jardin",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1756854739603374711/original/e20c80a2-993a-43df-b365-fecb7d0d0e1a.jpeg",
+      "ratio": 0.7499,
+      "alt": "Fare Hiva : le jardin (vue 3)",
+      "cover": false
+    },
+    {
+      "id": "fare-hiva-jardin-4",
+      "fare": "hiva",
+      "room": "jardin",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1756854739603374711/original/eddec268-0cab-4c0c-ba91-73b8403f6a28.jpeg",
+      "ratio": 2.2216,
+      "alt": "Fare Hiva : le jardin (vue 4)",
+      "cover": false
+    },
+    {
+      "id": "fare-hiva-jardin-5",
+      "fare": "hiva",
+      "room": "jardin",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1756854739603374711/original/1c308610-d397-47dc-ad2c-cebb446e537c.jpeg",
+      "ratio": 1.3333,
+      "alt": "Fare Hiva : le jardin (vue 5)",
+      "cover": false
+    },
+    {
+      "id": "fare-hiva-jardin-6",
+      "fare": "hiva",
+      "room": "jardin",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1756854739603374711/original/cc952127-485e-45f3-8ddc-3e8da1997368.jpeg",
+      "ratio": 1.3333,
+      "alt": "Fare Hiva : le jardin (vue 6)",
+      "cover": false
+    },
+    {
+      "id": "fare-hiva-exterieur-2",
+      "fare": "hiva",
+      "room": "exterieur",
+      "source": "https://a0.muscache.com/im/pictures/hosting/Hosting-1756854739603374711/original/aa06a34e-2638-49b1-affe-dc102d17d626.jpeg",
+      "ratio": 1.2369,
+      "alt": "Fare Hiva : l'extérieur (vue 2)",
+      "cover": false
+    }
+  ]
+}

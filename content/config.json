@@ -1,0 +1,11 @@
+{
+  "_comment": "Réglages techniques. `preview: true` ajoute la balise noindex partout (version d'aperçu) : passer à false à la mise en ligne. Les déploiements Netlify autres que la production restent toujours en noindex.",
+  "preview": true,
+  "defaultLocale": "fr",
+  "locales": [
+    "fr"
+  ],
+  "formName": "demande-sejour",
+  "accent": "#a9e7f5",
+  "_accent": "Couleur d'accent du template (bande des noms, bouton RÉSERVER) : bleu piscine. Préréglage « bleu/cyan » du skill Site Immersif."
+}

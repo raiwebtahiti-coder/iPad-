@@ -1,0 +1,145 @@
+{
+  "_comment": "Les trois fare. `slug` donne l'adresse de la page (/fare-hani/). `photos` : identifiants de content/photos.json, dans l'ordre de la galerie (la première est la couverture). `price` : texte libre affiché tel quel, ex. \"à partir de 18 000 XPF / nuit\".",
+
+  "fares": [
+    {
+      "id": "hani",
+      "slug": "fare-hani",
+      "name": "Fare Hani",
+      "tagline": "Entre confort & intimité, avec piscine",
+      "short": "Calme, élégant et moderne, avec sa piscine privée et un jardin intime.",
+      "pool": true,
+      "capacity": 4,
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "rating": "5,0",
+      "reviewsCount": 3,
+      "price": "[à confirmer]",
+      "airbnb": "https://www.airbnb.fr/rooms/1761287419219506408",
+      "icalEnv": "ICAL_FARE_HANI",
+      "description": [
+        "Détendez-vous dans ce logement calme et élégant.",
+        "Fare Hani est confortable et moderne, avec une ambiance tropicale. La maison dispose de sa piscine privée ; son agencement et son atmosphère vous offrent une expérience unique."
+      ],
+      "outdoor": {
+        "title": "Extérieur & piscine",
+        "items": ["Piscine privée", "Terrasse avec table et chaises", "Espace repas extérieur", "Jardin intime et calme", "Parfait pour se détendre après une journée plage ou randonnée"]
+      },
+      "rules": [],
+      "cardPhoto": "fare-hani-exterieur-1",
+      "photos": [
+        "fare-hani-exterieur-1", "fare-hani-exterieur-2", "fare-hani-exterieur-3", "fare-hani-exterieur-5", "fare-hani-exterieur-6",
+        "fare-hani-salon-1", "fare-hani-salon-2", "fare-hani-salon-3", "fare-hani-cuisine", "fare-hani-chambre", "fare-hani-salle-de-bain",
+        "fare-hani-jardin-1", "fare-hani-jardin-2", "fare-hani-jardin-3", "fare-hani-jardin-4", "fare-hani-jardin-5", "fare-hani-jardin-6",
+        "fare-hani-exterieur-4", "fare-hani-exterieur-7", "fare-hani-exterieur-8"
+      ],
+      "seo": {
+        "title": "Fare Hani — maison avec piscine privée à Maatea, Moorea",
+        "description": "Fare Hani : maison F2 pour 4 voyageurs avec piscine privée et jardin intime, à Maatea, Moorea. Chambre climatisée, cuisine équipée, arrivée autonome."
+      }
+    },
+    {
+      "id": "tahi",
+      "slug": "fare-tahi",
+      "name": "Fare Tahi",
+      "tagline": "Un refuge tropical avec piscine",
+      "short": "Un cocon moderne et lumineux, avec piscine privée, dans un quartier verdoyant.",
+      "pool": true,
+      "capacity": 4,
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "rating": null,
+      "ratingNote": "Nouvelle annonce",
+      "reviewsCount": 1,
+      "price": "[à confirmer]",
+      "airbnb": "https://www.airbnb.fr/rooms/1756855168816982098",
+      "icalEnv": "ICAL_FARE_TAHI",
+      "description": [
+        "Bienvenue dans votre cocon tropical, à Maatea, un quartier calme et verdoyant de Moorea.",
+        "Cette maison F2 moderne et lumineuse est idéale pour un séjour en couple, en famille ou entre amis. Vous profiterez d'une piscine privée, d'un espace extérieur agréable et d'un intérieur confortable pensé pour accueillir jusqu'à 4 personnes."
+      ],
+      "outdoor": {
+        "title": "Extérieur & piscine",
+        "items": ["Piscine privée", "Arrière-cour privée", "Terrasse avec table et chaises", "Espace repas extérieur", "Jardin intime et calme"]
+      },
+      "rules": ["Animaux non admis (d'après l'annonce Airbnb) [à confirmer]"],
+      "cardPhoto": "fare-tahi-exterieur-1",
+      "photos": [
+        "fare-tahi-exterieur-1", "fare-tahi-exterieur-2", "fare-tahi-exterieur-3", "fare-tahi-exterieur-4", "fare-tahi-exterieur-5",
+        "fare-tahi-salon-1", "fare-tahi-salon-2", "fare-tahi-salon-3", "fare-tahi-cuisine", "fare-tahi-chambre", "fare-tahi-salle-de-bain",
+        "fare-tahi-jardin-1", "fare-tahi-jardin-2", "fare-tahi-jardin-3", "fare-tahi-jardin-4", "fare-tahi-jardin-5", "fare-tahi-jardin-6", "fare-tahi-jardin-7",
+        "fare-tahi-exterieur-6", "fare-tahi-exterieur-7"
+      ],
+      "seo": {
+        "title": "Fare Tahi — refuge tropical avec piscine à Maatea, Moorea",
+        "description": "Fare Tahi : maison F2 moderne et lumineuse pour 4 voyageurs, avec piscine privée, à Maatea, Moorea. Arrivée autonome, cuisine équipée, parking gratuit."
+      }
+    },
+    {
+      "id": "hiva",
+      "slug": "fare-hiva",
+      "name": "Fare Hiva",
+      "tagline": "Simplicité et tranquillité",
+      "short": "Le choix confortable, pratique et abordable, avec un bel espace extérieur. Sans piscine.",
+      "pool": false,
+      "capacity": 4,
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "rating": "5,0",
+      "reviewsCount": 4,
+      "price": "[à confirmer]",
+      "airbnb": "https://www.airbnb.fr/rooms/1756854739603374711",
+      "icalEnv": "ICAL_FARE_HIVA",
+      "description": [
+        "Cette maison F2 est parfaite pour les voyageurs qui souhaitent un logement confortable, pratique et abordable, tout en profitant du charme naturel de Moorea.",
+        "Elle offre un bel espace extérieur et un intérieur agréable. Fare Hiva n'a pas de piscine : c'est le choix simple et tranquille."
+      ],
+      "outdoor": {
+        "title": "Extérieur",
+        "items": ["Terrasse avec table et chaises", "Espace repas extérieur", "Jardin calme et paisible", "Parfait pour se détendre après une journée plage ou randonnée"]
+      },
+      "rules": [],
+      "cardPhoto": "fare-hiva-exterieur-1",
+      "photos": [
+        "fare-hiva-exterieur-1", "fare-hiva-exterieur-3", "fare-hiva-chambre", "fare-hiva-cuisine", "fare-hiva-salon-2",
+        "fare-hiva-salon-1", "fare-hiva-salon-3", "fare-hiva-salle-de-bain",
+        "fare-hiva-jardin-1", "fare-hiva-jardin-2", "fare-hiva-jardin-3", "fare-hiva-jardin-4", "fare-hiva-jardin-5", "fare-hiva-jardin-6",
+        "fare-hiva-exterieur-2"
+      ],
+      "seo": {
+        "title": "Fare Hiva — maison simple et tranquille à Maatea, Moorea",
+        "description": "Fare Hiva : maison F2 pour 4 voyageurs, confortable et abordable, avec terrasse et jardin, à Maatea, Moorea. Arrivée autonome, parking gratuit."
+      }
+    }
+  ],
+
+  "common": {
+    "_comment": "Ce que les trois fare ont en commun (annonces Airbnb).",
+    "sleeping": [
+      { "room": "Chambre", "detail": "Climatisée, avec un lit double" },
+      { "room": "Salon", "detail": "Lumineux, avec un canapé-lit pour 2 personnes" }
+    ],
+    "amenities": [
+      { "group": "Cuisine", "items": ["Plaques de cuisson", "Réfrigérateur", "Micro-ondes", "Vaisselle complète", "Cuiseur à riz", "Espace repas extérieur"] },
+      { "group": "Confort", "items": ["Chambre climatisée", "Linge de lit et serviettes fournis", "Wifi", "Télévision"] },
+      { "group": "Pratique", "items": ["Arrivée autonome (boîte à clé sécurisée)", "Stationnement gratuit sur place", "Maison entière"] }
+    ],
+    "amenitiesMore": "Liste complète des équipements (environ 30 par annonce) : [à confirmer]",
+    "idealFor": "Couples, familles, voyageurs en quête de tranquillité, séjours courts ou longs."
+  },
+
+  "compare": {
+    "title": "Quel fare choisir ?",
+    "intro": "Même confort, même soin, même hôte. La vraie différence : la piscine.",
+    "rows": [
+      { "key": "pool", "label": "Piscine privée" },
+      { "key": "capacity", "label": "Voyageurs" },
+      { "key": "beds", "label": "Couchages" },
+      { "key": "outdoorShort", "label": "Extérieur" },
+      { "key": "rating", "label": "Note Airbnb" },
+      { "key": "price", "label": "Prix par nuit" }
+    ],
+    "beds": "1 lit double + 1 canapé-lit",
+    "outdoorShort": { "hani": "Jardin intime, terrasse", "tahi": "Arrière-cour privée, terrasse", "hiva": "Jardin, terrasse" }
+  }
+}

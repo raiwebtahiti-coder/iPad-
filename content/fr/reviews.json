@@ -1,0 +1,91 @@
+{
+  "_comment": "Avis laissés sur Airbnb (relevés le 25 septembre 2026). Extraits fidèles : certains avis longs sont raccourcis, les émojis sont retirés. `fare` relie l'avis à sa maison. Mettre à jour à la main ; ne jamais inventer d'avis.",
+  "source": "Airbnb",
+  "collected": "septembre 2026",
+  "summary": {
+    "hostRating": "5,0",
+    "hostReviews": 8,
+    "categories": [
+      {
+        "label": "Propreté",
+        "value": "5,0"
+      },
+      {
+        "label": "Précision",
+        "value": "5,0"
+      },
+      {
+        "label": "Arrivée",
+        "value": "5,0"
+      },
+      {
+        "label": "Communication",
+        "value": "5,0"
+      },
+      {
+        "label": "Qualité-prix",
+        "value": "5,0"
+      },
+      {
+        "label": "Emplacement",
+        "value": "4,7 – 4,8"
+      }
+    ]
+  },
+  "featured": {
+    "_comment": "L'avis mis en scène sur l'accueil.",
+    "fare": "hiva",
+    "author": "Simeon",
+    "text": "Ce fut notre séjour préféré parmi tous les logements Airbnb pendant nos 2 semaines de vacances : de belles maisons d'hôtes neuves avec tout ce dont vous avez besoin pour votre séjour, dans un quartier agréable et calme."
+  },
+  "reviews": [
+    {
+      "fare": "hani",
+      "author": "Christophe",
+      "stay": "Séjour de quelques nuits",
+      "text": "Un séjour absolument incroyable ! Le logement est vraiment superbe, très agréable à vivre, confortable et parfaitement bien équipé. On s'y sent tout de suite comme chez soi. Un grand merci également à l'hôte, qui a été au top du début à la fin : réactive, gentille, flexible et vraiment arrangeante. Je recommande ce logement les yeux fermés et j'y retournerais avec grand plaisir !"
+    },
+    {
+      "fare": "hiva",
+      "author": "Marion",
+      "stay": "Séjour de quelques nuits",
+      "text": "Très bon séjour dans ce logement tout neuf et décoré avec goût. La propriété, sur laquelle se situent deux autres petites maisons comme celle-ci, est très bien entretenue avec un joli jardin. Le logement est bien équipé et très propre. Bien situé sur Moorea, une bonne base pour découvrir l'île. Maheata est une hôte très sympathique, réactive et arrangeante. Je recommande !"
+    },
+    {
+      "fare": "tahi",
+      "author": "Yessica",
+      "stay": "Séjour d'environ une semaine",
+      "text": "Nous avons séjourné ici pendant 9 nuits et avons passé un très agréable séjour. La maison est toute neuve et tout était super propre. La piscine privée était également très agréable ! La communication avec Maheata était bonne, et elle a été très serviable. Nous reviendrions certainement !"
+    },
+    {
+      "fare": "hani",
+      "author": "Julia",
+      "stay": "Séjour de quelques nuits",
+      "text": "Tout s'est très bien passé ! Notre hôte s'est montrée particulièrement disponible. Le logement était vraiment propre et agréable. Super séjour ! Merci"
+    },
+    {
+      "fare": "hiva",
+      "author": "Simeon",
+      "stay": "Séjour de quelques nuits",
+      "text": "Ce fut notre séjour préféré parmi tous les logements Airbnb pendant nos 2 semaines de vacances : de belles maisons d'hôtes neuves avec tout ce dont vous avez besoin pour votre séjour, dans un quartier agréable et calme."
+    },
+    {
+      "fare": "hani",
+      "author": "Mickaël",
+      "stay": "Séjour de quelques nuits",
+      "text": "Logement à la hauteur de nos attentes ! Il est tout neuf et ménage parfait ! Hôte disponible et à l'écoute ! Bref… à bientôt !"
+    },
+    {
+      "fare": "hiva",
+      "author": "Ole",
+      "stay": "Séjour de quelques nuits",
+      "text": "L'installation est assez récente. Tout est là et joliment décoré. Le jardin est également très bien aménagé. La communication avec notre hôtesse était très bonne, elle a répondu immédiatement. Le logement est absolument recommandé."
+    },
+    {
+      "fare": "hiva",
+      "author": "Parker",
+      "stay": "Séjour de quelques nuits",
+      "text": "Tout était propre, bien entretenu et en très bon état. L'hôte a été très réactif, sympathique et serviable tout au long de notre séjour. Nous avons trouvé le quartier très paisible et sûr, et avons pu explorer toute l'île facilement. Dans l'ensemble, un excellent rapport qualité-prix. Nous reviendrions certainement !"
+    }
+  ]
+}

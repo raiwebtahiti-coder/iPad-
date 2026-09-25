@@ -1,0 +1,277 @@
+{
+  "fare-hani-chambre": {
+    "w": 1600,
+    "h": 1900,
+    "placeholder": true
+  },
+  "fare-hani-cuisine": {
+    "w": 1600,
+    "h": 1219,
+    "placeholder": true
+  },
+  "fare-hani-exterieur-1": {
+    "w": 1600,
+    "h": 1399,
+    "placeholder": true
+  },
+  "fare-hani-exterieur-2": {
+    "w": 1600,
+    "h": 1306,
+    "placeholder": true
+  },
+  "fare-hani-exterieur-3": {
+    "w": 1600,
+    "h": 1211,
+    "placeholder": true
+  },
+  "fare-hani-exterieur-4": {
+    "w": 1600,
+    "h": 2133,
+    "placeholder": true
+  },
+  "fare-hani-exterieur-5": {
+    "w": 1600,
+    "h": 1032,
+    "placeholder": true
+  },
+  "fare-hani-exterieur-6": {
+    "w": 1600,
+    "h": 1252,
+    "placeholder": true
+  },
+  "fare-hani-exterieur-7": {
+    "w": 1600,
+    "h": 1200,
+    "placeholder": true
+  },
+  "fare-hani-exterieur-8": {
+    "w": 1600,
+    "h": 2133,
+    "placeholder": true
+  },
+  "fare-hani-jardin-1": {
+    "w": 1600,
+    "h": 1200,
+    "placeholder": true
+  },
+  "fare-hani-jardin-2": {
+    "w": 1600,
+    "h": 2393,
+    "placeholder": true
+  },
+  "fare-hani-jardin-3": {
+    "w": 1600,
+    "h": 2134,
+    "placeholder": true
+  },
+  "fare-hani-jardin-4": {
+    "w": 1600,
+    "h": 720,
+    "placeholder": true
+  },
+  "fare-hani-jardin-5": {
+    "w": 1600,
+    "h": 1200,
+    "placeholder": true
+  },
+  "fare-hani-jardin-6": {
+    "w": 1600,
+    "h": 1200,
+    "placeholder": true
+  },
+  "fare-hani-salle-de-bain": {
+    "w": 1600,
+    "h": 1512,
+    "placeholder": true
+  },
+  "fare-hani-salon-1": {
+    "w": 1600,
+    "h": 1200,
+    "placeholder": true
+  },
+  "fare-hani-salon-2": {
+    "w": 1600,
+    "h": 2443,
+    "placeholder": true
+  },
+  "fare-hani-salon-3": {
+    "w": 1600,
+    "h": 1656,
+    "placeholder": true
+  },
+  "fare-hiva-chambre": {
+    "w": 1600,
+    "h": 1900,
+    "placeholder": true
+  },
+  "fare-hiva-cuisine": {
+    "w": 1600,
+    "h": 1219,
+    "placeholder": true
+  },
+  "fare-hiva-exterieur-1": {
+    "w": 1600,
+    "h": 1200,
+    "placeholder": true
+  },
+  "fare-hiva-exterieur-2": {
+    "w": 1600,
+    "h": 1294,
+    "placeholder": true
+  },
+  "fare-hiva-exterieur-3": {
+    "w": 1600,
+    "h": 1200,
+    "placeholder": true
+  },
+  "fare-hiva-jardin-1": {
+    "w": 1600,
+    "h": 1200,
+    "placeholder": true
+  },
+  "fare-hiva-jardin-2": {
+    "w": 1600,
+    "h": 2393,
+    "placeholder": true
+  },
+  "fare-hiva-jardin-3": {
+    "w": 1600,
+    "h": 2134,
+    "placeholder": true
+  },
+  "fare-hiva-jardin-4": {
+    "w": 1600,
+    "h": 720,
+    "placeholder": true
+  },
+  "fare-hiva-jardin-5": {
+    "w": 1600,
+    "h": 1200,
+    "placeholder": true
+  },
+  "fare-hiva-jardin-6": {
+    "w": 1600,
+    "h": 1200,
+    "placeholder": true
+  },
+  "fare-hiva-salle-de-bain": {
+    "w": 1600,
+    "h": 1512,
+    "placeholder": true
+  },
+  "fare-hiva-salon-1": {
+    "w": 1600,
+    "h": 1200,
+    "placeholder": true
+  },
+  "fare-hiva-salon-2": {
+    "w": 1600,
+    "h": 1946,
+    "placeholder": true
+  },
+  "fare-hiva-salon-3": {
+    "w": 1600,
+    "h": 1656,
+    "placeholder": true
+  },
+  "fare-tahi-chambre": {
+    "w": 1600,
+    "h": 1900,
+    "placeholder": true
+  },
+  "fare-tahi-cuisine": {
+    "w": 1600,
+    "h": 1219,
+    "placeholder": true
+  },
+  "fare-tahi-exterieur-1": {
+    "w": 1600,
+    "h": 1507,
+    "placeholder": true
+  },
+  "fare-tahi-exterieur-2": {
+    "w": 1600,
+    "h": 1150,
+    "placeholder": true
+  },
+  "fare-tahi-exterieur-3": {
+    "w": 1600,
+    "h": 1200,
+    "placeholder": true
+  },
+  "fare-tahi-exterieur-4": {
+    "w": 1600,
+    "h": 1102,
+    "placeholder": true
+  },
+  "fare-tahi-exterieur-5": {
+    "w": 1600,
+    "h": 2133,
+    "placeholder": true
+  },
+  "fare-tahi-exterieur-6": {
+    "w": 1600,
+    "h": 1200,
+    "placeholder": true
+  },
+  "fare-tahi-exterieur-7": {
+    "w": 1600,
+    "h": 1799,
+    "placeholder": true
+  },
+  "fare-tahi-jardin-1": {
+    "w": 1600,
+    "h": 1200,
+    "placeholder": true
+  },
+  "fare-tahi-jardin-2": {
+    "w": 1600,
+    "h": 2393,
+    "placeholder": true
+  },
+  "fare-tahi-jardin-3": {
+    "w": 1600,
+    "h": 2134,
+    "placeholder": true
+  },
+  "fare-tahi-jardin-4": {
+    "w": 1600,
+    "h": 720,
+    "placeholder": true
+  },
+  "fare-tahi-jardin-5": {
+    "w": 1600,
+    "h": 1200,
+    "placeholder": true
+  },
+  "fare-tahi-jardin-6": {
+    "w": 1600,
+    "h": 1330,
+    "placeholder": true
+  },
+  "fare-tahi-jardin-7": {
+    "w": 1600,
+    "h": 1200,
+    "placeholder": true
+  },
+  "fare-tahi-salle-de-bain": {
+    "w": 1600,
+    "h": 1512,
+    "placeholder": true
+  },
+  "fare-tahi-salon-1": {
+    "w": 1600,
+    "h": 1200,
+    "placeholder": true
+  },
+  "fare-tahi-salon-2": {
+    "w": 1600,
+    "h": 1656,
+    "placeholder": true
+  },
+  "fare-tahi-salon-3": {
+    "w": 1600,
+    "h": 2133,
+    "placeholder": true
+  }
+}

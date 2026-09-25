@@ -1,0 +1,10 @@
+# Déploiement relié à GitHub : Netlify construit le site et active la
+# fonction de disponibilités. En glisser-déposer : lancer `npm run build`
+# puis déposer le dossier dist/ (le calendrier reste alors masqué).
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"

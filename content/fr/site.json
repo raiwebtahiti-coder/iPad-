@@ -1,0 +1,118 @@
+{
+  "_comment": "Contenu général du site (français). Tout texte contenant [à confirmer] s'affiche surligné sur le site et doit être remplacé. Pour l'anglais : copier ce dossier en content/en/, traduire, puis ajouter \"en\" dans content/config.json.",
+
+  "brand": {
+    "name": "Les Fare de Maatea",
+    "nameNote": "Nom provisoire : l'ensemble n'a pas encore de nom.",
+    "tagline": "Trois fare au calme à Maatea, Moorea.",
+    "kicker": "MAATEA — MOOREA, POLYNÉSIE FRANÇAISE",
+    "registration": "5266DTO-MT",
+    "registrationLabel": "Meublé de tourisme n°",
+    "copyright": "© 2026 — MAATEA, MOOREA",
+    "signature": "LA VRAIE VIE TROPICALE"
+  },
+
+  "host": {
+    "name": "Maheata",
+    "responseTime": "Répond en général dans l'heure",
+    "airbnbProfile": "https://www.airbnb.fr/users/profile/1756854740431447074",
+    "reviewsCount": 8,
+    "rating": "5,0"
+  },
+
+  "contact": {
+    "email": "[à confirmer]",
+    "phone": "[à confirmer]",
+    "phoneDisplay": "[à confirmer]",
+    "whatsapp": "",
+    "whatsappNote": "Numéro international sans espace ni +, ex. 68987000000. Laisser vide tant qu'il n'est pas connu.",
+    "whatsappMessage": "Bonjour Maheata, je souhaite des informations sur les fare de Maatea.",
+    "address": "Maatea, Moorea — adresse exacte [à confirmer]",
+    "languages": "[à confirmer]"
+  },
+
+  "location": {
+    "area": "Maatea",
+    "island": "Moorea",
+    "region": "Îles du Vent",
+    "country": "Polynésie française",
+    "countryCode": "PF",
+    "lat": -17.5834,
+    "lng": -149.8018,
+    "coordsNote": "Position approximative publiée par Airbnb. Point exact [à confirmer] si la cliente souhaite l'afficher.",
+    "intro": "Maatea est un secteur paisible de Moorea, loin de l'agitation. Les trois fare sont au calme, avec les commerces essentiels à proximité.",
+    "points": [
+      "Quartier calme et verdoyant, idéal pour se ressourcer",
+      "Commerces essentiels à proximité",
+      "Une bonne base pour découvrir toute l'île",
+      "Stationnement gratuit sur place"
+    ],
+    "ferry": "Accès depuis le terminal du ferry de Vaiare : [à confirmer]",
+    "access": "Dernier accès par un court chemin de terre : [à confirmer]",
+    "distances": "Distances vers les plages, commerces et restaurants : [à confirmer]"
+  },
+
+  "stay": {
+    "checkIn": "à partir de 15 h",
+    "checkOut": "avant 11 h",
+    "hoursNote": "D'après les annonces Airbnb, [à confirmer] pour les réservations directes.",
+    "selfCheckIn": "Arrivée autonome : une boîte à clé sécurisée vous attend. Modalités de remise des instructions d'accès : [à confirmer].",
+    "minNights": "[à confirmer]",
+    "cancellation": "[à confirmer]",
+    "payment": "Modalités de paiement et d'acompte : [à confirmer]",
+    "deposit": "[à confirmer]",
+    "cleaning": "Frais de ménage : [à confirmer]",
+    "taxes": "Taxe de séjour : [à confirmer]"
+  },
+
+  "included": {
+    "title": "Inclus dans chaque séjour",
+    "intro": "Les trois fare partagent le même équipement de base : vous n'avez rien à apporter d'autre que votre maillot.",
+    "items": [
+      { "label": "Linge de lit et serviettes", "detail": "Fournis pour tous les voyageurs" },
+      { "label": "Chambre climatisée", "detail": "Avec lit double" },
+      { "label": "Cuisine équipée", "detail": "Plaques, réfrigérateur, micro-ondes, vaisselle, cuiseur à riz" },
+      { "label": "Terrasse et jardin", "detail": "Table, chaises et espace repas extérieur" },
+      { "label": "Wifi et télévision", "detail": "Dans chaque fare" },
+      { "label": "Stationnement gratuit", "detail": "Sur place" },
+      { "label": "Arrivée autonome", "detail": "Boîte à clé sécurisée" },
+      { "label": "Une hôte joignable", "detail": "Maheata répond en général dans l'heure" }
+    ]
+  },
+
+  "goodToKnow": {
+    "title": "Bon à savoir",
+    "kicker": "LE MOT DE MAHEATA",
+    "lead": "À Moorea, vous serez entourés de nature… et la nature vous aime beaucoup.",
+    "paragraphs": [
+      "Les moustiques vous considèrent comme une star, les lézards sont nos colocataires officiels, et les crabes de terre aiment faire leur petit défilé nocturne.",
+      "Rien de dangereux, juste la vraie vie tropicale."
+    ],
+    "closing": "Bienvenue au paradis, version 100 % authentique.",
+    "practical": [
+      { "label": "Arrivée", "value": "à partir de 15 h [à confirmer]" },
+      { "label": "Départ", "value": "avant 11 h [à confirmer]" },
+      { "label": "Capacité", "value": "4 voyageurs maximum par fare" },
+      { "label": "Animaux", "value": "[à confirmer]" }
+    ]
+  },
+
+  "reservation": {
+    "intro": "Choisissez votre fare et vos dates : Maheata vous répond personnellement pour confirmer la disponibilité et le tarif. Il s'agit d'une demande, pas d'une réservation automatique.",
+    "direct": "Réserver en direct, c'est sans commission de plateforme.",
+    "priceFrom": "[à confirmer]"
+  },
+
+  "seo": {
+    "siteUrl": "https://les-fare-de-maatea.netlify.app",
+    "siteUrlNote": "Adresse définitive du site [à confirmer]. Sur Netlify, l'adresse du déploiement est utilisée automatiquement.",
+    "home": {
+      "title": "Les Fare de Maatea — trois maisons au calme à Moorea",
+      "description": "Trois fare pour 4 voyageurs à Maatea, Moorea : Fare Hani et Fare Tahi avec piscine privée, Fare Hiva au jardin. Réservation directe auprès de Maheata."
+    },
+    "contact": {
+      "title": "Contact et infos pratiques — Les Fare de Maatea, Moorea",
+      "description": "Contacter Maheata, arrivée autonome, accès depuis le ferry et demande de séjour pour les trois fare de Maatea à Moorea."
+    }
+  }
+}

@@ -1,0 +1,6 @@
+/* Polices hébergées localement (mêmes familles que le template Site Immersif). */
+@font-face { font-family: 'Bricolage Grotesque'; font-style: normal; font-weight: 300; font-display: swap; src: url('bricolage-grotesque-latin-300-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Bricolage Grotesque'; font-style: normal; font-weight: 400; font-display: swap; src: url('bricolage-grotesque-latin-400-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Bricolage Grotesque'; font-style: normal; font-weight: 500; font-display: swap; src: url('bricolage-grotesque-latin-500-normal.woff2') format('woff2'); }
+@font-face { font-family: 'DM Mono'; font-style: normal; font-weight: 400; font-display: swap; src: url('dm-mono-latin-400-normal.woff2') format('woff2'); }
+@font-face { font-family: 'DM Mono'; font-style: normal; font-weight: 500; font-display: swap; src: url('dm-mono-latin-500-normal.woff2') format('woff2'); }

@@ -1,0 +1,93 @@
+{
+  "_comment": "Textes de l'accueil. Les blocs hook / positioning / manifesto / motto / process / testimonial / objections alimentent les scènes animées du template « Site Immersif » : respecter les contraintes de longueur indiquées.",
+
+  "nav": { "fares": "LES FARE", "stay": "SÉJOUR", "cta": "RÉSERVER" },
+
+  "hook": {
+    "_rules": "line1 + line2a/line2b : 2 lignes courtes. La ligne 2 tient sur une ligne : la photo naît entre line2a et line2b.",
+    "line1": "Trois fare au calme,",
+    "line2a": "à Maatea,",
+    "line2b": "Moorea.",
+    "image": "fare-hani-exterieur-1",
+    "floaters": ["fare-tahi-exterieur-5", "fare-hani-salon-2", "fare-hiva-exterieur-1", "fare-hani-jardin-3", "fare-tahi-exterieur-2", "fare-hiva-salon-1", "fare-tahi-jardin-2", "fare-hani-exterieur-3", "fare-hiva-chambre", "fare-tahi-salon-1"]
+  },
+
+  "positioning": "Trois maisons, deux piscines privées.",
+
+  "manifesto": {
+    "_rules": "2-3 phrases. Entre [[ ]] : 2 à 3 mots MAXIMUM (entourés à la main).",
+    "text": "Trois maisons simples et soignées, pensées par Maheata pour le calme de Maatea. On arrive en autonomie, on pose ses valises, et on s'y sent [[comme chez soi]] — avec une hôte qui répond dans l'heure."
+  },
+
+  "fares": {
+    "kicker": "LES TROIS FARE",
+    "title": "Trois maisons, un même soin",
+    "sub": "Chacune pour 4 voyageurs, avec sa chambre climatisée, sa cuisine et sa terrasse.",
+    "meta": "HANI — TAHI — HIVA",
+    "gallery": [
+      { "photo": "fare-hani-exterieur-2", "fare": "hani" },
+      { "photo": "fare-tahi-salon-3", "fare": "tahi" },
+      { "photo": "fare-hiva-exterieur-3", "fare": "hiva" },
+      { "photo": "fare-hani-chambre", "fare": "hani" },
+      { "photo": "fare-tahi-exterieur-3", "fare": "tahi" },
+      { "photo": "fare-hiva-salon-2", "fare": "hiva" },
+      { "photo": "fare-hani-exterieur-8", "fare": "hani" },
+      { "photo": "fare-tahi-exterieur-7", "fare": "tahi" }
+    ],
+    "cardsTitle": "Choisir son fare",
+    "discover": "Découvrir"
+  },
+
+  "motto": {
+    "kicker": "TROIS FARE, TROIS CARACTÈRES",
+    "_rules": "3 mots géants, un hint d'une ligne chacun.",
+    "words": [
+      { "word": "Hani", "hint": "Confort et intimité, avec piscine privée." },
+      { "word": "Tahi", "hint": "Un refuge tropical, avec piscine privée." },
+      { "word": "Hiva", "hint": "Simplicité et tranquillité, sans piscine." }
+    ]
+  },
+
+  "process": {
+    "_rules": "« introA introB [photo] introC » puis 3 étapes, desc en 1-2 phrases.",
+    "introA": "Un",
+    "introB": "séjour,",
+    "introC": "3 étapes.",
+    "image": "fare-hiva-jardin-4",
+    "cta": "Faire une demande →",
+    "items": [
+      { "name": "La demande", "meta": "ÉTAPE — 01", "desc": "Choisissez votre fare et vos dates, puis envoyez votre demande depuis le site. C'est gratuit et sans engagement." },
+      { "name": "La réponse", "meta": "ÉTAPE — 02", "desc": "Maheata vous répond personnellement pour confirmer la disponibilité, le tarif et les modalités de réservation." },
+      { "name": "L'arrivée", "meta": "ÉTAPE — 03", "desc": "Arrivée autonome grâce à la boîte à clé sécurisée. Il ne reste plus qu'à ralentir." }
+    ]
+  },
+
+  "testimonial": {
+    "_rules": "figure : chiffre qui monte de 0 (sans décimale). unit : 4 caractères max. kicker en MAJUSCULES.",
+    "kicker": "NOTE MOYENNE DE MAHEATA SUR AIRBNB — 8 AVIS",
+    "figure": "5",
+    "unit": "/5",
+    "author": "SIMEON — FARE HIVA"
+  },
+
+  "objections": {
+    "items": ["Pas de plateforme.", "Pas de commission.", "Pas d'intermédiaire."],
+    "finale": "Juste vous et Maheata,",
+    "pill": "en direct."
+  },
+
+  "trail": ["fare-hani-jardin-1", "fare-tahi-jardin-3", "fare-hiva-jardin-2", "fare-hani-salon-3", "fare-tahi-salon-2", "fare-hiva-salon-3", "fare-hani-jardin-5", "fare-tahi-exterieur-6", "fare-hiva-jardin-5", "fare-hani-exterieur-4", "fare-tahi-jardin-5", "fare-hiva-exterieur-2", "fare-hani-jardin-6", "fare-tahi-jardin-6", "fare-hiva-jardin-6", "fare-hani-exterieur-7", "fare-tahi-jardin-7", "fare-hiva-jardin-3", "fare-hani-salle-de-bain", "fare-tahi-chambre"],
+
+  "sections": {
+    "compareKicker": "COMPARER",
+    "includedKicker": "INCLUS",
+    "locationKicker": "LOCALISATION",
+    "locationTitle": "Au calme, à Maatea",
+    "reviewsKicker": "AVIS DES VOYAGEURS",
+    "reviewsTitle": "Ce qu'ils en disent",
+    "ctaKicker": "UN SÉJOUR À MOOREA EN TÊTE ?",
+    "ctaTitle": "Écrivez à Maheata, elle vous répond en direct.",
+    "footerKicker": "UN SÉJOUR À MOOREA EN TÊTE ?",
+    "footerReassurance": "RÉPONSE EN GÉNÉRAL DANS L'HEURE — DEMANDE SANS ENGAGEMENT"
+  }
+}

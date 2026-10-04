@@ -39,6 +39,12 @@
     reg(box);
     return { box, words };
   }
+  // un mot en couleur s'allume à son arrivée (halo bleu), puis garde une lueur douce
+  function glow(t, w, at) {
+    const k = spHit(t, at, 'snappy'), f = Math.exp(-Math.max(0, t - bt(at) - 0.15) * 3);
+    const a = k > 0.01 ? (0.35 + 0.65 * f) : 0;
+    put(w, { css: { textShadow: a ? `0 0 ${(20 + 40 * f).toFixed(0)}px rgba(120,160,255,${a.toFixed(3)}), 0 0 6px rgba(200,220,255,${(0.6 * a).toFixed(3)})` : 'none' } });
+  }
   function riseWords(t, L, at, step = 0.18, preset = 'snappy') {
     L.words.forEach((w, i) => {
       const p = spHit(t, beatOf(at) + i * step, preset);
@@ -73,6 +79,13 @@
         const c = g.createRadialGradient(540, 1180, 0, 540, 1180, 220);
         c.addColorStop(0, `rgba(255,255,255,${0.95 * pt})`); c.addColorStop(0.12, `rgba(190,210,255,${0.7 * pt})`); c.addColorStop(1, 'rgba(91,140,255,0)');
         g.fillStyle = c; g.fillRect(0, 0, W, H);
+        // ondes de lumière qui partent du point (une par demi-seconde) : l'œil est tiré dès l'image 0
+        for (let i = 0; i < 4; i++) {
+          const q = (t + 0.5 - i * 0.5) / 1.1;
+          if (q <= 0 || q >= 1) continue;
+          g.strokeStyle = `rgba(170,200,255,${(0.55 * (1 - q) * pt).toFixed(3)})`; g.lineWidth = 3 + 6 * (1 - q);
+          g.beginPath(); g.ellipse(540, 1180, 40 + 520 * q, (40 + 520 * q) * 0.42, 0, 0, 6.2832); g.stroke();
+        }
       }
       // sol en perspective : lignes qui défilent vers la caméra (profondeur permanente)
       const hor = 1290, vp = 540;
@@ -104,7 +117,7 @@
       S.l2.words[1].style.color = ACC2;
       S.tag = tag(S.cam, 'Le client demande', 90, 700);
       // fenêtre de discussion (verre sombre) en 3D
-      S.win = el('div', { class: 'abs', style: `left:80px;top:790px;width:920px;height:720px;border-radius:40px;` +
+      S.win = el('div', { class: 'abs', style: `left:60px;top:780px;width:960px;height:760px;border-radius:40px;` +
         `background:linear-gradient(160deg,#16244d 0%,#0c1533 55%,#0a1029 100%);border:1px solid rgba(150,180,255,.22);` +
         `box-shadow:0 60px 120px -30px rgba(0,0,0,.8), 0 0 80px -20px rgba(91,140,255,.45), inset 0 1px 0 rgba(255,255,255,.12);` +
         `transform-origin:50% 50%` }, S.cam);
@@ -114,38 +127,43 @@
       el('div', { class: 'abs', style: 'left:156px;top:44px;font:800 40px/1.1 UI;color:#f2f5ff' }, S.win, 'Teva');
       el('div', { class: 'abs', style: 'left:156px;top:94px;font:600 26px/1.1 UI;color:#93a0c7' }, S.win, 'Sorties en mer');
       el('div', { class: 'abs', style: 'left:44px;top:160px;width:832px;height:1px;background:rgba(150,180,255,.18)' }, S.win);
-      S.b1 = el('div', { class: 'abs', style: 'left:44px;top:204px;width:700px;height:252px;padding:30px 34px;box-sizing:border-box;' +
-        'border-radius:34px 34px 34px 10px;background:#1b2b5a;font:600 38px/1.32 UI;color:#f2f5ff;transform-origin:0 100%' }, S.win);
+      S.b1 = el('div', { class: 'abs', style: 'left:44px;top:200px;width:780px;height:300px;padding:30px 36px;box-sizing:border-box;' +
+        'border-radius:34px 34px 34px 10px;background:#1b2b5a;font:600 46px/1.3 UI;color:#f2f5ff;transform-origin:0 100%' }, S.win);
       S.t1 = el('span', {}, S.b1, '');
       S.c1 = el('span', { style: 'display:inline-block;width:4px;height:40px;margin-left:4px;vertical-align:-6px;background:#9db8ff' }, S.b1);
       reg(S.b1, { o: 0 }); reg(S.t1); reg(S.c1, { o: 0 });
-      S.dots = el('div', { class: 'abs', style: 'right:44px;top:500px;width:130px;height:64px;border-radius:32px;background:rgba(91,140,255,.25);transform-origin:100% 100%' }, S.win);
+      S.dots = el('div', { class: 'abs', style: 'right:44px;top:540px;width:130px;height:64px;border-radius:32px;background:rgba(91,140,255,.25);transform-origin:100% 100%' }, S.win);
       S.dd = [0, 1, 2].map((i) => reg(el('div', { class: 'abs', style: `left:${28 + i * 28}px;top:25px;width:14px;height:14px;border-radius:50%;background:#cfdcff` }, S.dots)));
       reg(S.dots, { o: 0 });
-      S.b2 = el('div', { class: 'abs', style: 'right:44px;top:500px;padding:28px 36px;border-radius:34px 34px 10px 34px;white-space:nowrap;' +
-        'background:linear-gradient(135deg,#7da0ff,#4a6dff);font:800 40px/1.2 UI;color:#fff;transform-origin:100% 100%;' +
+      S.b2 = el('div', { class: 'abs', style: 'right:44px;top:540px;padding:30px 38px;border-radius:34px 34px 10px 34px;white-space:nowrap;' +
+        'background:linear-gradient(135deg,#7da0ff,#4a6dff);font:800 46px/1.2 UI;color:#fff;transform-origin:100% 100%;' +
         'box-shadow:0 18px 40px -12px rgba(91,140,255,.8)' }, S.win, 'C’est noté. Je m’en occupe.');
       reg(S.b2, { o: 0 });
     },
     run(t, b, S) {
       // caméra : légère poussée continue, puis vol vers le haut (flou de vitesse) qui passe le relais
       const fly = ease.expoIn(seg(t, 'whip1', 8.7));
-      put(S.cam, { s: 1 + 0.05 * seg(t, 0, 8), y: -1700 * fly, filter: blur(26 * fly) });
+      // secousse brève à chaque frappe de l'accroche (amortie, sans aller-retour lent)
+      let shake = 0;
+      for (const hb of [0.25, 1.25]) { const d = t - bt(hb); if (d > 0) shake += 14 * Math.exp(-d * 11) * Math.sin(d * 70); }
+      const lean = ease.inOut(seg(t, 'reply', 'whip1'));
+      put(S.cam, { s: 1 + 0.05 * seg(t, 0, 8) + 0.06 * lean, y: -1700 * fly + shake - 60 * lean, x: shake * 0.4, filter: blur(26 * fly) });
       // l'accroche frappe dès l'image 0
       rise(t, S.l1, [-0.45, 0.25], null, { preset: 'heavy' });
       rise(t, S.l2, [0.8, 1.25], null, { preset: 'heavy' });
+      glow(t, S.l2.words[1], 1.25);
       popTag(t, S.tag, 'tag1');
       // la fenêtre arrive des profondeurs, penchée, et se pose (3D réelle)
       const p = spHit(t, 'chat', 'heavy'), dr = seg(t, 'chat', 8);
       put(S.win, { o: shown(p) * clamp(p * 1.6), filter: blur(14 * (1 - p)),
-        css: { transform: css3d({ z: lerp(-1400, 0, p), y: 120 * (1 - p), rx: lerp(34, 9, p) - 3 * dr, ry: lerp(-42, -12, p) + 8 * dr, rz: lerp(-8, -1, p) }) } });
+        css: { transform: css3d({ z: lerp(-1400, 0, p), y: 120 * (1 - p), rx: lerp(34, 6, p) - 2 * dr, ry: lerp(-42, -8, p) + 6 * dr, rz: lerp(-8, -1, p) }) } });
       // la demande de Teva s'écrit
       const pm = spHit(t, 'msg', 'snappy');
       put(S.b1, { o: shown(pm), s: 0.85 + 0.15 * pm });
       const n = type(t, S.t1, 'Bonjour Rai ! Je veux un site pour mes sorties en mer, avec réservation en ligne.', 'msg', 'msg_end');
-      put(S.c1, { o: b >= beatOf('msg') && b < beatOf('reply') && (n < 80 || Math.floor(b * 2) % 2 === 0) ? 1 : 0 });
+      put(S.c1, { o: b >= beatOf('msg') && b < beatOf('reply') - 0.4 && (n < 80 || Math.floor(b * 2) % 2 === 0) ? 1 : 0 });
       // « Rai écrit… » puis la réponse
-      const pd = spHit(t, 6.85, 'snappy') * (1 - sp(t, 7.15, 'snappy'));
+      const pd = spHit(t, beatOf('reply') - 0.4, 'snappy') * (1 - sp(t, beatOf('reply') - 0.08, 'snappy'));
       put(S.dots, { o: shown(pd) * pd, s: 0.7 + 0.3 * pd });
       S.dd.forEach((d, i) => put(d, { y: -8 * Math.max(0, Math.sin(t * 14 - i * 0.9)) }));
       const pr = spHit(t, 'reply', 'snappy');
@@ -191,6 +209,7 @@
       put(S.cam, { y: 1600 * (1 - inn), s: 1 + 4 * dive, filter: blur(22 * (1 - inn) + 30 * dive), o: 1 - clamp((dive - 0.75) * 4) });
       popTag(t, S.tag, 8.6);
       rise(t, S.l1, [8.8, 9.1], null, { preset: 'heavy' });
+      glow(t, S.l1.words[1], 9.1);
       // la liste flotte en 3D ; la caméra la longe en descendant
       const along = ease.inOut(seg(t, 9, 16));
       put(S.list, { css: { transform: css3d({ y: -120 * along, rx: 26 - 10 * along, rz: -7 + 4 * along, ry: 10 - 14 * along, p: 1500 }) } });
@@ -275,8 +294,10 @@
       popTag(t, S.tag, 'later', 22.0);
       rise(t, S.l1, [19.3, 19.55], 22.1, { preset: 'heavy' });
       rise(t, S.l2, [19.8, 20.0, 20.2], 22.1, { preset: 'heavy' });
+      glow(t, S.l2.words[2], 20.2);
       rise(t, S.l3, ['avous', 22.75, 22.95], null, { preset: 'heavy' });
       rise(t, S.l4, [23.0, 23.2], null, { preset: 'heavy' });
+      glow(t, S.l4.words[1], 23.2);
       popTag(t, S.tag2, 'abo');
       // le site s'assemble en 3D, morceau par morceau
       const ps = spHit(t, 17.3, 'heavy'), dr = seg(t, 17.3, 25.9);
@@ -335,7 +356,7 @@
       const pb = spHit(t, 'cta', 'snappy');
       put(S.btn, { o: shown(pb), s: 0.7 + 0.3 * pb, filter: blur(8 * (1 - pb)) });
       // un reflet traverse le bouton toutes les 2 secondes (tenue vivante)
-      const k = b >= 29.6 ? ((b - 29.6) % 4) / 1.2 : -1;
+      const k = b >= 29.4 ? ((b - 29.4) % 2.4) / 1.0 : -1;
       put(S.shine, { o: k >= 0 && k <= 1 ? 1 : 0, x: lerp(-180, 900, clamp(k)) });
       riseWords(t, S.num, 'num', 0.1);
       riseWords(t, S.url, 'url', 0.1);

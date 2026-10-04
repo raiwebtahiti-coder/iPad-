@@ -1,51 +1,218 @@
 {
-  "note": "Rai Web Design · « Le client propose, je construis » v2 (bleu nuit 3D). Tout en TEMPS (beats) : 120 bpm, 1 beat = 0,5 s, 36 beats = 18 s. La voix off (Higgsfield, Andre) se place par phrases via vo.json.",
+  "note": "Rai Web Design · « Le client propose, je construis » v2 (bleu nuit 3D). Tout en TEMPS (beats) : 120 bpm, 1 beat = 0,5 s, 33 beats = 16,5 s. Sans voix : le texte porte le récit, la musique est plus présente.",
   "title": "Rai Web Design — Votre projet, je le construis",
-  "duration": 18,
+  "duration": 17,
   "fps": 60,
   "bpm": 120,
-  "formats": ["9x16"],
+  "formats": [
+    "9x16"
+  ],
   "music": {
     "source": "synth",
     "seed": 689,
-    "chords": ["Am", "F", "C", "G"],
-    "sections": [
-      { "at": "hook", "kind": "intro" },
-      { "at": "build", "kind": "full" },
-      { "at": "later", "kind": "full" },
-      { "at": 22, "kind": "build" },
-      { "at": "gap", "kind": "gap" },
-      { "at": "end", "kind": "outro" }
+    "chords": [
+      "Am",
+      "F",
+      "C",
+      "G"
     ],
-    "accents": ["end"]
+    "sections": [
+      {
+        "at": "hook",
+        "kind": "intro"
+      },
+      {
+        "at": "build",
+        "kind": "full"
+      },
+      {
+        "at": "later",
+        "kind": "full"
+      },
+      {
+        "at": 22,
+        "kind": "build"
+      },
+      {
+        "at": "gap",
+        "kind": "gap"
+      },
+      {
+        "at": "end",
+        "kind": "outro"
+      }
+    ],
+    "accents": [
+      "end"
+    ]
   },
-  "mix": { "music": -2, "sfx": -4, "vo": 0, "duck": true },
+  "mix": {
+    "music": 0,
+    "sfx": -3,
+    "vo": 0,
+    "duck": false
+  },
   "voiceover": null,
   "marks": {
-    "hook": 0, "hook_w2": 0.5, "hook_w3": 1.2, "chat": 2.5, "tag1": 3.5, "msg": 4.5, "msg_end": 6.8, "reply": 7.2, "whip1": 8,
-    "build": 8.5, "chk1": 9.5, "chk2": 10.4, "chk3": 11.4, "chk4": 12.6, "chk5": 14, "pct_done": 15.5, "dive": 16,
-    "later": 17, "site": 17.8, "phone": 19, "online": 20, "avous": 22.5, "abo": 23.4, "push": 24.2,
-    "gap": 25.5, "end": 26, "name": 26.6, "tagline": 27.6, "cta": 29, "num": 30, "url": 30.6, "done": 36
+    "hook": 0,
+    "hook_w2": 0.5,
+    "hook_w3": 1.2,
+    "chat": 1.5,
+    "tag1": 2.3,
+    "msg": 3.0,
+    "msg_end": 5.2,
+    "reply": 5.8,
+    "whip1": 8,
+    "build": 8.5,
+    "chk1": 9.5,
+    "chk2": 10.4,
+    "chk3": 11.4,
+    "chk4": 12.6,
+    "chk5": 14,
+    "pct_done": 15.5,
+    "dive": 16,
+    "later": 17,
+    "site": 17.8,
+    "phone": 19,
+    "online": 20,
+    "avous": 22.5,
+    "abo": 23.4,
+    "push": 24.2,
+    "gap": 25.5,
+    "end": 26,
+    "name": 26.6,
+    "tagline": 27.6,
+    "cta": 29,
+    "num": 30,
+    "url": 30.6,
+    "done": 34
   },
   "sfx": [
-    { "at": "hook", "type": "pop", "gain": 0.35, "what": "le point de lumière s'ouvre" },
-    { "at": "chat", "type": "whoosh", "gain": 0.3, "what": "la fenêtre de discussion arrive en 3D" },
-    { "at": "msg", "type": "pop", "gain": 0.35, "what": "le message de Teva apparaît" },
-    { "at": "reply", "type": "pop", "gain": 0.45, "what": "la réponse de Rai" },
-    { "at": "whip1", "type": "whoosh", "gain": 0.4, "what": "vol de caméra vers le chantier" },
-    { "at": "chk1", "type": "tick", "gain": 0.4, "what": "Design coché" },
-    { "at": "chk2", "type": "tick", "gain": 0.4, "what": "Textes coché" },
-    { "at": "chk3", "type": "tick", "gain": 0.4, "what": "Version mobile coché" },
-    { "at": "chk4", "type": "tick", "gain": 0.4, "what": "Google coché" },
-    { "at": "chk5", "type": "tick", "gain": 0.4, "what": "Réservation coché" },
-    { "at": "pct_done", "type": "pop", "gain": 0.4, "what": "100 %" },
-    { "at": "dive", "type": "whoosh", "gain": 0.4, "what": "plongée dans le site" },
-    { "at": "site", "type": "pop", "gain": 0.3, "what": "le site s'assemble" },
-    { "at": "phone", "type": "whoosh", "gain": 0.25, "what": "le téléphone glisse devant" },
-    { "at": "online", "type": "pop", "gain": 0.5, "what": "badge En ligne" },
-    { "at": "abo", "type": "tick", "gain": 0.35, "what": "étiquette sans abonnement" },
-    { "at": "push", "type": "riser", "gain": 0.25, "what": "montée douce vers l'éclat" },
-    { "at": "end", "type": "thump", "gain": 0.45, "what": "le gros coup final (doux, pas de crash)" },
-    { "at": "cta", "type": "click", "gain": 0.35, "what": "le bouton WhatsApp" }
+    {
+      "at": "hook",
+      "type": "pop",
+      "gain": 0.35,
+      "what": "le point de lumière s'ouvre"
+    },
+    {
+      "at": 0.25,
+      "type": "pop",
+      "gain": 0.3,
+      "what": "VOUS AVEZ frappe"
+    },
+    {
+      "at": 1.25,
+      "type": "pop",
+      "gain": 0.35,
+      "what": "UN PROJET ? frappe"
+    },
+    {
+      "at": "chat",
+      "type": "whoosh",
+      "gain": 0.35,
+      "what": "la fenêtre de discussion arrive en 3D"
+    },
+    {
+      "at": "msg",
+      "type": "pop",
+      "gain": 0.35,
+      "what": "le message de Teva apparaît"
+    },
+    {
+      "at": "reply",
+      "type": "pop",
+      "gain": 0.45,
+      "what": "la réponse de Rai"
+    },
+    {
+      "at": "whip1",
+      "type": "whoosh",
+      "gain": 0.4,
+      "what": "vol de caméra vers le chantier"
+    },
+    {
+      "at": "chk1",
+      "type": "tick",
+      "gain": 0.4,
+      "what": "Design coché"
+    },
+    {
+      "at": "chk2",
+      "type": "tick",
+      "gain": 0.4,
+      "what": "Textes coché"
+    },
+    {
+      "at": "chk3",
+      "type": "tick",
+      "gain": 0.4,
+      "what": "Version mobile coché"
+    },
+    {
+      "at": "chk4",
+      "type": "tick",
+      "gain": 0.4,
+      "what": "Google coché"
+    },
+    {
+      "at": "chk5",
+      "type": "tick",
+      "gain": 0.4,
+      "what": "Réservation coché"
+    },
+    {
+      "at": "pct_done",
+      "type": "pop",
+      "gain": 0.4,
+      "what": "100 %"
+    },
+    {
+      "at": "dive",
+      "type": "whoosh",
+      "gain": 0.4,
+      "what": "plongée dans le site"
+    },
+    {
+      "at": "site",
+      "type": "pop",
+      "gain": 0.3,
+      "what": "le site s'assemble"
+    },
+    {
+      "at": "phone",
+      "type": "whoosh",
+      "gain": 0.25,
+      "what": "le téléphone glisse devant"
+    },
+    {
+      "at": "online",
+      "type": "pop",
+      "gain": 0.5,
+      "what": "badge En ligne"
+    },
+    {
+      "at": "abo",
+      "type": "tick",
+      "gain": 0.35,
+      "what": "étiquette sans abonnement"
+    },
+    {
+      "at": "push",
+      "type": "riser",
+      "gain": 0.25,
+      "what": "montée douce vers l'éclat"
+    },
+    {
+      "at": "end",
+      "type": "thump",
+      "gain": 0.45,
+      "what": "le gros coup final (doux, pas de crash)"
+    },
+    {
+      "at": "cta",
+      "type": "click",
+      "gain": 0.35,
+      "what": "le bouton WhatsApp"
+    }
   ]
 }

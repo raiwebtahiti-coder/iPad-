@@ -76,6 +76,16 @@ EOF
 node $S/assemble-index.mjs --storyboard ./STORYBOARD.md --hyperframes . | tail -3
 node $S/transitions.mjs inject --storyboard ./STORYBOARD.md --hyperframes . | tail -2
 node $S/transitions.mjs verify --storyboard ./STORYBOARD.md --index ./index.html | tail -1
+# all-cut films: transitions.mjs leaves index.html unchanged, so stamp the full-span anchor of the main timeline here
+python3 - <<'PY'
+import re
+p = "index.html"; s = open(p, encoding="utf-8").read()
+a = 'window.__timelines["main"] = gsap.timeline({ paused: true });'
+if "full-span anchor" not in s:
+    d = re.search(r'data-composition-id="main"[^>]*?data-duration="([0-9.]+)"', s).group(1)
+    s = s.replace(a, a + '\n      (function () { var tl = window.__timelines["main"];\n        tl.to({}, { duration: ' + d + ' }, 0); // full-span anchor\n      })();')
+    open(p, "w", encoding="utf-8").write(s)
+PY
 
 python3 - <<'EOF'
 import os, re

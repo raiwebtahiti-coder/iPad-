@@ -1,0 +1,467 @@
+<template>
+  <style>
+    /* ===== kit claude-intro (CSS) ===== */
+@font-face { font-family: "Instrument Sans"; src: url("assets/fonts/InstrumentSans-400.woff2") format("woff2"); font-weight: 400; font-display: block; }
+@font-face { font-family: "Instrument Sans"; src: url("assets/fonts/InstrumentSans-500.woff2") format("woff2"); font-weight: 500; font-display: block; }
+@font-face { font-family: "Instrument Sans"; src: url("assets/fonts/InstrumentSans-600.woff2") format("woff2"); font-weight: 600; font-display: block; }
+@font-face { font-family: "Instrument Sans"; src: url("assets/fonts/InstrumentSans-700.woff2") format("woff2"); font-weight: 700; font-display: block; }
+@font-face { font-family: "Instrument Serif"; src: url("assets/fonts/InstrumentSerif-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: block; }
+@font-face { font-family: "Instrument Serif"; src: url("assets/fonts/InstrumentSerif-400i.woff2") format("woff2"); font-weight: 400; font-style: italic; font-display: block; }
+@font-face { font-family: "JetBrains Mono"; src: url("assets/fonts/JetBrainsMono-400.woff2") format("woff2"); font-weight: 400; font-display: block; }
+@font-face { font-family: "JetBrains Mono"; src: url("assets/fonts/JetBrainsMono-600.woff2") format("woff2"); font-weight: 600; font-display: block; }
+
+.k-layer { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+.k-ground-dark { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px;
+  background: radial-gradient(ellipse 1400px 860px at 50% 46%, #1d1b19 0%, #141312 58%, #0d0c0b 100%); }
+.k-ground-paper { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px;
+  background: radial-gradient(ellipse 1500px 900px at 50% 42%, #f8f4ed 0%, #f4efe6 55%, #ece4d7 100%); }
+.k-grain { position: absolute; left: 0; top: 0; width: 2160px; height: 1080px; pointer-events: none; opacity: .04; mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23g)'/></svg>");
+  background-size: 240px 240px; }
+.k-grain.k-dark { opacity: .06; mix-blend-mode: screen; }
+
+/* sous-titre : bande y 890 à 980, centré, 62 px ; mots en inline-block (opacité 0 au départ) */
+.k-sub { position: absolute; left: 0; top: 896px; width: 1920px; height: 80px; text-align: center; white-space: nowrap;
+  font: 500 62px/80px "Instrument Sans", sans-serif; letter-spacing: -0.015em; color: #1c1a17; }
+.k-sub.k-on-dark { color: #f4efe6; text-shadow: 0 0 14px #141312, 0 0 28px #141312; }
+/* monde clair : un halo papier détache le sous-titre des interfaces qui passent dessous */
+.k-sub:not(.k-on-dark) { text-shadow: 0 0 10px #f4efe6, 0 0 22px #f4efe6, 0 0 36px rgba(244,239,230,.9); }
+.k-sub .k-box-tx { text-shadow: none; }
+.k-w { display: inline-block; opacity: 0; }
+
+/* moment typographique : centré, Instrument Serif 84 px au plus */
+.k-type { position: absolute; left: 0; width: 1920px; text-align: center; white-space: nowrap;
+  font: 400 84px/1.1 "Instrument Serif", serif; letter-spacing: -0.01em; color: #1c1a17; }
+.k-type.k-on-dark { color: #f4efe6; }
+
+/* boîte du mot clé : corail, texte papier ; le fond se trace de gauche à droite (scaleX 0 -> 1) */
+.k-box { position: relative; display: inline-block; margin-left: 0.1em; }
+.k-box-bg { position: absolute; left: -0.14em; right: -0.14em; top: 0.08em; bottom: 0.02em; border-radius: 10px; background: #d97757;
+  transform-origin: 0 50%; transform: scaleX(0); }
+.k-box-tx { position: relative; }
+
+/* trait du pic : coup de pinceau effilé corail sous LE mot (svg en 100 % de largeur du mot) */
+.k-trait { position: relative; display: inline-block; }
+.k-trait-svg { position: absolute; left: -0.06em; bottom: -0.10em; width: calc(100% + 0.12em); height: 0.22em; overflow: visible;
+  transform-origin: 0 50%; transform: scaleX(0); }
+
+/* carte d'interface */
+.k-card { position: absolute; background: #fffdf9; border-radius: 20px;
+  box-shadow: 0 1px 0 rgba(28,26,23,.06), 0 18px 40px -12px rgba(28,26,23,.22), 0 4px 10px rgba(28,26,23,.06); }
+.k-card.k-dark { background: #1f1d1b; box-shadow: 0 0 0 1px rgba(244,239,230,.10), 0 30px 60px -20px rgba(0,0,0,.6); }
+
+/* curseur : flèche papier cerclée d'encre, pointe en (0,0) de l'élément */
+.k-cursor { position: absolute; left: 0; top: 0; width: 34px; height: 42px; opacity: 0; transform-origin: 2px 2px; }
+.k-ring { position: absolute; width: 80px; height: 80px; margin: -40px 0 0 -40px; border-radius: 50%; border: 3px solid #d97757; opacity: 0; }
+
+/* caret de frappe */
+.k-caret { display: inline-block; width: 0.08em; height: 1em; background: #d97757; vertical-align: -0.12em; margin-left: 0.04em; border-radius: 2px; }
+/* frappe : chaque caractère porte son propre caret (à son bord droit), allumé seulement quand il est le dernier tapé */
+.k-ch { position: relative; }
+.k-ch-caret { position: absolute; left: 100%; top: 0.1em; width: 0.07em; height: 0.95em; margin-left: 0.03em; background: #d97757; border-radius: 2px; opacity: 0; }
+/* ===== fin du kit (CSS) ===== */
+
+    #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; -webkit-font-smoothing: antialiased; }
+    #p05-ground, #p05-stage, #p05-subs, #p05-grainclip { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: hidden; }
+
+    /* boîte de flou caméra (contenu x 340 à 1580, y 120 à 880 ; enfants en coordonnées monde via #p05-o) */
+    #p05-content { position: absolute; left: 340px; top: 120px; width: 1240px; height: 760px; }
+    #p05-o { position: absolute; left: -340px; top: -120px; width: 0; height: 0; }
+
+    /* ---- timeline de montage ---- */
+    #p05-tline { position: absolute; left: 0; top: 0; width: 0; height: 0; }
+    #p05-ruler { position: absolute; left: 360px; top: 690px; width: 1200px; height: 60px; }
+    #p05-rline { position: absolute; left: 0; top: 44px; width: 1200px; height: 2px; background: #e4ddd1; border-radius: 1px;
+      transform-origin: 0 50%; transform: scaleX(0); }
+    #p05-ticks { position: absolute; left: 0; top: 32px; width: 1200px; height: 12px; overflow: visible; opacity: 0; }
+    .p05-rlab { position: absolute; top: 0; width: 80px; margin-left: -40px; text-align: center; white-space: nowrap;
+      font: 400 15px/22px "JetBrains Mono", monospace; color: #8a8378; opacity: 0; }
+
+    .p05-clip { position: absolute; top: 760px; width: 180px; height: 56px; border-radius: 10px; background: #2b2723; }
+    #p05-c5 { background: #d97757; }
+    .p05-lab { position: absolute; left: 16px; top: 0; height: 56px; white-space: nowrap;
+      font: 400 18px/56px "JetBrains Mono", monospace; color: #f4efe6; opacity: 0; }
+    .p05-hi { position: absolute; left: 0; top: 0; width: 180px; height: 56px; box-sizing: border-box; border-radius: 10px;
+      border: 2px solid #f4efe6; background: rgba(244,239,230,.12); opacity: 0; }
+
+    #p05-ph { position: absolute; left: 360px; top: 713px; width: 0; height: 0; opacity: 0; }
+    #p05-phline { position: absolute; left: -1.5px; top: 7px; width: 3px; height: 110px; background: #d97757; border-radius: 2px; }
+    #p05-phhead { position: absolute; left: -7px; top: 0; width: 14px; height: 14px; background: #d97757; border-radius: 2px; transform: rotate(45deg); }
+
+    /* ---- écran d'aperçu (x 560 à 1360, y 150 à 600) ---- */
+    #p05-lift { position: absolute; left: 560px; top: 150px; width: 800px; height: 450px; border-radius: 18px; background: #1f1d1b; opacity: 0;
+      box-shadow: 0 70px 120px -30px rgba(28,26,23,.55), 0 24px 40px -12px rgba(28,26,23,.30); }
+    #p05-screen { left: 560px; top: 150px; width: 800px; height: 450px; border-radius: 18px; overflow: hidden; opacity: 0; }
+    .p05-mini { position: absolute; left: 0; top: 0; width: 800px; height: 450px; overflow: hidden; opacity: 0; }
+    #p05-m1 { opacity: 1; }
+    .p05-night { background: radial-gradient(ellipse 583px 358px at 50% 46%, #1d1b19 0%, #141312 58%, #0d0c0b 100%); }
+    .p05-paper { background: radial-gradient(ellipse 625px 375px at 50% 42%, #f8f4ed 0%, #f4efe6 55%, #ece4d7 100%); }
+    .p05-bx { position: absolute; }
+    .p05-bar { position: absolute; height: 7px; border-radius: 4px; }
+
+    /* 01 : nuit + « Bonjour. » */
+    #p05-m1tx { position: absolute; left: 0; top: 190px; width: 800px; height: 70px; text-align: center; white-space: nowrap;
+      font: 400 60px/70px "Instrument Serif", serif; letter-spacing: -0.01em; color: #f4efe6; }
+
+    /* 02 : éditeur clair + terminal sombre */
+    #p05-ed { left: 50px; top: 62px; width: 408px; height: 292px; border-radius: 10px; background: #fffdf9;
+      box-shadow: 0 10px 22px -10px rgba(28,26,23,.25), 0 1px 0 rgba(28,26,23,.06); }
+    #p05-term { left: 483px; top: 62px; width: 267px; height: 292px; border-radius: 10px; background: #1c1a17;
+      box-shadow: 0 10px 22px -10px rgba(28,26,23,.35); }
+    .p05-chk { position: absolute; width: 14px; height: 14px; }
+
+    /* 03 : tableau de bord */
+    #p05-win { left: 67px; top: 46px; width: 666px; height: 308px; border-radius: 9px; background: #fffdf9; overflow: hidden;
+      box-shadow: 0 10px 22px -10px rgba(28,26,23,.25), 0 1px 0 rgba(28,26,23,.06); }
+    #p05-side { left: 0; top: 0; width: 100px; height: 308px; background: #2b2723; }
+    .p05-kpi { position: absolute; top: 58px; width: 167px; height: 71px; box-sizing: border-box; border-radius: 7px; background: #f8f4ed; border: 1px solid #e4ddd1; }
+    #p05-table { left: 116px; top: 141px; width: 534px; height: 150px; box-sizing: border-box; border-radius: 7px; border: 1px solid #e4ddd1; }
+
+    /* 04 : graphique */
+    #p05-panel { left: 108px; top: 58px; width: 584px; height: 284px; border-radius: 9px; background: #fffdf9;
+      box-shadow: 0 10px 22px -10px rgba(28,26,23,.25), 0 1px 0 rgba(28,26,23,.06); }
+    .p05-cbar { position: absolute; width: 50px; border-radius: 5px 5px 0 0; background: #2b2723; }
+
+    /* 05 : la mise en abyme */
+    #p05-s5 { left: 233px; top: 62px; width: 334px; height: 188px; border-radius: 8px; background: #1f1d1b; overflow: hidden;
+      box-shadow: 0 10px 22px -10px rgba(28,26,23,.35); }
+    #p05-s5in { left: 8px; top: 8px; width: 318px; height: 172px; border-radius: 5px; background: #f4efe6; overflow: hidden; }
+
+    /* 06 : nuit, champ de demande, bouton corail (réplique de la carte de fin à l'échelle 800/1920) */
+    #p05-m6card { left: 212.5px; top: 193.75px; width: 375px; height: 62.5px; border-radius: 11px; background: #1f1d1b;
+      box-shadow: 0 0 0 1px rgba(244,239,230,.10), 0 12px 25px -8px rgba(0,0,0,.6); }
+    #p05-m6pill { left: 256px; top: 16.25px; width: 96px; height: 30px; border-radius: 15px; background: #d97757; }
+    #p05-m6pill svg { position: absolute; left: 38px; top: 5px; width: 20px; height: 20px; }
+
+    /* sous-titres : le mot en boîte passe de l'encre au papier quand la boîte se trace */
+    .p05-pap { position: absolute; left: 0; top: 0; color: #f4efe6; opacity: 0; }
+  </style>
+
+  <div id="root" data-composition-id="05-film" data-width="1920" data-height="1080" data-duration="4.5">
+    <div id="p05-ground" class="clip" data-start="0" data-duration="5.25" data-track-index="0" data-layout-ignore>
+      <div class="k-ground-paper"></div>
+    </div>
+
+    <div id="p05-stage" class="clip" data-start="0" data-duration="5.25" data-track-index="1">
+      <div id="p05-world" class="k-layer">
+        <div id="p05-content">
+          <div id="p05-o">
+
+            <!-- écran d'aperçu : l'ombre de soulèvement, puis l'écran et ses six miniatures -->
+            <div id="p05-lift"></div>
+            <div id="p05-screen" class="k-card k-dark">
+              <div id="p05-m1" class="p05-mini p05-night">
+                <div id="p05-m1tx">Bonjour.<i class="k-caret"></i></div>
+              </div>
+              <div id="p05-m2" class="p05-mini p05-paper">
+                <div id="p05-ed" class="p05-bx"></div>
+                <div id="p05-term" class="p05-bx"></div>
+              </div>
+              <div id="p05-m3" class="p05-mini p05-paper">
+                <div id="p05-win" class="p05-bx">
+                  <div id="p05-side" class="p05-bx"></div>
+                  <div class="p05-bar" style="left:116px;top:22px;width:140px;height:12px;border-radius:6px;background:#1c1a17"></div>
+                  <div class="p05-kpi" style="left:116px"><div class="p05-bar" style="left:12px;top:14px;width:60px;background:#c9c0b2"></div><div class="p05-bar" style="left:12px;top:34px;width:90px;height:16px;border-radius:5px;background:#1c1a17"></div></div>
+                  <div class="p05-kpi" style="left:299px"><div class="p05-bar" style="left:12px;top:14px;width:70px;background:#c9c0b2"></div><div class="p05-bar" style="left:12px;top:34px;width:76px;height:16px;border-radius:5px;background:#1c1a17"></div></div>
+                  <div class="p05-kpi" style="left:483px"><div class="p05-bar" style="left:12px;top:14px;width:54px;background:#c9c0b2"></div><div class="p05-bar" style="left:12px;top:34px;width:84px;height:16px;border-radius:5px;background:#1c1a17"></div></div>
+                  <div id="p05-table" class="p05-bx"></div>
+                </div>
+              </div>
+              <div id="p05-m4" class="p05-mini p05-paper">
+                <div id="p05-panel" class="p05-bx"></div>
+              </div>
+              <div id="p05-m5" class="p05-mini p05-paper">
+                <div id="p05-s5" class="p05-bx"><div id="p05-s5in" class="p05-bx"></div></div>
+              </div>
+              <div id="p05-m6" class="p05-mini p05-night">
+                <div id="p05-m6card" class="p05-bx">
+                  <div class="p05-bar" style="left:18px;top:27px;width:150px;height:9px;border-radius:5px;background:rgba(138,131,120,.55)"></div>
+                  <div id="p05-m6pill" class="p05-bx"><svg viewBox="0 0 20 20"><path d="M4 10 L15.5 10 M11 5.5 L15.5 10 L11 14.5" fill="none" stroke="#f4efe6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- timeline de montage : règle, six clips, tête de lecture -->
+            <div id="p05-tline">
+              <div id="p05-ruler">
+                <div id="p05-rline"></div>
+                <svg id="p05-ticks" viewBox="0 0 1200 12"></svg>
+              </div>
+              <div id="p05-c0" class="p05-clip"><i class="p05-hi"></i><span class="p05-lab">01 bonjour</span></div>
+              <div id="p05-c1" class="p05-clip"><i class="p05-hi"></i><span class="p05-lab">02 code</span></div>
+              <div id="p05-c2" class="p05-clip"><i class="p05-hi"></i><span class="p05-lab">03 design</span></div>
+              <div id="p05-c3" class="p05-clip"><i class="p05-hi"></i><span class="p05-lab">04 données</span></div>
+              <div id="p05-c4" class="p05-clip"><i class="p05-hi"></i><span class="p05-lab">05 film</span></div>
+              <div id="p05-c5" class="p05-clip"><i class="p05-hi"></i><span class="p05-lab">06 fin</span></div>
+              <div id="p05-ph"><i id="p05-phline"></i><i id="p05-phhead"></i></div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="p05-subs" class="clip" data-start="0" data-duration="5.25" data-track-index="2">
+      <div id="p05-s1" class="k-sub"><span class="k-w p05-w1">Je</span> <span class="k-w p05-w1">fais</span> <span class="k-w p05-w1">même</span> <span class="k-w p05-w1">des</span> <span class="k-w p05-w1"><span class="k-box"><i id="p05-box" class="k-box-bg"></i><span class="k-box-tx"><span id="p05-fink">films</span><span id="p05-fpap" class="p05-pap">films</span></span></span>.</span></div>
+      <div id="p05-s2" class="k-sub"><span class="k-w p05-w2">Comme</span> <span class="k-w p05-w2"><span class="k-trait">celui-ci<svg id="p05-trait" class="k-trait-svg" viewBox="0 0 100 10" preserveAspectRatio="none"><path d="M0 6 C 20 3.6, 60 3.2, 100 4.6 L 100 5.4 C 60 6.4, 20 8.6, 0 7.4 Z" fill="#d97757"/></svg></span>.</span></div>
+    </div>
+
+    <div id="p05-grainclip" class="clip" data-start="0" data-duration="5.25" data-track-index="3" data-layout-ignore>
+      <div id="p05-grain" class="k-grain"></div>
+    </div>
+  </div>
+
+  <script src="assets/vendor/gsap.min.js"></script>
+  <script>
+    (function () {
+      var FID = "05-film";
+      var T = 5.25;
+
+      /* ===== kit claude-intro (JS) ===== */
+/* flou en px écran sur un élément (0 = "none") */
+function kBlur(el, px) { el.style.filter = px > 0.25 ? "blur(" + px.toFixed(1) + "px)" : "none"; }
+/* caméra 2D : le point monde (c.x, c.y) au centre de l'écran, échelle c.s ; le monde est un plan 1920x1080 */
+function kCam(worldEl, c) {
+  worldEl.style.transformOrigin = "0 0";
+  worldEl.style.transform = "translate(" + (960 - c.x * c.s).toFixed(2) + "px," + (540 - c.y * c.s).toFixed(2) + "px) scale(" + c.s.toFixed(4) + ")";
+}
+/* un mot du sous-titre arrive : y +10, flou 6 -> 0, opacité 0 -> 1 en 0,16 s */
+function kWord(tl, el, t) {
+  tl.fromTo(el, { opacity: 0, y: 10, filter: "blur(6px)" },
+    { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.16, ease: "power2.out", immediateRender: t <= 0 }, t);
+}
+/* une ligne de sous-titre : mots sur leurs cues, sortie vers le haut à tOut (0,14 s) ; tOut null = reste */
+function kLine(tl, lineEl, wordEls, cues, tOut) {
+  for (var i = 0; i < wordEls.length; i++) kWord(tl, wordEls[i], cues[i]);
+  if (tOut != null) tl.fromTo(lineEl, { y: 0, opacity: 1, filter: "blur(0px)" },
+    { y: -14, opacity: 0, filter: "blur(6px)", duration: 0.14, ease: "power2.in", immediateRender: false }, tOut);
+}
+/* boîte du mot clé : le fond corail se trace (0,16 s power3.out) */
+function kBox(tl, bgEl, t) {
+  tl.fromTo(bgEl, { scaleX: 0 }, { scaleX: 1, duration: 0.16, ease: "power3.out", immediateRender: false }, t);
+}
+/* trait du pic : se dessine de gauche à droite (0,4 s power2.out) */
+function kTrait(tl, svgEl, t) {
+  tl.fromTo(svgEl, { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power2.out", immediateRender: false }, t);
+}
+/* arrivée « trop grand et flou, puis se pose » : ×1,15 flou 10 -> ×1 net en 0,22 s expo.out */
+function kArrive(tl, el, t, from) {
+  from = from || 1.15;
+  tl.fromTo(el, { opacity: 0, scale: from, filter: "blur(10px)" },
+    { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.22, ease: "expo.out", immediateRender: t <= 0 }, t);
+}
+/* curseur : un seul geste courbe de (x0,y0) à (x1,y1), de t à t+d (power3.inOut), puis clic direct à t+d+0.04 :
+   pression 0,86 et anneau corail qui s'ouvre (ringEl optionnel, placé au point d'arrivée) */
+function kCursor(tl, el, x0, y0, x1, y1, t, d, ringEl) {
+  var p = { k: 0 };
+  var cx = (x0 + x1) / 2 + (y1 - y0) * 0.22, cy = (y0 + y1) / 2 - (x1 - x0) * 0.22;
+  function place() {
+    var k = p.k, a = (1 - k) * (1 - k), b = 2 * (1 - k) * k, c = k * k;
+    el.style.left = "0px"; el.style.top = "0px";
+    gsap.set(el, { x: a * x0 + b * cx + c * x1, y: a * y0 + b * cy + c * y1 });
+  }
+  tl.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 0.08, ease: "none", immediateRender: false }, t);
+  tl.fromTo(p, { k: 0 }, { k: 1, duration: d, ease: "power3.inOut", immediateRender: false, onUpdate: place }, t);
+  tl.fromTo(el, { scale: 1 }, { scale: 0.86, duration: 0.06, ease: "power2.in", immediateRender: false }, t + d + 0.04);
+  tl.fromTo(el, { scale: 0.86 }, { scale: 1, duration: 0.12, ease: "power2.out", immediateRender: false }, t + d + 0.10);
+  if (ringEl) {
+    gsap.set(ringEl, { left: x1 + "px", top: y1 + "px" });
+    tl.fromTo(ringEl, { opacity: 1, scale: 0.3 }, { opacity: 0, scale: 1.6, duration: 0.45, ease: "power2.out", immediateRender: false }, t + d + 0.06);
+  }
+  place();
+}
+/* découpe le texte d'un élément en <span class="k-ch"> (opacité 0), chacun avec son caret <i class="k-ch-caret"> (à l'init, une fois) */
+function kSplit(el) {
+  var s = el.textContent; el.textContent = "";
+  var out = [];
+  for (var i = 0; i < s.length; i++) {
+    var c = document.createElement("span"); c.className = "k-ch"; c.style.opacity = "0"; c.textContent = s[i];
+    var k = document.createElement("i"); k.className = "k-ch-caret"; c.appendChild(k);
+    el.appendChild(c); out.push(c);
+  }
+  return out;
+}
+/* frappe : les caractères (de kSplit, un ou plusieurs tableaux concaténés) apparaissent un par un de t à t+d ; le caret
+   corail suit le dernier caractère tapé ; keepCaret = le caret du dernier caractère reste allumé à la fin.
+   Renvoie le caret final (pour le faire clignoter avec kBlink). */
+function kType(tl, chEls, t, d, keepCaret) {
+  var step = d / Math.max(1, chEls.length);
+  for (var i = 0; i < chEls.length; i++) {
+    var ti = t + i * step, car = chEls[i].lastChild;
+    tl.fromTo(chEls[i], { opacity: 0 }, { opacity: 1, duration: 0.01, ease: "none", immediateRender: false }, ti);
+    tl.fromTo(car, { opacity: 0 }, { opacity: 1, duration: 0.01, ease: "none", immediateRender: false }, ti);
+    if (i < chEls.length - 1 || !keepCaret)
+      tl.fromTo(car, { opacity: 1 }, { opacity: 0, duration: 0.01, ease: "none", immediateRender: false }, ti + step);
+  }
+  return chEls.length ? chEls[chEls.length - 1].lastChild : null;
+}
+/* clignotement fini d'un caret : éteint à chaque temps de la liste pendant off s (0,2 par défaut) */
+function kBlink(tl, caretEl, times, off) {
+  off = off || 0.2;
+  for (var i = 0; i < times.length; i++) {
+    tl.fromTo(caretEl, { opacity: 1 }, { opacity: 0, duration: 0.01, ease: "none", immediateRender: false }, times[i]);
+    tl.fromTo(caretEl, { opacity: 0 }, { opacity: 1, duration: 0.01, ease: "none", immediateRender: false }, times[i] + off);
+  }
+}
+/* ===== fin du kit (JS) ===== */
+
+      var byId = function (id) { return document.getElementById(id); };
+      function mk(parent, cls, css) {
+        var d = document.createElement("div"); d.className = cls; d.style.cssText = css; parent.appendChild(d); return d;
+      }
+
+      /* ---------- construction des dessins (déterministe, une fois) ---------- */
+      /* règle : graduations toutes les 40 px, étiquettes toutes les 200 px (5 s) */
+      var ticks = byId("p05-ticks"), NS = "http://www.w3.org/2000/svg", ruler = byId("p05-ruler"), rlabs = [];
+      for (var k = 0; k <= 30; k++) {
+        var ln = document.createElementNS(NS, "line"), major = k % 5 === 0;
+        ln.setAttribute("x1", k * 40); ln.setAttribute("x2", k * 40);
+        ln.setAttribute("y1", major ? 0 : 5); ln.setAttribute("y2", 12);
+        ln.setAttribute("stroke", "#8a8378"); ln.setAttribute("stroke-opacity", major ? "0.7" : "0.4"); ln.setAttribute("stroke-width", "1.5");
+        ticks.appendChild(ln);
+        if (major) { var lb = mk(ruler, "p05-rlab", "left:" + (k * 40) + "px"); lb.textContent = (k / 5 * 5) + " s"; rlabs.push(lb); }
+      }
+      /* place les clips : x = 360 + i × 204 */
+      for (var i = 0; i < 6; i++) byId("p05-c" + i).style.left = (360 + i * 204) + "px";
+
+      /* 02 : lignes de code en traits colorés */
+      var C = { kw: "#b4553a", str: "#3f7d5c", tag: "#3d5fc4", com: "#a39b8e", ink: "#2b2723" };
+      var rows = [
+        [0, [["com", 120]]], [0, [["kw", 44], ["ink", 70], ["str", 90]]], [0, []],
+        [0, [["kw", 60], ["ink", 96], ["ink", 20]]], [1, [["kw", 44], ["ink", 50], ["str", 110]]],
+        [1, [["tag", 40], ["ink", 70], ["str", 60], ["tag", 30]]], [2, [["tag", 50], ["ink", 120]]],
+        [2, [["tag", 50], ["str", 90], ["tag", 40]]], [1, [["tag", 44]]], [0, [["ink", 16]]], [0, []],
+        [0, [["kw", 70], ["ink", 80]]], [1, [["kw", 50], ["str", 104]]]
+      ];
+      var ed = byId("p05-ed");
+      for (var r = 0; r < rows.length; r++) {
+        var top = 24 + r * 20;
+        mk(ed, "p05-bar", "left:14px;top:" + top + "px;width:12px;background:#e4ddd1");
+        var x = 40 + rows[r][0] * 18;
+        for (var b = 0; b < rows[r][1].length; b++) {
+          var seg = rows[r][1][b];
+          mk(ed, "p05-bar", "left:" + x + "px;top:" + top + "px;width:" + seg[1] + "px;background:" + C[seg[0]]);
+          x += seg[1] + 7;
+        }
+      }
+      /* 02 : terminal, 4 coches vertes */
+      var term = byId("p05-term"), tw = [120, 92, 140, 104];
+      for (var q = 0; q < 4; q++) {
+        var ty = 26 + q * 32;
+        var ck = document.createElementNS(NS, "svg"); ck.setAttribute("viewBox", "0 0 14 14"); ck.setAttribute("class", "p05-chk");
+        ck.style.left = "18px"; ck.style.top = (ty - 4) + "px";
+        var cp = document.createElementNS(NS, "path"); cp.setAttribute("d", "M2.5 7.5 L5.8 10.5 L11.5 3.5");
+        cp.setAttribute("fill", "none"); cp.setAttribute("stroke", "#3f8f63"); cp.setAttribute("stroke-width", "2.4");
+        cp.setAttribute("stroke-linecap", "round"); cp.setAttribute("stroke-linejoin", "round");
+        ck.appendChild(cp); term.appendChild(ck);
+        mk(term, "p05-bar", "left:42px;top:" + ty + "px;width:" + tw[q] + "px;background:rgba(244,239,230,.35)");
+      }
+      /* 03 : barre latérale (entrées) et lignes du tableau */
+      var side = byId("p05-side");
+      mk(side, "p05-bar", "left:16px;top:22px;width:52px;height:10px;border-radius:5px;background:rgba(244,239,230,.75)");
+      for (var s = 0; s < 4; s++) mk(side, "p05-bar", "left:16px;top:" + (62 + s * 24) + "px;width:" + [62, 48, 56, 40][s] + "px;background:rgba(244,239,230,.32)");
+      var table = byId("p05-table");
+      for (var t = 0; t < 5; t++) {
+        var yy = 16 + t * 27;
+        mk(table, "p05-bar", "left:14px;top:" + yy + "px;width:" + (t ? 120 : 90) + "px;background:" + (t ? "#d6cdbf" : "#8a8378"));
+        mk(table, "p05-bar", "left:200px;top:" + yy + "px;width:" + (t ? 80 : 60) + "px;background:" + (t ? "#d6cdbf" : "#8a8378"));
+        mk(table, "p05-bar", "left:420px;top:" + yy + "px;width:" + (t ? 70 : 50) + "px;background:" + (t ? "#d6cdbf" : "#8a8378"));
+      }
+      /* 04 : 6 barres (base y 258), la dernière corail */
+      var panel = byId("p05-panel"), hs = [62.5, 75, 68.75, 89.6, 102, 129];
+      mk(panel, "p05-bar", "left:24px;top:258px;width:536px;height:2px;border-radius:1px;background:#e4ddd1");
+      for (var h = 0; h < 6; h++)
+        mk(panel, "p05-cbar", "left:" + (33.3 + h * 93.3).toFixed(1) + "px;top:" + (258 - hs[h]).toFixed(1) + "px;height:" + hs[h] + "px" + (h === 5 ? ";background:#d97757" : ""));
+      /* 05 : la timeline en miniature (écran + règle + 6 clips + tête), avec sa propre miniature dans l'écran */
+      var m5 = byId("p05-m5");
+      mk(m5, "p05-bar", "left:150px;top:305px;width:500px;height:1.5px;border-radius:1px;background:#d6cdbf");
+      for (var c = 0; c < 6; c++) mk(m5, "p05-bx", "left:" + (150 + c * 85) + "px;top:317px;width:75px;height:23px;border-radius:5px;background:" + (c === 5 ? "#d97757" : "#2b2723"));
+      mk(m5, "p05-bx", "left:" + (150 + 4 * 85 + 22) + "px;top:299px;width:2.5px;height:47px;border-radius:1px;background:#d97757");
+      var s5 = byId("p05-s5in");
+      mk(s5, "p05-bx", "left:96px;top:24px;width:126px;height:71px;border-radius:4px;background:#1f1d1b");
+      mk(s5, "p05-bx", "left:61px;top:123px;width:196px;height:1px;background:#d6cdbf");
+      for (var c2 = 0; c2 < 6; c2++) mk(s5, "p05-bx", "left:" + (61 + c2 * 33.5) + "px;top:128px;width:29px;height:9px;border-radius:2.5px;background:" + (c2 === 5 ? "#d97757" : "#2b2723"));
+
+      /* ---------- caméra ---------- */
+      var world = byId("p05-world"), content = byId("p05-content");
+      var cam = { x: 960, y: 540, s: 0.96, b: 8 };
+      function render() { kCam(world, cam); kBlur(content, cam.b); }
+
+      var tl = gsap.timeline({ paused: true, defaults: { lazy: false }, onUpdate: render });
+
+      tl.fromTo(cam, { x: 960, y: 540, s: 0.96, b: 8 }, { s: 1.0, b: 0, duration: 0.35, ease: "expo.out" }, 0);
+      tl.fromTo(cam, { y: 540, s: 1.0 }, { y: 500, s: 1.05, duration: 2.05, ease: "none", immediateRender: false }, 0.35);
+      tl.fromTo(cam, { y: 500, s: 1.05 }, { y: 490, s: 1.08, duration: 1.10, ease: "none", immediateRender: false }, 2.40);
+      tl.fromTo(cam, { x: 960, y: 490, s: 1.08 }, { y: 375, s: 1.9, duration: 1.0, ease: "power2.in", immediateRender: false }, 3.50);
+      tl.fromTo(cam, { y: 375, s: 1.9 }, { s: 2.4, duration: 0.75, ease: "none", immediateRender: false }, 4.50);
+
+      /* grain qui glisse d'un motif */
+      tl.fromTo(byId("p05-grain"), { x: 0 }, { x: -240, duration: T, ease: "none" }, 0);
+
+      /* ===== Scene 1 : la timeline de montage ===== */
+      var labs = Array.prototype.slice.call(document.getElementsByClassName("p05-lab"));
+      for (var a = 0; a < labs.length; a++)
+        tl.fromTo(labs[a], { opacity: 0, x: -6 }, { opacity: 1, x: 0, duration: 0.2, ease: "power3.out", immediateRender: false }, 0.30 + a * 0.04);
+
+      tl.fromTo(byId("p05-rline"), { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power3.out", immediateRender: false }, 0.40);
+      tl.fromTo(ticks, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power3.out", immediateRender: false }, 0.42);
+      for (var l = 0; l < rlabs.length; l++)
+        tl.fromTo(rlabs[l], { opacity: 0, y: 4 }, { opacity: 1, y: 0, duration: 0.2, ease: "power3.out", immediateRender: false }, 0.42 + l * 0.04);
+
+      var ph = byId("p05-ph");
+      tl.fromTo(ph, { opacity: 0, y: -8 }, { opacity: 1, y: 0, duration: 0.2, ease: "power3.out", immediateRender: false }, 0.50);
+
+      var screen = byId("p05-screen");
+      kArrive(tl, screen, 0.60, 1.15);
+
+      /* la tête de lecture parcourt la timeline (linéaire, 0.70 à 3.40, x 360 à 1560) */
+      var P0 = 0.70, P1 = 3.40, V = 1200 / (P1 - P0);
+      tl.fromTo(ph, { x: 0 }, { x: 1200, duration: P1 - P0, ease: "none", immediateRender: false }, P0);
+
+      /* le clip sous la tête s'éclaire ; l'écran montre sa miniature (échange franc + pop 1,02 -> 1) */
+      var his = Array.prototype.slice.call(document.getElementsByClassName("p05-hi"));
+      function on(el, t) { tl.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 0.01, ease: "none", immediateRender: false }, t); }
+      function off(el, t) { tl.fromTo(el, { opacity: 1 }, { opacity: 0, duration: 0.01, ease: "none", immediateRender: false }, t); }
+      for (var j = 0; j < 6; j++) {
+        var tin = j === 0 ? 0.55 : P0 + (204 * j) / V;
+        var tout = P0 + (180 + 204 * j) / V;
+        on(his[j], tin);
+        if (j < 5) off(his[j], tout);
+        if (j > 0) {
+          var prev = byId("p05-m" + j), cur = byId("p05-m" + (j + 1));
+          off(prev, tin);
+          on(cur, tin);
+          tl.fromTo(cur, { scale: 1.02 }, { scale: 1, duration: 0.12, ease: "power3.out", immediateRender: false }, tin);
+        }
+        if (j === 4) {
+          /* le clip 05 pulse : 1 -> 1,04 -> 1 */
+          var c4 = byId("p05-c4");
+          tl.fromTo(c4, { scale: 1 }, { scale: 1.04, duration: 0.12, ease: "power3.out", immediateRender: false }, tin);
+          tl.fromTo(c4, { scale: 1.04 }, { scale: 1, duration: 0.22, ease: "power3.out", immediateRender: false }, tin + 0.12);
+        }
+      }
+
+      /* sous-titre « Je fais même des [films]. » */
+      var w1 = Array.prototype.slice.call(document.getElementsByClassName("p05-w1"));
+      kLine(tl, byId("p05-s1"), w1, [0.45, 0.60, 0.78, 0.98, 1.12], 2.25);
+      kBox(tl, byId("p05-box"), 1.10);
+      tl.fromTo(byId("p05-fink"), { opacity: 1 }, { opacity: 0, duration: 0.16, ease: "power3.out", immediateRender: false }, 1.10);
+      tl.fromTo(byId("p05-fpap"), { opacity: 0 }, { opacity: 1, duration: 0.16, ease: "power3.out", immediateRender: false }, 1.10);
+
+      /* ===== Scene 2 : « Comme celui-ci. » ===== */
+      var w2 = Array.prototype.slice.call(document.getElementsByClassName("p05-w2"));
+      kLine(tl, byId("p05-s2"), w2, [2.50, 2.75], 4.10);
+      kTrait(tl, byId("p05-trait"), 2.95);
+
+      /* 3.50 la timeline s'efface vers le bas ; 3.55 l'écran se soulève */
+      tl.fromTo(byId("p05-tline"), { y: 0, opacity: 1 }, { y: 30, opacity: 0, duration: 0.3, ease: "power2.in", immediateRender: false }, 3.50);
+      var lift = byId("p05-lift");
+      tl.fromTo(lift, { opacity: 0, scale: 1 }, { opacity: 1, scale: 1.01, duration: 0.45, ease: "power3.out", immediateRender: false }, 3.55);
+      tl.fromTo(screen, { scale: 1 }, { scale: 1.01, duration: 0.45, ease: "power3.out", immediateRender: false }, 3.55);
+
+      render();
+      window.__timelines = window.__timelines || {};
+      window.__timelines[FID] = tl;
+    })();
+  </script>
+</template>

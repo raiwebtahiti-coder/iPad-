@@ -37,10 +37,12 @@
       id="root"
       data-composition-id="main"
       data-start="0"
-      data-duration="5"
+      data-duration="30"
       data-width="1920"
       data-height="1080"
     >
+      <div id="paperbed" class="clip" data-start="4.95" data-duration="21.8" data-track-index="12" style="position:absolute;inset:0;background:#f4efe6"></div>
+
       <div
         id="el-01-bonjour"
         class="scene"
@@ -51,11 +53,85 @@
         data-track-index="1"
       ></div>
 
+      <div
+        id="el-02-code"
+        class="scene"
+        data-composition-id="02-code"
+        data-composition-src="compositions/frames/02-code.html"
+        data-start="5"
+        data-duration="5.5"
+        data-track-index="1"
+      ></div>
+
+      <div
+        id="el-03-interface"
+        class="scene"
+        data-composition-id="03-interface"
+        data-composition-src="compositions/frames/03-interface.html"
+        data-start="10.5"
+        data-duration="5.5"
+        data-track-index="1"
+      ></div>
+
+      <div
+        id="el-04-donnees"
+        class="scene"
+        data-composition-id="04-donnees"
+        data-composition-src="compositions/frames/04-donnees.html"
+        data-start="16"
+        data-duration="5.5"
+        data-track-index="1"
+      ></div>
+
+      <div
+        id="el-05-film"
+        class="scene"
+        data-composition-id="05-film"
+        data-composition-src="compositions/frames/05-film.html"
+        data-start="21.5"
+        data-duration="5.25"
+        data-track-index="1"
+      ></div>
+
+      <div
+        id="el-06-fin"
+        class="scene"
+        data-composition-id="06-fin"
+        data-composition-src="compositions/frames/06-fin.html"
+        data-start="26"
+        data-duration="4"
+        data-track-index="1"
+      ></div>
+      <audio id="mix" data-start="0" data-duration="30.0" data-track-index="11" src="assets/audio/mix-M1.wav" data-volume="1"></audio>
+      <div id="fxleak" class="clip" data-start="4.75" data-duration="0.9" data-track-index="30" style="position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:60">
+        <div id="fxleak-sweep" style="position:absolute;left:0;top:-200px;width:1400px;height:1480px;opacity:0;mix-blend-mode:screen;background:radial-gradient(ellipse at 50% 50%,rgba(245,206,189,0.85) 0%,rgba(229,148,111,0.5) 35%,rgba(217,119,87,0) 70%)"></div>
+        <div id="fxleak-core" style="position:absolute;left:960px;top:540px;width:600px;height:600px;margin:-300px 0 0 -300px;border-radius:50%;opacity:0;background:radial-gradient(circle,rgba(251,249,245,1) 0%,#f4efe6 30%,rgba(244,199,179,0.9) 50%,rgba(217,119,87,0.5) 64%,rgba(217,119,87,0) 76%)"></div>
+        <div id="fxleak-streak" style="position:absolute;left:-240px;top:537px;width:2400px;height:6px;border-radius:3px;opacity:0;background:linear-gradient(90deg,rgba(249,225,215,0),rgba(252,240,235,1) 50%,rgba(249,225,215,0));box-shadow:0 0 34px 12px rgba(240,180,154,0.7)"></div>
+        <div id="fxleak-flash" style="position:absolute;inset:0;opacity:0;background:#f4efe6"></div>
+      </div>
+      <div id="fxiris" class="clip" data-start="25.95" data-duration="0.95" data-track-index="31" style="position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:61">
+        <svg width="1920" height="1080" viewBox="0 0 1920 1080" style="position:absolute;inset:0"><circle id="fxiris-ring" cx="960" cy="540" r="0" fill="none" stroke="#e5946f" stroke-width="6" style="filter:drop-shadow(0 0 16px #f0b49a) drop-shadow(0 0 40px rgba(217,119,87,0.8))"/></svg>
+      </div>
+
     </div>
 
     <script>
       window.__timelines = window.__timelines || {};
       window.__timelines["main"] = gsap.timeline({ paused: true });
+      (function () { var tl = window.__timelines["main"];
+        // orchestrator layer (motion-design skill): light flash and iris
+        tl.fromTo("#fxleak-core", { scale: 0.02, opacity: 0 }, { scale: 4.6, opacity: 1, duration: 0.22, ease: "expo.in", immediateRender: false }, 4.78);
+        tl.fromTo("#fxleak-streak", { scaleX: 0, opacity: 0 }, { scaleX: 1, opacity: 1, duration: 0.16, ease: "power3.in", immediateRender: false }, 4.8);
+        tl.fromTo("#fxleak-sweep", { x: 1100, opacity: 0 }, { x: -700, opacity: 1, duration: 0.5, ease: "power2.inOut", immediateRender: false }, 4.78);
+        tl.fromTo("#fxleak-flash", { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "power2.in", immediateRender: false }, 4.9);
+        tl.to("#fxleak-flash", { opacity: 0, duration: 0.5, ease: "power2.out" }, 5.05);
+        tl.to(["#fxleak-core", "#fxleak-streak", "#fxleak-sweep"], { opacity: 0, duration: 0.4, ease: "power2.out" }, 5.02);
+        tl.fromTo("#el-06-fin", { clipPath: "circle(0% at 960px 540px)" }, { clipPath: "circle(160% at 960px 540px)", duration: 0.75, ease: "power2.inOut", immediateRender: false }, 26.0);
+        tl.fromTo("#fxiris-ring", { attr: { r: 0 } }, { attr: { r: 2492 }, duration: 0.75, ease: "power2.inOut", immediateRender: false }, 26.0);
+        tl.fromTo("#fxiris-ring", { opacity: 0 }, { opacity: 1, duration: 0.08, immediateRender: false }, 26.0);
+        tl.to("#fxiris-ring", { opacity: 0, duration: 0.15 }, 26.65);
+        tl.to({}, { duration: 30 }, 0); // full-span anchor
+      })();
     </script>
   </body>
 </html>

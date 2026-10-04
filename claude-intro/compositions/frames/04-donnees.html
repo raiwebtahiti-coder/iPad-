@@ -23,7 +23,10 @@
 /* sous-titre : bande y 890 à 980, centré, 62 px ; mots en inline-block (opacité 0 au départ) */
 .k-sub { position: absolute; left: 0; top: 896px; width: 1920px; height: 80px; text-align: center; white-space: nowrap;
   font: 500 62px/80px "Instrument Sans", sans-serif; letter-spacing: -0.015em; color: #1c1a17; }
-.k-sub.k-on-dark { color: #f4efe6; }
+.k-sub.k-on-dark { color: #f4efe6; text-shadow: 0 0 14px #141312, 0 0 28px #141312; }
+/* monde clair : un halo papier détache le sous-titre des interfaces qui passent dessous */
+.k-sub:not(.k-on-dark) { text-shadow: 0 0 10px #f4efe6, 0 0 22px #f4efe6, 0 0 36px rgba(244,239,230,.9); }
+.k-sub .k-box-tx { text-shadow: none; }
 .k-w { display: inline-block; opacity: 0; }
 
 /* moment typographique : centré, Instrument Serif 84 px au plus */
@@ -277,7 +280,7 @@ function kBlink(tl, caretEl, times, off) {
 
       var byId = function (id) { return document.getElementById(id); };
       var world = byId("p04-world");
-      var cam = { x: 960, y: 480, s: 1.12, b: 10 };
+      var cam = { x: 632, y: 241, s: 1.9, b: 10 };
       function render() { kCam(world, cam); kBlur(world, cam.b); }
 
       var tl = gsap.timeline({ paused: true, defaults: { lazy: false }, onUpdate: render });
@@ -290,10 +293,13 @@ function kBlink(tl, caretEl, times, off) {
       function fmt(v) { return v.toFixed(1).replace(".", ",") + " k"; }
 
       /* ---- caméra ---- */
-      tl.fromTo(cam, { s: 1.12, b: 10 }, { s: 1.0, b: 0, duration: 0.35, ease: "expo.out" }, 0);
-      tl.fromTo(cam, { x: 960, y: 480, s: 1.0 }, { x: 1000, y: 490, s: 1.02, duration: 1.85, ease: "none", immediateRender: false }, 0.35);
+      /* raccord : la valeur « 48 320 € » de la carte 1 (séquence 3) à la même taille et à la même place, puis la carte s'ouvre en panneau */
+      tl.fromTo(cam, { x: 632, y: 241, s: 1.9, b: 10 }, { x: 960, y: 480, s: 1.0, b: 0, duration: 0.45, ease: "expo.out" }, 0);
+      tl.fromTo(cam, { x: 960, y: 480, s: 1.0 }, { x: 1000, y: 490, s: 1.02, duration: 1.75, ease: "none", immediateRender: false }, 0.45);
       tl.fromTo(cam, { x: 1000, y: 490, s: 1.02 }, { x: 1380, y: 520, s: 1.30, duration: 0.4, ease: "power3.inOut", immediateRender: false }, 2.2);
-      tl.fromTo(cam, { x: 1380, y: 520, s: 1.30 }, { x: 960, y: 540, s: 1.0, duration: 0.45, ease: "power3.inOut", immediateRender: false }, 3.5);
+      /* tenue vivante sur juin : la caméra continue de dériver */
+      tl.fromTo(cam, { x: 1380, y: 520, s: 1.30 }, { x: 1396, y: 522, s: 1.33, duration: 0.9, ease: "none", immediateRender: false }, 2.6);
+      tl.fromTo(cam, { x: 1396, y: 522, s: 1.33 }, { x: 960, y: 540, s: 1.0, duration: 0.45, ease: "power3.inOut", immediateRender: false }, 3.5);
       tl.fromTo(cam, { s: 1.0 }, { s: 0.99, duration: 0.95, ease: "none", immediateRender: false }, 3.95);
       tl.fromTo(cam, { s: 0.99 }, { s: 0.96, duration: 0.6, ease: "power2.in", immediateRender: false }, 4.9);
       tl.fromTo(cam, { b: 0 }, { b: 8, duration: 0.3, ease: "power2.in", immediateRender: false }, 5.2);

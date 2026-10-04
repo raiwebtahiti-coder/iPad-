@@ -92,7 +92,7 @@ Scene 2 (2.20 à 5.00 s) : P2, le champ de demande
 - scene: Sous la lumière, un éditeur de code clair : la phrase est devenue le commentaire de la ligne 1, le code s'écrit ligne par ligne ; à droite l'aperçu se construit en même temps ; le terminal lance les tests et 4 coches vertes tombent ; la caméra plonge dans l'aperçu
 - duration: 5.50s
 - transition_in: cut
-- status: outline
+- status: animated
 - src: compositions/frames/02-code.html
 - voiceover: "J'écris le code. Je le teste."
 - type: demo
@@ -129,7 +129,7 @@ Scene 2 (2.90 à 5.50 s) : P4, les tests, puis l'aperçu
 - scene: Le tableau de bord se pose plein cadre et ses contenus s'impriment ; un curseur de design sélectionne le bouton Exporter, choisit le corail, arrondit ses coins ; des repères de 40 px s'affichent entre les cartes ; la caméra plonge dans la carte « Chiffre d'affaires »
 - duration: 5.50s
 - transition_in: cut
-- status: outline
+- status: animated
 - src: compositions/frames/03-interface.html
 - voiceover: "Je dessine l'interface. Au pixel près."
 - type: demo
@@ -166,7 +166,7 @@ Scene 2 (1.80 à 5.50 s) : P6, le design au pixel près
 - scene: La carte « Chiffre d'affaires » s'ouvre en graphique : les barres de janvier à juin poussent, une courbe de tendance se trace, juin s'annote « record » ; puis tout s'efface sauf les barres, qui se couchent et deviennent six clips
 - duration: 5.50s
 - transition_in: cut
-- status: outline
+- status: animated
 - src: compositions/frames/04-donnees.html
 - voiceover: "J'analyse tes données. Et j'en tire l'essentiel."
 - type: demo
@@ -203,7 +203,7 @@ Scene 2 (2.60 à 5.50 s) : P8, l'essentiel, puis les barres se couchent
 - scene: Les six clips deviennent une timeline de montage ; un écran d'aperçu se pose au-dessus ; la tête de lecture corail parcourt la timeline et l'écran rejoue en miniature chaque séquence de ce film, jusqu'à la sienne ; la caméra plonge dans l'écran
 - duration: 4.50s
 - transition_in: cut
-- status: outline
+- status: animated
 - src: compositions/frames/05-film.html
 - voiceover: "Je fais même des films. Comme celui-ci."
 - type: demo
@@ -240,7 +240,7 @@ Scene 2 (2.30 à 4.50 s) : P10, « Comme celui-ci. »
 - scene: Sur la nuit, « Claude » se pose ; le champ de demande revient avec « Raconte-moi ton projet » et un bouton corail « Commencer → » ; le curseur arrive et clique ; tenue vivante, puis le noir
 - duration: 4.00s
 - transition_in: cut
-- status: outline
+- status: animated
 - src: compositions/frames/06-fin.html
 - voiceover: "À ton tour. Créons ta vidéo."
 - type: cta

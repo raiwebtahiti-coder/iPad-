@@ -29,7 +29,10 @@
 /* sous-titre : bande y 890 à 980, centré, 62 px ; mots en inline-block (opacité 0 au départ) */
 .k-sub { position: absolute; left: 0; top: 896px; width: 1920px; height: 80px; text-align: center; white-space: nowrap;
   font: 500 62px/80px "Instrument Sans", sans-serif; letter-spacing: -0.015em; color: #1c1a17; }
-.k-sub.k-on-dark { color: #f4efe6; }
+.k-sub.k-on-dark { color: #f4efe6; text-shadow: 0 0 14px #141312, 0 0 28px #141312; }
+/* monde clair : un halo papier détache le sous-titre des interfaces qui passent dessous */
+.k-sub:not(.k-on-dark) { text-shadow: 0 0 10px #f4efe6, 0 0 22px #f4efe6, 0 0 36px rgba(244,239,230,.9); }
+.k-sub .k-box-tx { text-shadow: none; }
 .k-w { display: inline-block; opacity: 0; }
 
 /* moment typographique : centré, Instrument Serif 84 px au plus */

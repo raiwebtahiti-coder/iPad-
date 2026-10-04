@@ -1,0 +1,522 @@
+<template>
+  <style>
+    /* ===== kit claude-intro (CSS) ===== */
+@font-face { font-family: "Instrument Sans"; src: url("assets/fonts/InstrumentSans-400.woff2") format("woff2"); font-weight: 400; font-display: block; }
+@font-face { font-family: "Instrument Sans"; src: url("assets/fonts/InstrumentSans-500.woff2") format("woff2"); font-weight: 500; font-display: block; }
+@font-face { font-family: "Instrument Sans"; src: url("assets/fonts/InstrumentSans-600.woff2") format("woff2"); font-weight: 600; font-display: block; }
+@font-face { font-family: "Instrument Sans"; src: url("assets/fonts/InstrumentSans-700.woff2") format("woff2"); font-weight: 700; font-display: block; }
+@font-face { font-family: "Instrument Serif"; src: url("assets/fonts/InstrumentSerif-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: block; }
+@font-face { font-family: "Instrument Serif"; src: url("assets/fonts/InstrumentSerif-400i.woff2") format("woff2"); font-weight: 400; font-style: italic; font-display: block; }
+@font-face { font-family: "JetBrains Mono"; src: url("assets/fonts/JetBrainsMono-400.woff2") format("woff2"); font-weight: 400; font-display: block; }
+@font-face { font-family: "JetBrains Mono"; src: url("assets/fonts/JetBrainsMono-600.woff2") format("woff2"); font-weight: 600; font-display: block; }
+
+.k-layer { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+.k-ground-dark { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px;
+  background: radial-gradient(ellipse 1400px 860px at 50% 46%, #1d1b19 0%, #141312 58%, #0d0c0b 100%); }
+.k-ground-paper { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px;
+  background: radial-gradient(ellipse 1500px 900px at 50% 42%, #f8f4ed 0%, #f4efe6 55%, #ece4d7 100%); }
+.k-grain { position: absolute; left: 0; top: 0; width: 2160px; height: 1080px; pointer-events: none; opacity: .04; mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23g)'/></svg>");
+  background-size: 240px 240px; }
+.k-grain.k-dark { opacity: .06; mix-blend-mode: screen; }
+
+/* sous-titre : bande y 890 à 980, centré, 62 px ; mots en inline-block (opacité 0 au départ) */
+.k-sub { position: absolute; left: 0; top: 896px; width: 1920px; height: 80px; text-align: center; white-space: nowrap;
+  font: 500 62px/80px "Instrument Sans", sans-serif; letter-spacing: -0.015em; color: #1c1a17; }
+.k-sub.k-on-dark { color: #f4efe6; }
+.k-w { display: inline-block; opacity: 0; }
+
+/* moment typographique : centré, Instrument Serif 84 px au plus */
+.k-type { position: absolute; left: 0; width: 1920px; text-align: center; white-space: nowrap;
+  font: 400 84px/1.1 "Instrument Serif", serif; letter-spacing: -0.01em; color: #1c1a17; }
+.k-type.k-on-dark { color: #f4efe6; }
+
+/* boîte du mot clé : corail, texte papier ; le fond se trace de gauche à droite (scaleX 0 -> 1) */
+.k-box { position: relative; display: inline-block; margin-left: 0.1em; }
+.k-box-bg { position: absolute; left: -0.14em; right: -0.14em; top: 0.08em; bottom: 0.02em; border-radius: 10px; background: #d97757;
+  transform-origin: 0 50%; transform: scaleX(0); }
+.k-box-tx { position: relative; }
+
+/* trait du pic : coup de pinceau effilé corail sous LE mot (svg en 100 % de largeur du mot) */
+.k-trait { position: relative; display: inline-block; }
+.k-trait-svg { position: absolute; left: -0.06em; bottom: -0.10em; width: calc(100% + 0.12em); height: 0.22em; overflow: visible;
+  transform-origin: 0 50%; transform: scaleX(0); }
+
+/* carte d'interface */
+.k-card { position: absolute; background: #fffdf9; border-radius: 20px;
+  box-shadow: 0 1px 0 rgba(28,26,23,.06), 0 18px 40px -12px rgba(28,26,23,.22), 0 4px 10px rgba(28,26,23,.06); }
+.k-card.k-dark { background: #1f1d1b; box-shadow: 0 0 0 1px rgba(244,239,230,.10), 0 30px 60px -20px rgba(0,0,0,.6); }
+
+/* curseur : flèche papier cerclée d'encre, pointe en (0,0) de l'élément */
+.k-cursor { position: absolute; left: 0; top: 0; width: 34px; height: 42px; opacity: 0; transform-origin: 2px 2px; }
+.k-ring { position: absolute; width: 80px; height: 80px; margin: -40px 0 0 -40px; border-radius: 50%; border: 3px solid #d97757; opacity: 0; }
+
+/* caret de frappe */
+.k-caret { display: inline-block; width: 0.08em; height: 1em; background: #d97757; vertical-align: -0.12em; margin-left: 0.04em; border-radius: 2px; }
+/* frappe : chaque caractère porte son propre caret (à son bord droit), allumé seulement quand il est le dernier tapé */
+.k-ch { position: relative; }
+.k-ch-caret { position: absolute; left: 100%; top: 0.1em; width: 0.07em; height: 0.95em; margin-left: 0.03em; background: #d97757; border-radius: 2px; opacity: 0; }
+/* ===== fin du kit (CSS) ===== */
+
+    #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; -webkit-font-smoothing: antialiased; }
+    #p03-ground, #p03-stage, #p03-subs, #p03-grainclip { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: hidden; }
+
+    /* ---- fenêtre du tableau de bord (coordonnées monde) ---- */
+    #p03-win { left: 160px; top: 110px; width: 1600px; height: 740px; }
+    #p03-side { position: absolute; left: 160px; top: 110px; width: 240px; height: 740px; background: #1c1a17; border-radius: 20px 0 0 20px; }
+    .p03-a { position: absolute; white-space: nowrap; transform-origin: 0 50%; opacity: 0; }
+    .p03-sk { position: absolute; border-radius: 6px; background: #ece6dc; }
+    .p03-sk.p03-skd { background: rgba(244,239,230,.16); }
+
+    #p03-brand { left: 192px; top: 140px; font: 400 30px/36px "Instrument Serif", serif; color: #f4efe6; }
+    #p03-pill { position: absolute; left: 176px; top: 206px; width: 208px; height: 44px; border-radius: 12px; background: #d97757; opacity: 0; transform-origin: 0 50%; }
+    .p03-nav { left: 192px; font: 500 20px/44px "Instrument Sans", sans-serif; color: rgba(244,239,230,.72); }
+    #p03-n1 { top: 206px; color: #f4efe6; }
+    #p03-n2 { top: 258px; }
+    #p03-n3 { top: 310px; }
+    #p03-n4 { top: 362px; }
+
+    #p03-title { left: 440px; top: 132px; font: 600 40px/48px "Instrument Sans", sans-serif; letter-spacing: -0.02em; color: #1c1a17; }
+    #p03-date { left: 440px; top: 186px; font: 400 20px/26px "Instrument Sans", sans-serif; color: #8a8378; }
+
+    /* bouton Exporter : fonds empilés (gris r8, corail r8, corail r26) en fondu d'opacité */
+    #p03-btn { position: absolute; left: 1540px; top: 140px; width: 160px; height: 52px; transform-origin: 50% 50%; }
+    .p03-bbg { position: absolute; left: 0; top: 0; width: 160px; height: 52px; }
+    #p03-bg1 { background: #e4ddd1; border-radius: 8px; }
+    #p03-bg2 { background: #d97757; border-radius: 8px; opacity: 0; }
+    #p03-bg3 { background: #d97757; border-radius: 26px; opacity: 0; }
+    .p03-btx { position: absolute; left: 0; top: 0; width: 160px; text-align: center; font: 600 20px/52px "Instrument Sans", sans-serif; transform-origin: 50% 50%; }
+    #p03-bt1 { color: #1c1a17; opacity: 0; }
+    #p03-bt2 { color: #f4efe6; opacity: 0; }
+    #p03-btsk { left: 40px; top: 20px; width: 80px; height: 12px; background: #d3cabc; }
+
+    /* cartes KPI */
+    .p03-cw { position: absolute; top: 250px; width: 400px; height: 170px; transform-origin: 50% 50%; }
+    #p03-cw1 { left: 440px; } #p03-cw2 { left: 880px; } #p03-cw3 { left: 1320px; }
+    .p03-card { left: 0; top: 0; width: 400px; height: 170px; border-radius: 18px; }
+    #p03-lift { position: absolute; left: 0; top: 0; width: 400px; height: 170px; border-radius: 18px; opacity: 0;
+      box-shadow: 0 40px 70px -18px rgba(28,26,23,.34), 0 10px 24px rgba(28,26,23,.10); }
+    .p03-lab { left: 28px; top: 26px; font: 500 20px/26px "Instrument Sans", sans-serif; color: #8a8378; }
+    .p03-val { left: 28px; top: 70px; font: 600 52px/62px "Instrument Sans", sans-serif; letter-spacing: -0.02em; color: #1c1a17; }
+    #p03-up { position: absolute; right: 28px; top: 85px; height: 32px; padding: 0 12px; border-radius: 16px; white-space: nowrap;
+      background: rgba(63,143,99,.14); color: #3f8f63; font: 600 18px/32px "Instrument Sans", sans-serif; opacity: 0; transform-origin: 50% 50%; }
+    .p03-sk.p03-skl { left: 28px; top: 32px; width: 150px; height: 14px; }
+    .p03-sk.p03-skv { left: 28px; top: 84px; width: 200px; height: 34px; border-radius: 8px; }
+
+    /* tableau « Dernières commandes » */
+    #p03-tab { position: absolute; left: 440px; top: 450px; width: 1280px; height: 360px; border-radius: 18px; background: #fffdf9; border: 1px solid #e4ddd1; box-sizing: border-box; }
+    #p03-tt { left: 32px; top: 26px; font: 600 22px/28px "Instrument Sans", sans-serif; color: #1c1a17; }
+    .p03-sep { position: absolute; left: 32px; width: 1214px; height: 1px; background: #e4ddd1; }
+    .p03-row { position: absolute; left: 0; width: 1278px; height: 76px; opacity: 0; }
+    .p03-row span { position: absolute; top: 0; white-space: nowrap; }
+    .p03-id { left: 32px; font: 400 20px/76px "JetBrains Mono", monospace; color: #8a8378; }
+    .p03-cl { left: 220px; font: 500 22px/76px "Instrument Sans", sans-serif; color: #1c1a17; }
+    .p03-am { right: 32px; font: 600 22px/76px "Instrument Sans", sans-serif; color: #1c1a17; }
+    .p03-rsk { position: absolute; left: 0; width: 1278px; height: 76px; }
+
+    /* sélection de design autour du bouton */
+    #p03-sel { position: absolute; left: 1537px; top: 137px; width: 166px; height: 58px; opacity: 0; }
+    .p03-e { position: absolute; background: #d97757; }
+    #p03-et { left: 0; top: 0; width: 166px; height: 2px; transform-origin: 0 50%; transform: scaleX(0); }
+    #p03-eb { left: 0; top: 56px; width: 166px; height: 2px; transform-origin: 100% 50%; transform: scaleX(0); }
+    #p03-el { left: 0; top: 0; width: 2px; height: 58px; transform-origin: 50% 100%; transform: scaleY(0); }
+    #p03-er { left: 164px; top: 0; width: 2px; height: 58px; transform-origin: 50% 0; transform: scaleY(0); }
+    .p03-h { position: absolute; width: 11px; height: 11px; box-sizing: border-box; background: #fffdf9; border: 2px solid #d97757; opacity: 0; }
+    #p03-hTL { left: -4px; top: -4px; } #p03-hTR { left: 159px; top: -4px; }
+    #p03-hBL { left: -4px; top: 51px; } #p03-hBR { left: 159px; top: 51px; }
+    #p03-tag { position: absolute; left: 0; top: -36px; height: 26px; padding: 0 8px; border-radius: 6px; background: #d97757; color: #f4efe6;
+      font: 400 16px/26px "JetBrains Mono", monospace; white-space: nowrap; opacity: 0; transform-origin: 0 100%; }
+
+    /* panneau de couleurs */
+    #p03-link { position: absolute; left: 1619px; top: 196px; width: 2px; height: 26px; background: #d97757; transform-origin: 50% 0; transform: scaleY(0); opacity: 0; }
+    #p03-pal { left: 1514px; top: 222px; width: 212px; height: 68px; border-radius: 14px; opacity: 0; transform-origin: 50% 0; }
+    .p03-sw { position: absolute; top: 16px; width: 36px; height: 36px; border-radius: 50%; }
+    #p03-sw1 { left: 16px; background: #1c1a17; }
+    #p03-sw2 { left: 64px; background: #e4ddd1; }
+    #p03-sw3 { left: 112px; background: #3f8f63; }
+    #p03-sw4 { left: 160px; background: #d97757; }
+    #p03-swr { position: absolute; left: 155px; top: 11px; width: 46px; height: 46px; box-sizing: border-box; border-radius: 50%; border: 2px solid #1c1a17; opacity: 0; }
+    #p03-ring { left: 1692px; top: 256px; }
+
+    /* curseur : enveloppe (glissés suivants) + flèche (kCursor) */
+    #p03-curw { position: absolute; left: 0; top: 0; width: 0; height: 0; }
+
+    /* repères de mesure entre les cartes */
+    .p03-ru { position: absolute; top: 323px; width: 40px; height: 24px; opacity: 0; }
+    #p03-ru1 { left: 840px; } #p03-ru2 { left: 1280px; }
+    .p03-rl { position: absolute; left: 0; top: 11px; width: 40px; height: 2px; background: #d97757; transform-origin: 50% 50%; }
+    .p03-rt { position: absolute; top: 5px; width: 2px; height: 14px; background: #d97757; }
+    .p03-rn { position: absolute; left: -10px; top: -24px; width: 60px; text-align: center; font: 600 16px/20px "JetBrains Mono", monospace; color: #d97757; }
+
+    /* sous-titre : mot en boîte, encre puis papier (fondu de deux couches) */
+    .p03-boxw { margin-left: 0.14em; margin-right: 0.12em; }
+    .p03-pap { position: absolute; left: 0; top: 0; color: #f4efe6; opacity: 0; }
+  </style>
+
+  <div id="root" data-composition-id="03-interface" data-width="1920" data-height="1080" data-duration="5.5">
+    <div id="p03-ground" class="clip" data-start="0" data-duration="5.5" data-track-index="0" data-layout-ignore>
+      <div class="k-ground-paper"></div>
+    </div>
+
+    <div id="p03-stage" class="clip" data-start="0" data-duration="5.5" data-track-index="1">
+      <div id="p03-world" class="k-layer">
+        <!-- fenêtre -->
+        <div id="p03-win" class="k-card"></div>
+        <div id="p03-side"></div>
+
+        <!-- barre latérale : squelettes puis libellés -->
+        <i class="p03-sk p03-skd" id="p03-sk-brand" style="left:192px;top:149px;width:96px;height:18px"></i>
+        <i class="p03-sk p03-skd" id="p03-sk-n1" style="left:192px;top:221px;width:140px;height:14px"></i>
+        <i class="p03-sk p03-skd" id="p03-sk-n2" style="left:192px;top:273px;width:70px;height:14px"></i>
+        <i class="p03-sk p03-skd" id="p03-sk-n3" style="left:192px;top:325px;width:84px;height:14px"></i>
+        <i class="p03-sk p03-skd" id="p03-sk-n4" style="left:192px;top:377px;width:88px;height:14px"></i>
+        <div id="p03-pill"></div>
+        <div id="p03-brand" class="p03-a">Ventes</div>
+        <div id="p03-n1" class="p03-a p03-nav">Tableau de bord</div>
+        <div id="p03-n2" class="p03-a p03-nav">Clients</div>
+        <div id="p03-n3" class="p03-a p03-nav">Produits</div>
+        <div id="p03-n4" class="p03-a p03-nav">Réglages</div>
+
+        <!-- en-tête -->
+        <i class="p03-sk" id="p03-sk-title" style="left:440px;top:142px;width:300px;height:28px;border-radius:8px"></i>
+        <i class="p03-sk" id="p03-sk-date" style="left:440px;top:192px;width:130px;height:14px"></i>
+        <div id="p03-title" class="p03-a">Tableau de bord</div>
+        <div id="p03-date" class="p03-a">Octobre 2026</div>
+
+        <div id="p03-btn">
+          <div id="p03-bg1" class="p03-bbg"></div>
+          <div id="p03-bg2" class="p03-bbg"></div>
+          <div id="p03-bg3" class="p03-bbg"></div>
+          <i id="p03-btsk" class="p03-sk"></i>
+          <div id="p03-bt1" class="p03-btx">Exporter</div>
+          <div id="p03-bt2" class="p03-btx">Exporter</div>
+        </div>
+
+        <!-- cartes KPI -->
+        <div id="p03-cw1" class="p03-cw">
+          <div id="p03-lift"></div>
+          <div class="k-card p03-card">
+            <i class="p03-sk p03-skl" id="p03-skl1"></i><i class="p03-sk p03-skv" id="p03-skv1"></i>
+            <div id="p03-l1" class="p03-a p03-lab">Chiffre d’affaires</div>
+            <div id="p03-v1" class="p03-a p03-val">0&nbsp;€</div>
+            <div id="p03-up">+23&nbsp;%</div>
+          </div>
+        </div>
+        <div id="p03-cw2" class="p03-cw">
+          <div class="k-card p03-card">
+            <i class="p03-sk p03-skl" id="p03-skl2"></i><i class="p03-sk p03-skv" id="p03-skv2" style="width:140px"></i>
+            <div id="p03-l2" class="p03-a p03-lab">Commandes</div>
+            <div id="p03-v2" class="p03-a p03-val">0</div>
+          </div>
+        </div>
+        <div id="p03-cw3" class="p03-cw">
+          <div class="k-card p03-card">
+            <i class="p03-sk p03-skl" id="p03-skl3"></i><i class="p03-sk p03-skv" id="p03-skv3" style="width:170px"></i>
+            <div id="p03-l3" class="p03-a p03-lab">Panier moyen</div>
+            <div id="p03-v3" class="p03-a p03-val">0,00&nbsp;€</div>
+          </div>
+        </div>
+
+        <!-- tableau -->
+        <div id="p03-tab">
+          <i class="p03-sk" id="p03-sk-tt" style="left:32px;top:32px;width:220px;height:16px"></i>
+          <div id="p03-tt" class="p03-a">Dernières commandes</div>
+          <i class="p03-sep" style="top:96px"></i>
+          <i class="p03-sep" style="top:172px"></i>
+          <i class="p03-sep" style="top:248px"></i>
+          <div id="p03-rs1" class="p03-rsk" style="top:96px">
+            <i class="p03-sk" style="left:32px;top:31px;width:70px;height:14px"></i><i class="p03-sk" style="left:220px;top:31px;width:150px;height:14px"></i><i class="p03-sk" style="left:1150px;top:31px;width:96px;height:14px"></i>
+          </div>
+          <div id="p03-rs2" class="p03-rsk" style="top:172px">
+            <i class="p03-sk" style="left:32px;top:31px;width:70px;height:14px"></i><i class="p03-sk" style="left:220px;top:31px;width:130px;height:14px"></i><i class="p03-sk" style="left:1166px;top:31px;width:80px;height:14px"></i>
+          </div>
+          <div id="p03-rs3" class="p03-rsk" style="top:248px">
+            <i class="p03-sk" style="left:32px;top:31px;width:70px;height:14px"></i><i class="p03-sk" style="left:220px;top:31px;width:140px;height:14px"></i><i class="p03-sk" style="left:1150px;top:31px;width:96px;height:14px"></i>
+          </div>
+          <div id="p03-r1" class="p03-row" style="top:96px"><span class="p03-id">#1042</span><span class="p03-cl">Atelier Brun</span><span class="p03-am">129,00&nbsp;€</span></div>
+          <div id="p03-r2" class="p03-row" style="top:172px"><span class="p03-id">#1041</span><span class="p03-cl">Maison Léa</span><span class="p03-am">64,50&nbsp;€</span></div>
+          <div id="p03-r3" class="p03-row" style="top:248px"><span class="p03-id">#1040</span><span class="p03-cl">Studio Nord</span><span class="p03-am">212,00&nbsp;€</span></div>
+        </div>
+
+        <!-- repères de mesure -->
+        <div id="p03-ru1" class="p03-ru"><i class="p03-rl" id="p03-rl1"></i><i class="p03-rt" style="left:0"></i><i class="p03-rt" style="left:38px"></i><span class="p03-rn">40</span></div>
+        <div id="p03-ru2" class="p03-ru"><i class="p03-rl" id="p03-rl2"></i><i class="p03-rt" style="left:0"></i><i class="p03-rt" style="left:38px"></i><span class="p03-rn">40</span></div>
+
+        <!-- sélection, filet, panneau de couleurs -->
+        <div id="p03-sel">
+          <i id="p03-et" class="p03-e"></i><i id="p03-eb" class="p03-e"></i><i id="p03-el" class="p03-e"></i><i id="p03-er" class="p03-e"></i>
+          <i id="p03-hTL" class="p03-h"></i><i id="p03-hTR" class="p03-h"></i><i id="p03-hBL" class="p03-h"></i><i id="p03-hBR" class="p03-h"></i>
+          <div id="p03-tag">Bouton · 160 × 52</div>
+        </div>
+        <i id="p03-link"></i>
+        <div id="p03-pal" class="k-card">
+          <i id="p03-sw1" class="p03-sw"></i><i id="p03-sw2" class="p03-sw"></i><i id="p03-sw3" class="p03-sw"></i><i id="p03-sw4" class="p03-sw"></i>
+          <i id="p03-swr"></i>
+        </div>
+
+        <i id="p03-ring" class="k-ring"></i>
+        <div id="p03-curw">
+          <svg id="p03-cursor" class="k-cursor" viewBox="0 0 34 42"><path d="M2 2 L2 34 L10.5 26 L16 39 L22 36.5 L16.6 24 L28 24 Z" fill="#f4efe6" stroke="#1c1a17" stroke-width="2.4" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <div id="p03-subs" class="clip" data-start="0" data-duration="5.5" data-track-index="2">
+      <div id="p03-s1" class="k-sub"><span class="k-w p03-w1">Je</span> <span class="k-w p03-w1">dessine</span> <span class="k-w p03-w1">l’<span class="k-box p03-boxw"><i id="p03-box1" class="k-box-bg"></i><span class="k-box-tx"><span>interface</span><span id="p03-pap1" class="p03-pap">interface</span></span></span>.</span></div>
+      <div id="p03-s2" class="k-sub"><span class="k-w p03-w2">Au</span> <span class="k-trait"><span class="k-w p03-w2">pixel</span><svg id="p03-trait" class="k-trait-svg" viewBox="0 0 100 10" preserveAspectRatio="none"><path d="M0 6 C 20 3.6, 60 3.2, 100 4.6 L 100 5.4 C 60 6.4, 20 8.6, 0 7.4 Z" fill="#d97757"/></svg></span> <span class="k-w p03-w2">près.</span></div>
+    </div>
+
+    <div id="p03-grainclip" class="clip" data-start="0" data-duration="5.5" data-track-index="3" data-layout-ignore>
+      <div id="p03-grain" class="k-grain"></div>
+    </div>
+  </div>
+
+  <script src="assets/vendor/gsap.min.js"></script>
+  <script>
+    (function () {
+      var FID = "03-interface";
+      var T = 5.5;
+
+      /* ===== kit claude-intro (JS) ===== */
+/* flou en px écran sur un élément (0 = "none") */
+function kBlur(el, px) { el.style.filter = px > 0.25 ? "blur(" + px.toFixed(1) + "px)" : "none"; }
+/* caméra 2D : le point monde (c.x, c.y) au centre de l'écran, échelle c.s ; le monde est un plan 1920x1080 */
+function kCam(worldEl, c) {
+  worldEl.style.transformOrigin = "0 0";
+  worldEl.style.transform = "translate(" + (960 - c.x * c.s).toFixed(2) + "px," + (540 - c.y * c.s).toFixed(2) + "px) scale(" + c.s.toFixed(4) + ")";
+}
+/* un mot du sous-titre arrive : y +10, flou 6 -> 0, opacité 0 -> 1 en 0,16 s */
+function kWord(tl, el, t) {
+  tl.fromTo(el, { opacity: 0, y: 10, filter: "blur(6px)" },
+    { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.16, ease: "power2.out", immediateRender: t <= 0 }, t);
+}
+/* une ligne de sous-titre : mots sur leurs cues, sortie vers le haut à tOut (0,14 s) ; tOut null = reste */
+function kLine(tl, lineEl, wordEls, cues, tOut) {
+  for (var i = 0; i < wordEls.length; i++) kWord(tl, wordEls[i], cues[i]);
+  if (tOut != null) tl.fromTo(lineEl, { y: 0, opacity: 1, filter: "blur(0px)" },
+    { y: -14, opacity: 0, filter: "blur(6px)", duration: 0.14, ease: "power2.in", immediateRender: false }, tOut);
+}
+/* boîte du mot clé : le fond corail se trace (0,16 s power3.out) */
+function kBox(tl, bgEl, t) {
+  tl.fromTo(bgEl, { scaleX: 0 }, { scaleX: 1, duration: 0.16, ease: "power3.out", immediateRender: false }, t);
+}
+/* trait du pic : se dessine de gauche à droite (0,4 s power2.out) */
+function kTrait(tl, svgEl, t) {
+  tl.fromTo(svgEl, { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power2.out", immediateRender: false }, t);
+}
+/* arrivée « trop grand et flou, puis se pose » : ×1,15 flou 10 -> ×1 net en 0,22 s expo.out */
+function kArrive(tl, el, t, from) {
+  from = from || 1.15;
+  tl.fromTo(el, { opacity: 0, scale: from, filter: "blur(10px)" },
+    { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.22, ease: "expo.out", immediateRender: t <= 0 }, t);
+}
+/* curseur : un seul geste courbe de (x0,y0) à (x1,y1), de t à t+d (power3.inOut), puis clic direct à t+d+0.04 :
+   pression 0,86 et anneau corail qui s'ouvre (ringEl optionnel, placé au point d'arrivée) */
+function kCursor(tl, el, x0, y0, x1, y1, t, d, ringEl) {
+  var p = { k: 0 };
+  var cx = (x0 + x1) / 2 + (y1 - y0) * 0.22, cy = (y0 + y1) / 2 - (x1 - x0) * 0.22;
+  function place() {
+    var k = p.k, a = (1 - k) * (1 - k), b = 2 * (1 - k) * k, c = k * k;
+    el.style.left = "0px"; el.style.top = "0px";
+    gsap.set(el, { x: a * x0 + b * cx + c * x1, y: a * y0 + b * cy + c * y1 });
+  }
+  tl.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 0.08, ease: "none", immediateRender: false }, t);
+  tl.fromTo(p, { k: 0 }, { k: 1, duration: d, ease: "power3.inOut", immediateRender: false, onUpdate: place }, t);
+  tl.fromTo(el, { scale: 1 }, { scale: 0.86, duration: 0.06, ease: "power2.in", immediateRender: false }, t + d + 0.04);
+  tl.fromTo(el, { scale: 0.86 }, { scale: 1, duration: 0.12, ease: "power2.out", immediateRender: false }, t + d + 0.10);
+  if (ringEl) {
+    gsap.set(ringEl, { left: x1 + "px", top: y1 + "px" });
+    tl.fromTo(ringEl, { opacity: 1, scale: 0.3 }, { opacity: 0, scale: 1.6, duration: 0.45, ease: "power2.out", immediateRender: false }, t + d + 0.06);
+  }
+  place();
+}
+/* découpe le texte d'un élément en <span class="k-ch"> (opacité 0), chacun avec son caret <i class="k-ch-caret"> (à l'init, une fois) */
+function kSplit(el) {
+  var s = el.textContent; el.textContent = "";
+  var out = [];
+  for (var i = 0; i < s.length; i++) {
+    var c = document.createElement("span"); c.className = "k-ch"; c.style.opacity = "0"; c.textContent = s[i];
+    var k = document.createElement("i"); k.className = "k-ch-caret"; c.appendChild(k);
+    el.appendChild(c); out.push(c);
+  }
+  return out;
+}
+/* frappe : les caractères (de kSplit, un ou plusieurs tableaux concaténés) apparaissent un par un de t à t+d ; le caret
+   corail suit le dernier caractère tapé ; keepCaret = le caret du dernier caractère reste allumé à la fin.
+   Renvoie le caret final (pour le faire clignoter avec kBlink). */
+function kType(tl, chEls, t, d, keepCaret) {
+  var step = d / Math.max(1, chEls.length);
+  for (var i = 0; i < chEls.length; i++) {
+    var ti = t + i * step, car = chEls[i].lastChild;
+    tl.fromTo(chEls[i], { opacity: 0 }, { opacity: 1, duration: 0.01, ease: "none", immediateRender: false }, ti);
+    tl.fromTo(car, { opacity: 0 }, { opacity: 1, duration: 0.01, ease: "none", immediateRender: false }, ti);
+    if (i < chEls.length - 1 || !keepCaret)
+      tl.fromTo(car, { opacity: 1 }, { opacity: 0, duration: 0.01, ease: "none", immediateRender: false }, ti + step);
+  }
+  return chEls.length ? chEls[chEls.length - 1].lastChild : null;
+}
+/* clignotement fini d'un caret : éteint à chaque temps de la liste pendant off s (0,2 par défaut) */
+function kBlink(tl, caretEl, times, off) {
+  off = off || 0.2;
+  for (var i = 0; i < times.length; i++) {
+    tl.fromTo(caretEl, { opacity: 1 }, { opacity: 0, duration: 0.01, ease: "none", immediateRender: false }, times[i]);
+    tl.fromTo(caretEl, { opacity: 0 }, { opacity: 1, duration: 0.01, ease: "none", immediateRender: false }, times[i] + off);
+  }
+}
+/* ===== fin du kit (JS) ===== */
+
+      var byId = function (id) { return document.getElementById(id); };
+      var world = byId("p03-world");
+      var cam = { x: 960, y: 480, s: 1.08, b: 12 };
+      function render() { kCam(world, cam); kBlur(world, cam.b); }
+
+      var tl = gsap.timeline({ paused: true, defaults: { lazy: false }, onUpdate: render });
+
+      /* formatage français : espace fine insécable en séparateur de milliers */
+      function fr(n, dec) {
+        var s = n.toFixed(dec).split(".");
+        var i = s[0].replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+        return dec ? i + "," + s[1] : i;
+      }
+      function out(el, t, d) {
+        tl.fromTo(el, { opacity: 1 }, { opacity: 0, duration: d || 0.12, ease: "power2.in", immediateRender: false }, t);
+      }
+      function fadeIn(el, t, d) {
+        tl.fromTo(el, { opacity: 0 }, { opacity: 1, duration: d || 0.2, ease: "power2.out", immediateRender: false }, t);
+      }
+      /* impression d'un texte : le squelette s'efface, le texte arrive (kArrive) */
+      function print(el, sk, t) {
+        if (sk) out(sk, t, 0.12);
+        kArrive(tl, el, t, 1.08);
+      }
+      function roll(el, to, dec, suffix, t) {
+        var p = { v: 0 };
+        tl.fromTo(p, { v: 0 }, { v: to, duration: 0.5, ease: "power3.out", immediateRender: false,
+          onUpdate: function () { el.textContent = fr(dec ? p.v : Math.round(p.v), dec) + suffix; } }, t);
+      }
+
+      /* ---- caméra ---- */
+      tl.fromTo(cam, { x: 960, y: 480, s: 1.08, b: 12 }, { x: 960, y: 480, s: 1.0, b: 0, duration: 0.35, ease: "expo.out" }, 0);
+      tl.fromTo(cam, { s: 1.0 }, { s: 1.02, duration: 1.45, ease: "none", immediateRender: false }, 0.35);
+      tl.fromTo(cam, { x: 960, y: 480, s: 1.02 }, { x: 1500, y: 260, s: 1.40, duration: 0.4, ease: "power3.inOut", immediateRender: false }, 1.8);
+      tl.fromTo(cam, { b: 0 }, { b: 2, duration: 0.2, ease: "power2.in", immediateRender: false }, 1.8);
+      tl.fromTo(cam, { b: 2 }, { b: 0, duration: 0.2, ease: "power2.out", immediateRender: false }, 2.0);
+      tl.fromTo(cam, { s: 1.40 }, { s: 1.44, duration: 1.2, ease: "none", immediateRender: false }, 2.2);
+      tl.fromTo(cam, { x: 1500, y: 260, s: 1.44 }, { x: 1080, y: 335, s: 1.30, duration: 0.45, ease: "power3.inOut", immediateRender: false }, 3.4);
+      tl.fromTo(cam, { b: 0 }, { b: 2, duration: 0.22, ease: "power2.in", immediateRender: false }, 3.4);
+      tl.fromTo(cam, { b: 2 }, { b: 0, duration: 0.23, ease: "power2.out", immediateRender: false }, 3.62);
+      tl.fromTo(cam, { x: 1080, s: 1.30 }, { x: 900, s: 1.32, duration: 0.95, ease: "none", immediateRender: false }, 3.85);
+      tl.fromTo(cam, { x: 900, y: 335, s: 1.32 }, { x: 640, y: 335, s: 3.3, duration: 0.7, ease: "power2.in", immediateRender: false }, 4.8);
+      tl.fromTo(cam, { b: 0 }, { b: 10, duration: 0.3, ease: "power2.in", immediateRender: false }, 5.2);
+
+      /* grain qui glisse d'un motif */
+      tl.fromTo(byId("p03-grain"), { x: 0 }, { x: -240, duration: T, ease: "none" }, 0);
+
+      /* ===== Scene 1 : le tableau de bord se pose et s'imprime ===== */
+      print(byId("p03-brand"), byId("p03-sk-brand"), 0.35);
+      out(byId("p03-sk-n1"), 0.40, 0.12);
+      kArrive(tl, byId("p03-pill"), 0.40, 1.08);
+      kArrive(tl, byId("p03-n1"), 0.40, 1.08);
+      print(byId("p03-n2"), byId("p03-sk-n2"), 0.45);
+      print(byId("p03-n3"), byId("p03-sk-n3"), 0.50);
+      print(byId("p03-n4"), byId("p03-sk-n4"), 0.55);
+      print(byId("p03-title"), byId("p03-sk-title"), 0.60);
+      print(byId("p03-date"), byId("p03-sk-date"), 0.68);
+      print(byId("p03-bt1"), byId("p03-btsk"), 0.72);
+
+      var vals = [["p03-v1", 48320, 0, " €"], ["p03-v2", 1284, 0, ""], ["p03-v3", 37.6, 2, " €"]];
+      for (var i = 0; i < 3; i++) {
+        var tc = 0.85 + i * 0.15, n = i + 1;
+        print(byId("p03-l" + n), byId("p03-skl" + n), tc);
+        out(byId("p03-skv" + n), tc, 0.12);
+        fadeIn(byId("p03-v" + n), tc, 0.12);
+        roll(byId("p03-v" + n), vals[i][1], vals[i][2], vals[i][3], tc);
+      }
+      kArrive(tl, byId("p03-up"), 1.30, 1.15);
+
+      print(byId("p03-tt"), byId("p03-sk-tt"), 1.25);
+      for (var r = 1; r <= 3; r++) {
+        var tr = 1.35 + (r - 1) * 0.1;
+        out(byId("p03-rs" + r), tr, 0.12);
+        tl.fromTo(byId("p03-r" + r), { opacity: 0, x: 20 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out", immediateRender: false }, tr);
+      }
+
+      /* sous-titre « Je dessine l’[interface]. » */
+      var w1 = Array.prototype.slice.call(document.getElementsByClassName("p03-w1"));
+      kLine(tl, byId("p03-s1"), w1, [0.30, 0.48, 0.85], 2.90);
+      kBox(tl, byId("p03-box1"), 0.84);
+      tl.fromTo(byId("p03-pap1"), { opacity: 0 }, { opacity: 1, duration: 0.16, ease: "power3.out", immediateRender: false }, 0.84);
+
+      /* ===== Scene 2 : le design au pixel près ===== */
+      var cur = byId("p03-cursor"), curw = byId("p03-curw"), btn = byId("p03-btn");
+      kCursor(tl, cur, 1200, 700, 1620, 166, 1.85, 0.4);
+      tl.fromTo(btn, { scale: 1 }, { scale: 0.97, duration: 0.06, ease: "power2.in", immediateRender: false }, 2.29);
+      tl.fromTo(btn, { scale: 0.97 }, { scale: 1, duration: 0.14, ease: "power2.out", immediateRender: false }, 2.35);
+
+      /* cadre de sélection qui se trace + poignées + étiquette */
+      fadeIn(byId("p03-sel"), 2.25, 0.04);
+      tl.fromTo(byId("p03-et"), { scaleX: 0 }, { scaleX: 1, duration: 0.2, ease: "power3.out", immediateRender: false }, 2.25);
+      tl.fromTo(byId("p03-er"), { scaleY: 0 }, { scaleY: 1, duration: 0.14, ease: "power3.out", immediateRender: false }, 2.29);
+      tl.fromTo(byId("p03-eb"), { scaleX: 0 }, { scaleX: 1, duration: 0.2, ease: "power3.out", immediateRender: false }, 2.31);
+      tl.fromTo(byId("p03-el"), { scaleY: 0 }, { scaleY: 1, duration: 0.14, ease: "power3.out", immediateRender: false }, 2.35);
+      ["p03-hTL", "p03-hTR", "p03-hBR", "p03-hBL"].forEach(function (id, k) {
+        tl.fromTo(byId(id), { opacity: 0, scale: 0 }, { opacity: 1, scale: 1, duration: 0.18, ease: "power3.out", immediateRender: false }, 2.33 + k * 0.03);
+      });
+      kArrive(tl, byId("p03-tag"), 2.33, 1.1);
+
+      /* panneau de couleurs relié par un filet */
+      fadeIn(byId("p03-link"), 2.45, 0.04);
+      tl.fromTo(byId("p03-link"), { scaleY: 0 }, { scaleY: 1, duration: 0.16, ease: "power3.out", immediateRender: false }, 2.45);
+      kArrive(tl, byId("p03-pal"), 2.47, 1.08);
+
+      /* le curseur glisse sur la pastille corail et clique */
+      tl.fromTo(curw, { x: 0 }, { x: 72, duration: 0.22, ease: "power2.inOut", immediateRender: false }, 2.50);
+      tl.fromTo(curw, { y: 0 }, { y: 90, duration: 0.22, ease: "power3.inOut", immediateRender: false }, 2.50);
+      tl.fromTo(cur, { scale: 1 }, { scale: 0.86, duration: 0.06, ease: "power2.in", immediateRender: false }, 2.72);
+      tl.fromTo(cur, { scale: 0.86 }, { scale: 1, duration: 0.12, ease: "power2.out", immediateRender: false }, 2.78);
+      tl.fromTo(byId("p03-ring"), { opacity: 1, scale: 0.3 }, { opacity: 0, scale: 1.6, duration: 0.45, ease: "power2.out", immediateRender: false }, 2.74);
+      tl.fromTo(byId("p03-swr"), { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.18, ease: "power3.out", immediateRender: false }, 2.76);
+
+      /* le bouton passe au corail (fondu d'un second fond), texte papier */
+      fadeIn(byId("p03-bg2"), 2.80, 0.2);
+      out(byId("p03-bg1"), 2.80, 0.2);
+      fadeIn(byId("p03-bt2"), 2.80, 0.2);
+      out(byId("p03-bt1"), 2.80, 0.2);
+
+      /* le curseur attrape la poignée en haut à gauche et la tire : coins 8 -> 26 px */
+      tl.fromTo(curw, { x: 72 }, { x: -82, duration: 0.24, ease: "power2.inOut", immediateRender: false }, 2.84);
+      tl.fromTo(curw, { y: 90 }, { y: -28, duration: 0.24, ease: "power3.inOut", immediateRender: false }, 2.84);
+      tl.fromTo(cur, { scale: 1 }, { scale: 0.86, duration: 0.06, ease: "power2.in", immediateRender: false }, 3.06);
+      tl.fromTo(curw, { x: -82, y: -28 }, { x: -75, y: -21, duration: 0.2, ease: "power2.inOut", immediateRender: false }, 3.10);
+      tl.fromTo(byId("p03-hTL"), { x: 0, y: 0 }, { x: 7, y: 7, duration: 0.2, ease: "power2.inOut", immediateRender: false }, 3.10);
+      fadeIn(byId("p03-bg3"), 3.10, 0.22);
+      out(byId("p03-bg2"), 3.10, 0.22);
+      tl.fromTo(cur, { scale: 0.86 }, { scale: 1, duration: 0.12, ease: "power2.out", immediateRender: false }, 3.32);
+
+      /* la sélection et le panneau s'effacent, puis le curseur */
+      ["p03-sel", "p03-link", "p03-pal"].forEach(function (id) { out(byId(id), 3.40, 0.12); });
+      out(cur, 3.50, 0.1);
+
+      /* repères de mesure « 40 » entre les cartes */
+      [["p03-ru1", "p03-rl1"], ["p03-ru2", "p03-rl2"]].forEach(function (p, k) {
+        var tt = 3.55 + k * 0.15;
+        tl.fromTo(byId(p[0]), { opacity: 0, y: 6 }, { opacity: 1, y: 0, duration: 0.2, ease: "power3.out", immediateRender: false }, tt);
+        tl.fromTo(byId(p[1]), { scaleX: 0 }, { scaleX: 1, duration: 0.25, ease: "power3.out", immediateRender: false }, tt);
+        out(byId(p[0]), 4.40, 0.12);
+      });
+
+      /* la carte 1 se soulève */
+      tl.fromTo(byId("p03-cw1"), { scale: 1 }, { scale: 1.02, duration: 0.4, ease: "power3.out", immediateRender: false }, 4.50);
+      fadeIn(byId("p03-lift"), 4.50, 0.4);
+
+      /* sous-titre « Au [pixel] près. » */
+      var w2 = Array.prototype.slice.call(document.getElementsByClassName("p03-w2"));
+      kLine(tl, byId("p03-s2"), w2, [3.30, 3.45, 3.75], 5.10);
+      kTrait(tl, byId("p03-trait"), 3.85);
+
+      render();
+      window.__timelines = window.__timelines || {};
+      window.__timelines[FID] = tl;
+    })();
+  </script>
+</template>

@@ -27,3 +27,9 @@ motion-reel-kit/videos/
 motion-reel-kit/node_modules
 .venv/
 !motion-reel-kit/examples/*.mp4
+
+# motion-reel projects: generated files
+reels/*/node_modules
+reels/*/review/
+reels/*/renders/
+reels/*/audio/

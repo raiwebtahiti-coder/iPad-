@@ -1,0 +1,405 @@
+<template>
+  <style>
+    /* ===== kit claude-intro (CSS) ===== */
+@font-face { font-family: "Instrument Sans"; src: url("assets/fonts/InstrumentSans-400.woff2") format("woff2"); font-weight: 400; font-display: block; }
+@font-face { font-family: "Instrument Sans"; src: url("assets/fonts/InstrumentSans-500.woff2") format("woff2"); font-weight: 500; font-display: block; }
+@font-face { font-family: "Instrument Sans"; src: url("assets/fonts/InstrumentSans-600.woff2") format("woff2"); font-weight: 600; font-display: block; }
+@font-face { font-family: "Instrument Sans"; src: url("assets/fonts/InstrumentSans-700.woff2") format("woff2"); font-weight: 700; font-display: block; }
+@font-face { font-family: "Instrument Serif"; src: url("assets/fonts/InstrumentSerif-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: block; }
+@font-face { font-family: "Instrument Serif"; src: url("assets/fonts/InstrumentSerif-400i.woff2") format("woff2"); font-weight: 400; font-style: italic; font-display: block; }
+@font-face { font-family: "JetBrains Mono"; src: url("assets/fonts/JetBrainsMono-400.woff2") format("woff2"); font-weight: 400; font-display: block; }
+@font-face { font-family: "JetBrains Mono"; src: url("assets/fonts/JetBrainsMono-600.woff2") format("woff2"); font-weight: 600; font-display: block; }
+
+.k-layer { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+.k-ground-dark { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px;
+  background: radial-gradient(ellipse 1400px 860px at 50% 46%, #1d1b19 0%, #141312 58%, #0d0c0b 100%); }
+.k-ground-paper { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px;
+  background: radial-gradient(ellipse 1500px 900px at 50% 42%, #f8f4ed 0%, #f4efe6 55%, #ece4d7 100%); }
+.k-grain { position: absolute; left: 0; top: 0; width: 2160px; height: 1080px; pointer-events: none; opacity: .04; mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23g)'/></svg>");
+  background-size: 240px 240px; }
+.k-grain.k-dark { opacity: .06; mix-blend-mode: screen; }
+
+/* sous-titre : bande y 890 à 980, centré, 62 px ; mots en inline-block (opacité 0 au départ) */
+.k-sub { position: absolute; left: 0; top: 896px; width: 1920px; height: 80px; text-align: center; white-space: nowrap;
+  font: 500 62px/80px "Instrument Sans", sans-serif; letter-spacing: -0.015em; color: #1c1a17; }
+.k-sub.k-on-dark { color: #f4efe6; }
+.k-w { display: inline-block; opacity: 0; }
+
+/* moment typographique : centré, Instrument Serif 84 px au plus */
+.k-type { position: absolute; left: 0; width: 1920px; text-align: center; white-space: nowrap;
+  font: 400 84px/1.1 "Instrument Serif", serif; letter-spacing: -0.01em; color: #1c1a17; }
+.k-type.k-on-dark { color: #f4efe6; }
+
+/* boîte du mot clé : corail, texte papier ; le fond se trace de gauche à droite (scaleX 0 -> 1) */
+.k-box { position: relative; display: inline-block; margin-left: 0.1em; }
+.k-box-bg { position: absolute; left: -0.14em; right: -0.14em; top: 0.08em; bottom: 0.02em; border-radius: 10px; background: #d97757;
+  transform-origin: 0 50%; transform: scaleX(0); }
+.k-box-tx { position: relative; }
+
+/* trait du pic : coup de pinceau effilé corail sous LE mot (svg en 100 % de largeur du mot) */
+.k-trait { position: relative; display: inline-block; }
+.k-trait-svg { position: absolute; left: -0.06em; bottom: -0.10em; width: calc(100% + 0.12em); height: 0.22em; overflow: visible;
+  transform-origin: 0 50%; transform: scaleX(0); }
+
+/* carte d'interface */
+.k-card { position: absolute; background: #fffdf9; border-radius: 20px;
+  box-shadow: 0 1px 0 rgba(28,26,23,.06), 0 18px 40px -12px rgba(28,26,23,.22), 0 4px 10px rgba(28,26,23,.06); }
+.k-card.k-dark { background: #1f1d1b; box-shadow: 0 0 0 1px rgba(244,239,230,.10), 0 30px 60px -20px rgba(0,0,0,.6); }
+
+/* curseur : flèche papier cerclée d'encre, pointe en (0,0) de l'élément */
+.k-cursor { position: absolute; left: 0; top: 0; width: 34px; height: 42px; opacity: 0; transform-origin: 2px 2px; }
+.k-ring { position: absolute; width: 80px; height: 80px; margin: -40px 0 0 -40px; border-radius: 50%; border: 3px solid #d97757; opacity: 0; }
+
+/* caret de frappe */
+.k-caret { display: inline-block; width: 0.08em; height: 1em; background: #d97757; vertical-align: -0.12em; margin-left: 0.04em; border-radius: 2px; }
+/* frappe : chaque caractère porte son propre caret (à son bord droit), allumé seulement quand il est le dernier tapé */
+.k-ch { position: relative; }
+.k-ch-caret { position: absolute; left: 100%; top: 0.1em; width: 0.07em; height: 0.95em; margin-left: 0.03em; background: #d97757; border-radius: 2px; opacity: 0; }
+/* ===== fin du kit (CSS) ===== */
+
+    #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; -webkit-font-smoothing: antialiased; }
+    #p04-ground, #p04-stage, #p04-subs, #p04-grainclip { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: hidden; }
+
+    /* panneau blanc (x 260 à 1660, y 140 à 820) : visible dès t=0 (handoff_in) */
+    #p04-panel { left: 260px; top: 140px; width: 1400px; height: 680px; }
+    #p04-label { position: absolute; left: 320px; top: 200px; height: 30px; white-space: nowrap;
+      font: 500 24px/30px "Instrument Sans", sans-serif; color: #8a8378; }
+    #p04-kpi { position: absolute; left: 320px; top: 240px; height: 96px; display: flex; align-items: center; white-space: nowrap; }
+    #p04-num { font: 600 88px/96px "Instrument Sans", sans-serif; letter-spacing: -0.02em; color: #1c1a17; }
+    #p04-pill { margin-left: 24px; padding: 8px 16px; border-radius: 999px; background: rgba(63,143,99,.12);
+      font: 600 26px/30px "Instrument Sans", sans-serif; color: #3f8f63; }
+
+    /* grille */
+    .p04-grid { position: absolute; left: 320px; width: 1280px; height: 2px; background: #e4ddd1; transform-origin: 0 50%; opacity: 0; }
+
+    /* halo de juin (barre x 1460 à 1580, y 450 à 760) */
+    #p04-halo { position: absolute; left: 1340px; top: 345px; width: 360px; height: 520px; opacity: 0;
+      background: radial-gradient(ellipse 50% 50% at 50% 50%, rgba(240,180,154,.85) 0%, rgba(240,180,154,.45) 45%, rgba(240,180,154,0) 100%); }
+
+    /* barres : base y 760, largeur 120 ; rayon = celui du clip (10) déformé, pour épouser le clip exactement */
+    .p04-bar { position: absolute; width: 120px; background: #2b2723; transform-origin: 50% 100%; opacity: 0; }
+    #p04-bar5 { background: #d97757; }
+
+    /* mois sous la base */
+    .p04-mo { position: absolute; top: 768px; width: 120px; height: 26px; text-align: center; opacity: 0;
+      font: 500 22px/26px "Instrument Sans", sans-serif; color: #8a8378; }
+
+    /* valeurs au-dessus des barres */
+    .p04-val { position: absolute; width: 120px; height: 24px; text-align: center; opacity: 0; white-space: nowrap;
+      font: 600 18px/24px "Instrument Sans", sans-serif; color: #2b2723; }
+    .p04-val span { background: #fffdf9; padding: 0 8px; }
+    #p04-v5c { color: #d97757; }
+
+    /* courbe de tendance et filet */
+    #p04-lines { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: visible; }
+    #p04-trend { fill: none; stroke: #d97757; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; opacity: 0; }
+    #p04-filet { fill: none; stroke: #d97757; stroke-width: 2; stroke-linecap: round; opacity: 0; }
+
+    /* annotation */
+    #p04-annot { left: 1612px; top: 362px; height: 58px; padding: 0 20px; border-radius: 14px; opacity: 0; white-space: nowrap;
+      font: 600 24px/58px "Instrument Sans", sans-serif; color: #1c1a17; }
+    #p04-annot b { font-weight: 600; color: #3f8f63; }
+
+    /* clips (180 x 56, rayon 10) en y 760, x = 360 + i × 204 */
+    .p04-clip { position: absolute; top: 760px; width: 180px; height: 56px; border-radius: 10px; background: #2b2723; opacity: 0; }
+    #p04-clip5 { background: #d97757; }
+
+    /* mot en boîte : couche encre + couche papier (fondu croisé quand la boîte se trace) */
+    .p04-dual { position: relative; }
+    .p04-pap { position: absolute; left: 0; top: 0; color: #f4efe6; opacity: 0; }
+  </style>
+
+  <div id="root" data-composition-id="04-donnees" data-width="1920" data-height="1080" data-duration="5.5">
+    <div id="p04-ground" class="clip" data-start="0" data-duration="5.5" data-track-index="0" data-layout-ignore>
+      <div class="k-ground-paper"></div>
+    </div>
+
+    <div id="p04-stage" class="clip" data-start="0" data-duration="5.5" data-track-index="1">
+      <div id="p04-world" class="k-layer">
+        <div id="p04-panel" class="k-card"></div>
+        <div id="p04-label">Chiffre d’affaires</div>
+        <div id="p04-kpi"><span id="p04-num">48&nbsp;320&nbsp;€</span><span id="p04-pill">+23&nbsp;%</span></div>
+
+        <div id="p04-gridg">
+          <i id="p04-g0" class="p04-grid" style="top:599px"></i>
+          <i id="p04-g1" class="p04-grid" style="top:679px"></i>
+          <i id="p04-g2" class="p04-grid" style="top:519px"></i>
+        </div>
+
+        <div id="p04-halo"></div>
+
+        <div id="p04-bar0" class="p04-bar" style="left:340px;top:610px;height:150px;border-radius:6.667px / 26.786px"></div>
+        <div id="p04-bar1" class="p04-bar" style="left:564px;top:580px;height:180px;border-radius:6.667px / 32.143px"></div>
+        <div id="p04-bar2" class="p04-bar" style="left:788px;top:595px;height:165px;border-radius:6.667px / 29.464px"></div>
+        <div id="p04-bar3" class="p04-bar" style="left:1012px;top:545px;height:215px;border-radius:6.667px / 38.393px"></div>
+        <div id="p04-bar4" class="p04-bar" style="left:1236px;top:515px;height:245px;border-radius:6.667px / 43.750px"></div>
+        <div id="p04-bar5" class="p04-bar" style="left:1460px;top:450px;height:310px;border-radius:6.667px / 55.357px"></div>
+
+        <div id="p04-mos">
+          <div id="p04-m0" class="p04-mo" style="left:340px">Jan</div>
+          <div id="p04-m1" class="p04-mo" style="left:564px">Fév</div>
+          <div id="p04-m2" class="p04-mo" style="left:788px">Mar</div>
+          <div id="p04-m3" class="p04-mo" style="left:1012px">Avr</div>
+          <div id="p04-m4" class="p04-mo" style="left:1236px">Mai</div>
+          <div id="p04-m5" class="p04-mo" style="left:1460px">Juin</div>
+        </div>
+
+        <div id="p04-vals">
+          <div id="p04-v0" class="p04-val" style="left:340px;top:572px"><span>6,1&nbsp;k</span></div>
+          <div id="p04-v1" class="p04-val" style="left:564px;top:542px"><span>7,3&nbsp;k</span></div>
+          <div id="p04-v2" class="p04-val" style="left:788px;top:557px"><span>6,7&nbsp;k</span></div>
+          <div id="p04-v3" class="p04-val" style="left:1012px;top:507px"><span>8,7&nbsp;k</span></div>
+          <div id="p04-v4" class="p04-val" style="left:1236px;top:477px"><span>9,9&nbsp;k</span></div>
+          <div id="p04-v5" class="p04-val" style="left:1460px;top:412px"><span>12,6&nbsp;k</span></div>
+          <div id="p04-v5c" class="p04-val" style="left:1460px;top:412px"><span>12,6&nbsp;k</span></div>
+        </div>
+
+        <svg id="p04-lines" viewBox="0 0 1920 1080">
+          <path id="p04-trend" d="M400 610"/>
+          <path id="p04-filet" d="M1584 450 L1612 391"/>
+        </svg>
+
+        <div id="p04-annot" class="k-card">Juin&nbsp;: record, <b>+23&nbsp;%</b></div>
+
+        <div id="p04-clip0" class="p04-clip" style="left:360px"></div>
+        <div id="p04-clip1" class="p04-clip" style="left:564px"></div>
+        <div id="p04-clip2" class="p04-clip" style="left:768px"></div>
+        <div id="p04-clip3" class="p04-clip" style="left:972px"></div>
+        <div id="p04-clip4" class="p04-clip" style="left:1176px"></div>
+        <div id="p04-clip5" class="p04-clip" style="left:1380px"></div>
+      </div>
+    </div>
+
+    <div id="p04-subs" class="clip" data-start="0" data-duration="5.5" data-track-index="2">
+      <div id="p04-s1" class="k-sub"><span class="k-w p04-w1">J’analyse</span> <span class="k-w p04-w1">tes</span> <span class="k-box"><i id="p04-box1" class="k-box-bg"></i><span class="k-box-tx"><span class="k-w p04-w1 p04-dual"><span id="p04-dink">données</span><span id="p04-dpap" class="p04-pap">données</span></span></span></span><span class="k-w p04-w1">.</span></div>
+      <div id="p04-s2" class="k-sub"><span class="k-w p04-w2">Et</span> <span class="k-w p04-w2">j’en</span> <span class="k-w p04-w2">tire</span> <span class="k-trait"><span class="k-w p04-w2">l’essentiel.</span><svg id="p04-trait" class="k-trait-svg" viewBox="0 0 100 10" preserveAspectRatio="none"><path d="M0 6 C 20 3.6, 60 3.2, 100 4.6 L 100 5.4 C 60 6.4, 20 8.6, 0 7.4 Z" fill="#d97757"/></svg></span></div>
+    </div>
+
+    <div id="p04-grainclip" class="clip" data-start="0" data-duration="5.5" data-track-index="3" data-layout-ignore>
+      <div id="p04-grain" class="k-grain"></div>
+    </div>
+  </div>
+
+  <script src="assets/vendor/gsap.min.js"></script>
+  <script>
+    (function () {
+      var FID = "04-donnees";
+      var T = 5.5;
+
+      /* ===== kit claude-intro (JS) ===== */
+/* flou en px écran sur un élément (0 = "none") */
+function kBlur(el, px) { el.style.filter = px > 0.25 ? "blur(" + px.toFixed(1) + "px)" : "none"; }
+/* caméra 2D : le point monde (c.x, c.y) au centre de l'écran, échelle c.s ; le monde est un plan 1920x1080 */
+function kCam(worldEl, c) {
+  worldEl.style.transformOrigin = "0 0";
+  worldEl.style.transform = "translate(" + (960 - c.x * c.s).toFixed(2) + "px," + (540 - c.y * c.s).toFixed(2) + "px) scale(" + c.s.toFixed(4) + ")";
+}
+/* un mot du sous-titre arrive : y +10, flou 6 -> 0, opacité 0 -> 1 en 0,16 s */
+function kWord(tl, el, t) {
+  tl.fromTo(el, { opacity: 0, y: 10, filter: "blur(6px)" },
+    { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.16, ease: "power2.out", immediateRender: t <= 0 }, t);
+}
+/* une ligne de sous-titre : mots sur leurs cues, sortie vers le haut à tOut (0,14 s) ; tOut null = reste */
+function kLine(tl, lineEl, wordEls, cues, tOut) {
+  for (var i = 0; i < wordEls.length; i++) kWord(tl, wordEls[i], cues[i]);
+  if (tOut != null) tl.fromTo(lineEl, { y: 0, opacity: 1, filter: "blur(0px)" },
+    { y: -14, opacity: 0, filter: "blur(6px)", duration: 0.14, ease: "power2.in", immediateRender: false }, tOut);
+}
+/* boîte du mot clé : le fond corail se trace (0,16 s power3.out) */
+function kBox(tl, bgEl, t) {
+  tl.fromTo(bgEl, { scaleX: 0 }, { scaleX: 1, duration: 0.16, ease: "power3.out", immediateRender: false }, t);
+}
+/* trait du pic : se dessine de gauche à droite (0,4 s power2.out) */
+function kTrait(tl, svgEl, t) {
+  tl.fromTo(svgEl, { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power2.out", immediateRender: false }, t);
+}
+/* arrivée « trop grand et flou, puis se pose » : ×1,15 flou 10 -> ×1 net en 0,22 s expo.out */
+function kArrive(tl, el, t, from) {
+  from = from || 1.15;
+  tl.fromTo(el, { opacity: 0, scale: from, filter: "blur(10px)" },
+    { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.22, ease: "expo.out", immediateRender: t <= 0 }, t);
+}
+/* curseur : un seul geste courbe de (x0,y0) à (x1,y1), de t à t+d (power3.inOut), puis clic direct à t+d+0.04 :
+   pression 0,86 et anneau corail qui s'ouvre (ringEl optionnel, placé au point d'arrivée) */
+function kCursor(tl, el, x0, y0, x1, y1, t, d, ringEl) {
+  var p = { k: 0 };
+  var cx = (x0 + x1) / 2 + (y1 - y0) * 0.22, cy = (y0 + y1) / 2 - (x1 - x0) * 0.22;
+  function place() {
+    var k = p.k, a = (1 - k) * (1 - k), b = 2 * (1 - k) * k, c = k * k;
+    el.style.left = "0px"; el.style.top = "0px";
+    gsap.set(el, { x: a * x0 + b * cx + c * x1, y: a * y0 + b * cy + c * y1 });
+  }
+  tl.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 0.08, ease: "none", immediateRender: false }, t);
+  tl.fromTo(p, { k: 0 }, { k: 1, duration: d, ease: "power3.inOut", immediateRender: false, onUpdate: place }, t);
+  tl.fromTo(el, { scale: 1 }, { scale: 0.86, duration: 0.06, ease: "power2.in", immediateRender: false }, t + d + 0.04);
+  tl.fromTo(el, { scale: 0.86 }, { scale: 1, duration: 0.12, ease: "power2.out", immediateRender: false }, t + d + 0.10);
+  if (ringEl) {
+    gsap.set(ringEl, { left: x1 + "px", top: y1 + "px" });
+    tl.fromTo(ringEl, { opacity: 1, scale: 0.3 }, { opacity: 0, scale: 1.6, duration: 0.45, ease: "power2.out", immediateRender: false }, t + d + 0.06);
+  }
+  place();
+}
+/* découpe le texte d'un élément en <span class="k-ch"> (opacité 0), chacun avec son caret <i class="k-ch-caret"> (à l'init, une fois) */
+function kSplit(el) {
+  var s = el.textContent; el.textContent = "";
+  var out = [];
+  for (var i = 0; i < s.length; i++) {
+    var c = document.createElement("span"); c.className = "k-ch"; c.style.opacity = "0"; c.textContent = s[i];
+    var k = document.createElement("i"); k.className = "k-ch-caret"; c.appendChild(k);
+    el.appendChild(c); out.push(c);
+  }
+  return out;
+}
+/* frappe : les caractères (de kSplit, un ou plusieurs tableaux concaténés) apparaissent un par un de t à t+d ; le caret
+   corail suit le dernier caractère tapé ; keepCaret = le caret du dernier caractère reste allumé à la fin.
+   Renvoie le caret final (pour le faire clignoter avec kBlink). */
+function kType(tl, chEls, t, d, keepCaret) {
+  var step = d / Math.max(1, chEls.length);
+  for (var i = 0; i < chEls.length; i++) {
+    var ti = t + i * step, car = chEls[i].lastChild;
+    tl.fromTo(chEls[i], { opacity: 0 }, { opacity: 1, duration: 0.01, ease: "none", immediateRender: false }, ti);
+    tl.fromTo(car, { opacity: 0 }, { opacity: 1, duration: 0.01, ease: "none", immediateRender: false }, ti);
+    if (i < chEls.length - 1 || !keepCaret)
+      tl.fromTo(car, { opacity: 1 }, { opacity: 0, duration: 0.01, ease: "none", immediateRender: false }, ti + step);
+  }
+  return chEls.length ? chEls[chEls.length - 1].lastChild : null;
+}
+/* clignotement fini d'un caret : éteint à chaque temps de la liste pendant off s (0,2 par défaut) */
+function kBlink(tl, caretEl, times, off) {
+  off = off || 0.2;
+  for (var i = 0; i < times.length; i++) {
+    tl.fromTo(caretEl, { opacity: 1 }, { opacity: 0, duration: 0.01, ease: "none", immediateRender: false }, times[i]);
+    tl.fromTo(caretEl, { opacity: 0 }, { opacity: 1, duration: 0.01, ease: "none", immediateRender: false }, times[i] + off);
+  }
+}
+/* ===== fin du kit (JS) ===== */
+
+      var byId = function (id) { return document.getElementById(id); };
+      var world = byId("p04-world");
+      var cam = { x: 960, y: 480, s: 1.12, b: 10 };
+      function render() { kCam(world, cam); kBlur(world, cam.b); }
+
+      var tl = gsap.timeline({ paused: true, defaults: { lazy: false }, onUpdate: render });
+
+      /* ---- données du graphique (monde) ---- */
+      var H = [150, 180, 165, 215, 245, 310];
+      var V = [6.1, 7.3, 6.7, 8.7, 9.9, 12.6];
+      var BASE = 760;
+      function barX(i) { return 340 + 224 * i; }
+      function fmt(v) { return v.toFixed(1).replace(".", ",") + " k"; }
+
+      /* ---- caméra ---- */
+      tl.fromTo(cam, { s: 1.12, b: 10 }, { s: 1.0, b: 0, duration: 0.35, ease: "expo.out" }, 0);
+      tl.fromTo(cam, { x: 960, y: 480, s: 1.0 }, { x: 1000, y: 490, s: 1.02, duration: 1.85, ease: "none", immediateRender: false }, 0.35);
+      tl.fromTo(cam, { x: 1000, y: 490, s: 1.02 }, { x: 1380, y: 520, s: 1.30, duration: 0.4, ease: "power3.inOut", immediateRender: false }, 2.2);
+      tl.fromTo(cam, { x: 1380, y: 520, s: 1.30 }, { x: 960, y: 540, s: 1.0, duration: 0.45, ease: "power3.inOut", immediateRender: false }, 3.5);
+      tl.fromTo(cam, { s: 1.0 }, { s: 0.99, duration: 0.95, ease: "none", immediateRender: false }, 3.95);
+      tl.fromTo(cam, { s: 0.99 }, { s: 0.96, duration: 0.6, ease: "power2.in", immediateRender: false }, 4.9);
+      tl.fromTo(cam, { b: 0 }, { b: 8, duration: 0.3, ease: "power2.in", immediateRender: false }, 5.2);
+
+      /* ---- grain qui glisse d'un motif ---- */
+      tl.fromTo(byId("p04-grain"), { x: 0 }, { x: -240, duration: T, ease: "none" }, 0);
+
+      /* ===== Scene 1 : le graphique pousse ===== */
+      /* grille : y 600, 680, 520, de gauche à droite */
+      ["p04-g0", "p04-g1", "p04-g2"].forEach(function (id, k) {
+        var t = 0.4 + 0.05 * k;
+        tl.fromTo(byId(id), { opacity: 0 }, { opacity: 1, duration: 0.01, ease: "none", immediateRender: false }, t);
+        tl.fromTo(byId(id), { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "power3.out", immediateRender: false }, t);
+      });
+      /* mois */
+      for (var m = 0; m < 6; m++) {
+        tl.fromTo(byId("p04-m" + m), { opacity: 0, y: 6 }, { opacity: 1, y: 0, duration: 0.25, ease: "power3.out", immediateRender: false }, 0.55 + 0.03 * m);
+      }
+      /* barres + valeurs qui roulent */
+      for (var i = 0; i < 6; i++) {
+        (function (i) {
+          var t = 0.6 + 0.15 * i;
+          var bar = byId("p04-bar" + i);
+          tl.fromTo(bar, { opacity: 0 }, { opacity: 1, duration: 0.01, ease: "none", immediateRender: false }, t);
+          tl.fromTo(bar, { scaleY: 0 }, { scaleY: 1, duration: 0.35, ease: "expo.out", immediateRender: false }, t);
+          var vEl = byId("p04-v" + i), sp = vEl.firstChild;
+          var p = { v: 0 };
+          tl.fromTo(vEl, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.3, ease: "expo.out", immediateRender: false }, t + 0.02);
+          tl.fromTo(p, { v: 0 }, { v: V[i], duration: 0.5, ease: "power3.out", immediateRender: false,
+            onUpdate: function () { sp.textContent = fmt(p.v); } }, t);
+        })(i);
+      }
+
+      /* courbe de tendance sur les sommets (Catmull-Rom -> Bézier) */
+      var P = [];
+      for (var j = 0; j < 6; j++) P.push([barX(j) + 60, BASE - H[j]]);
+      var d = "M" + P[0][0] + " " + P[0][1];
+      for (var j2 = 0; j2 < 5; j2++) {
+        var p0 = P[Math.max(0, j2 - 1)], p1 = P[j2], p2 = P[j2 + 1], p3 = P[Math.min(5, j2 + 2)];
+        var c1x = p1[0] + (p2[0] - p0[0]) / 6, c1y = p1[1] + (p2[1] - p0[1]) / 6;
+        var c2x = p2[0] - (p3[0] - p1[0]) / 6, c2y = p2[1] - (p3[1] - p1[1]) / 6;
+        d += " C" + c1x.toFixed(1) + " " + c1y.toFixed(1) + ", " + c2x.toFixed(1) + " " + c2y.toFixed(1) + ", " + p2[0] + " " + p2[1];
+      }
+      var trend = byId("p04-trend");
+      trend.setAttribute("d", d);
+      var LT = trend.getTotalLength() * 1.02;
+      trend.style.strokeDasharray = LT;
+      trend.style.strokeDashoffset = LT;
+      tl.fromTo(trend, { opacity: 0 }, { opacity: 1, duration: 0.01, ease: "none", immediateRender: false }, 1.5);
+      tl.fromTo(trend, { strokeDashoffset: LT }, { strokeDashoffset: 0, duration: 0.6, ease: "power2.out", immediateRender: false }, 1.5);
+
+      /* juin s'éclaire */
+      var halo = byId("p04-halo");
+      tl.fromTo(halo, { opacity: 0 }, { opacity: 0.6, duration: 0.3, ease: "power2.out", immediateRender: false }, 2.3);
+
+      /* annotation + filet */
+      var filet = byId("p04-filet");
+      var LF = filet.getTotalLength() * 1.05;
+      filet.style.strokeDasharray = LF;
+      filet.style.strokeDashoffset = LF;
+      tl.fromTo(filet, { opacity: 0 }, { opacity: 1, duration: 0.01, ease: "none", immediateRender: false }, 2.4);
+      tl.fromTo(filet, { strokeDashoffset: LF }, { strokeDashoffset: 0, duration: 0.2, ease: "power2.out", immediateRender: false }, 2.4);
+      kArrive(tl, byId("p04-annot"), 2.4, 1.15);
+
+      /* sous-titre « J’analyse tes [données]. » */
+      var w1 = Array.prototype.slice.call(document.getElementsByClassName("p04-w1"));
+      kLine(tl, byId("p04-s1"), w1, [0.4, 0.8, 0.95, 0.95], 2.55);
+      kBox(tl, byId("p04-box1"), 0.93);
+      tl.fromTo(byId("p04-dink"), { opacity: 1 }, { opacity: 0, duration: 0.1, ease: "none", immediateRender: false }, 0.96);
+      tl.fromTo(byId("p04-dpap"), { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "none", immediateRender: false }, 0.96);
+
+      /* ===== Scene 2 : l'essentiel, puis les barres se couchent ===== */
+      /* tenue vivante sur juin */
+      tl.fromTo(halo, { opacity: 0.6 }, { opacity: 1, duration: 0.9, ease: "sine.inOut", immediateRender: false }, 2.6);
+      tl.fromTo(byId("p04-v5c"), { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "power1.out", immediateRender: false }, 2.8);
+      tl.fromTo(byId("p04-v5").firstChild, { opacity: 1 }, { opacity: 0, duration: 0.2, ease: "power1.out", immediateRender: false }, 2.8);
+
+      /* sous-titre « Et j’en tire l’[essentiel]. » */
+      var w2 = Array.prototype.slice.call(document.getElementsByClassName("p04-w2"));
+      kLine(tl, byId("p04-s2"), w2, [2.75, 2.9, 3.1, 3.3], 4.6);
+      kTrait(tl, byId("p04-trait"), 3.42);
+
+      /* 4.00 : tout s'efface sauf les barres */
+      ["p04-label", "p04-kpi", "p04-gridg", "p04-mos", "p04-vals", "p04-trend", "p04-annot", "p04-filet", "p04-halo"].forEach(function (id, k) {
+        tl.fromTo(byId(id), { opacity: 1 }, { opacity: 0, duration: 0.2, ease: "power2.in", immediateRender: false }, 4.0 + 0.03 * k);
+      });
+      /* 4.10 : le fond du panneau s'efface */
+      tl.fromTo(byId("p04-panel"), { opacity: 1 }, { opacity: 0, duration: 0.3, ease: "power2.in", immediateRender: false }, 4.1);
+
+      /* 4.35 à 5.00 : chaque barre se couche et devient un clip (transformation pure vers l'identité) */
+      for (var c = 0; c < 6; c++) {
+        (function (i) {
+          var t = 4.35 + 0.05 * i;
+          var clip = byId("p04-clip" + i), bar = byId("p04-bar" + i);
+          var cxClip = 360 + 204 * i + 90, cyClip = 760 + 28;
+          var cxBar = barX(i) + 60, cyBar = BASE - H[i] / 2;
+          tl.fromTo(bar, { opacity: 1 }, { opacity: 0, duration: 0.01, ease: "none", immediateRender: false }, t);
+          tl.fromTo(clip, { opacity: 0 }, { opacity: 1, duration: 0.01, ease: "none", immediateRender: false }, t);
+          tl.fromTo(clip, { x: cxBar - cxClip, y: cyBar - cyClip, scaleX: 120 / 180, scaleY: H[i] / 56 },
+            { x: 0, y: 0, scaleX: 1, scaleY: 1, duration: 0.4, ease: "power3.inOut", immediateRender: false }, t);
+        })(c);
+      }
+
+      render();
+      window.__timelines = window.__timelines || {};
+      window.__timelines[FID] = tl;
+    })();
+  </script>
+</template>

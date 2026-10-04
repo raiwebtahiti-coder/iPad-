@@ -1,0 +1,282 @@
+<template>
+  <style>
+    /* ===== kit claude-intro (CSS) ===== */
+@font-face { font-family: "Instrument Sans"; src: url("assets/fonts/InstrumentSans-400.woff2") format("woff2"); font-weight: 400; font-display: block; }
+@font-face { font-family: "Instrument Sans"; src: url("assets/fonts/InstrumentSans-500.woff2") format("woff2"); font-weight: 500; font-display: block; }
+@font-face { font-family: "Instrument Sans"; src: url("assets/fonts/InstrumentSans-600.woff2") format("woff2"); font-weight: 600; font-display: block; }
+@font-face { font-family: "Instrument Sans"; src: url("assets/fonts/InstrumentSans-700.woff2") format("woff2"); font-weight: 700; font-display: block; }
+@font-face { font-family: "Instrument Serif"; src: url("assets/fonts/InstrumentSerif-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: block; }
+@font-face { font-family: "Instrument Serif"; src: url("assets/fonts/InstrumentSerif-400i.woff2") format("woff2"); font-weight: 400; font-style: italic; font-display: block; }
+@font-face { font-family: "JetBrains Mono"; src: url("assets/fonts/JetBrainsMono-400.woff2") format("woff2"); font-weight: 400; font-display: block; }
+@font-face { font-family: "JetBrains Mono"; src: url("assets/fonts/JetBrainsMono-600.woff2") format("woff2"); font-weight: 600; font-display: block; }
+
+.k-layer { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+.k-ground-dark { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px;
+  background: radial-gradient(ellipse 1400px 860px at 50% 46%, #1d1b19 0%, #141312 58%, #0d0c0b 100%); }
+.k-ground-paper { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px;
+  background: radial-gradient(ellipse 1500px 900px at 50% 42%, #f8f4ed 0%, #f4efe6 55%, #ece4d7 100%); }
+.k-grain { position: absolute; left: 0; top: 0; width: 2160px; height: 1080px; pointer-events: none; opacity: .04; mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23g)'/></svg>");
+  background-size: 240px 240px; }
+.k-grain.k-dark { opacity: .06; mix-blend-mode: screen; }
+
+/* sous-titre : bande y 890 à 980, centré, 62 px ; mots en inline-block (opacité 0 au départ) */
+.k-sub { position: absolute; left: 0; top: 896px; width: 1920px; height: 80px; text-align: center; white-space: nowrap;
+  font: 500 62px/80px "Instrument Sans", sans-serif; letter-spacing: -0.015em; color: #1c1a17; }
+.k-sub.k-on-dark { color: #f4efe6; }
+.k-w { display: inline-block; opacity: 0; }
+
+/* moment typographique : centré, Instrument Serif 84 px au plus */
+.k-type { position: absolute; left: 0; width: 1920px; text-align: center; white-space: nowrap;
+  font: 400 84px/1.1 "Instrument Serif", serif; letter-spacing: -0.01em; color: #1c1a17; }
+.k-type.k-on-dark { color: #f4efe6; }
+
+/* boîte du mot clé : corail, texte papier ; le fond se trace de gauche à droite (scaleX 0 -> 1) */
+.k-box { position: relative; display: inline-block; margin-left: 0.1em; }
+.k-box-bg { position: absolute; left: -0.14em; right: -0.14em; top: 0.08em; bottom: 0.02em; border-radius: 10px; background: #d97757;
+  transform-origin: 0 50%; transform: scaleX(0); }
+.k-box-tx { position: relative; }
+
+/* trait du pic : coup de pinceau effilé corail sous LE mot (svg en 100 % de largeur du mot) */
+.k-trait { position: relative; display: inline-block; }
+.k-trait-svg { position: absolute; left: -0.06em; bottom: -0.10em; width: calc(100% + 0.12em); height: 0.22em; overflow: visible;
+  transform-origin: 0 50%; transform: scaleX(0); }
+
+/* carte d'interface */
+.k-card { position: absolute; background: #fffdf9; border-radius: 20px;
+  box-shadow: 0 1px 0 rgba(28,26,23,.06), 0 18px 40px -12px rgba(28,26,23,.22), 0 4px 10px rgba(28,26,23,.06); }
+.k-card.k-dark { background: #1f1d1b; box-shadow: 0 0 0 1px rgba(244,239,230,.10), 0 30px 60px -20px rgba(0,0,0,.6); }
+
+/* curseur : flèche papier cerclée d'encre, pointe en (0,0) de l'élément */
+.k-cursor { position: absolute; left: 0; top: 0; width: 34px; height: 42px; opacity: 0; transform-origin: 2px 2px; }
+.k-ring { position: absolute; width: 80px; height: 80px; margin: -40px 0 0 -40px; border-radius: 50%; border: 3px solid #d97757; opacity: 0; }
+
+/* caret de frappe */
+.k-caret { display: inline-block; width: 0.08em; height: 1em; background: #d97757; vertical-align: -0.12em; margin-left: 0.04em; border-radius: 2px; }
+/* frappe : chaque caractère porte son propre caret (à son bord droit), allumé seulement quand il est le dernier tapé */
+.k-ch { position: relative; }
+.k-ch-caret { position: absolute; left: 100%; top: 0.1em; width: 0.07em; height: 0.95em; margin-left: 0.03em; background: #d97757; border-radius: 2px; opacity: 0; }
+/* ===== fin du kit (CSS) ===== */
+
+    #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; -webkit-font-smoothing: antialiased; }
+    #p06-ground, #p06-stage, #p06-subs, #p06-grainclip, #p06-veilclip { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: hidden; }
+
+    /* lueur corail derrière la carte (rayon 700 px, centre (960, 540)) */
+    #p06-glow { position: absolute; left: 260px; top: -160px; width: 1400px; height: 1400px; opacity: 0;
+      background: radial-gradient(circle 700px at 50% 50%, #d97757 0%, rgba(217,119,87,.45) 30%, rgba(217,119,87,0) 100%); }
+
+    /* « Claude » : Instrument Serif 64 px, centré, top 286 */
+    #p06-name { top: 286px; font-size: 64px; opacity: 0; }
+
+    /* carte de demande (comme en 01), centrée en (960, 540) */
+    #p06-card { left: 510px; top: 465px; width: 900px; height: 150px; border-radius: 26px; }
+    #p06-lead, #p06-prompt { position: absolute; left: 44px; top: 53px; height: 44px; white-space: nowrap;
+      font: 500 34px/44px "Instrument Sans", sans-serif; letter-spacing: -0.01em; color: #f4efe6; }
+    #p06-lead { width: 0; }
+    #p06-lead .k-ch-caret { opacity: 1; }
+
+    /* bouton pilule corail 230 x 72, centre (1240, 540) */
+    #p06-btn { position: absolute; left: 615px; top: 39px; width: 230px; height: 72px; border-radius: 36px; background: #d97757; }
+    #p06-btnhi { position: absolute; left: 0; top: 0; width: 230px; height: 72px; border-radius: 36px; background: #e5946f; opacity: 0; }
+    #p06-btnlab { position: absolute; left: 0; top: 0; width: 230px; height: 72px; display: flex; align-items: center; justify-content: center; gap: 12px;
+      font: 600 28px/1 "Instrument Sans", sans-serif; letter-spacing: -0.01em; color: #f4efe6; white-space: nowrap; }
+    #p06-arrow { display: block; width: 26px; height: 26px; }
+
+    #p06-ring { border-color: #f0b49a; }
+
+    /* voile de fin */
+    #p06-veil { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; background: #0d0c0b; opacity: 0; }
+  </style>
+
+  <div id="root" data-composition-id="06-fin" data-width="1920" data-height="1080" data-duration="4">
+    <div id="p06-ground" class="clip" data-start="0" data-duration="4" data-track-index="0" data-layout-ignore>
+      <div class="k-ground-dark"></div>
+    </div>
+
+    <div id="p06-stage" class="clip" data-start="0" data-duration="4" data-track-index="1">
+      <div id="p06-world" class="k-layer">
+        <div id="p06-glow"></div>
+
+        <div id="p06-name" class="k-type k-on-dark">Claude</div>
+
+        <div id="p06-card" class="k-card k-dark">
+          <span id="p06-lead"><i class="k-ch-caret" id="p06-leadcaret"></i></span>
+          <div id="p06-prompt">Raconte-moi ton projet</div>
+          <div id="p06-btn">
+            <i id="p06-btnhi"></i>
+            <div id="p06-btnlab"><span>Commencer</span><svg id="p06-arrow" viewBox="0 0 26 26"><path d="M3 13 L22 13 M14.5 5.5 L22 13 L14.5 20.5" fill="none" stroke="#f4efe6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          </div>
+        </div>
+
+        <i id="p06-ring" class="k-ring"></i>
+        <svg id="p06-cursor" class="k-cursor" viewBox="0 0 34 42"><path d="M2 2 L2 34 L10.5 26 L16 39 L22 36.5 L16.6 24 L28 24 Z" fill="#f4efe6" stroke="#1c1a17" stroke-width="2.4" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+
+    <div id="p06-subs" class="clip" data-start="0" data-duration="4" data-track-index="2">
+      <div id="p06-s1" class="k-sub k-on-dark"><span class="k-w p06-w">À</span> <span class="k-w p06-w">ton</span> <span class="k-w p06-w">tour.</span> <span class="k-w p06-w">Créons</span> <span class="k-w p06-w">ta</span> <span class="k-box"><i id="p06-box" class="k-box-bg"></i><span class="k-box-tx"><span class="k-w p06-w">vidéo.</span></span></span></div>
+    </div>
+
+    <div id="p06-grainclip" class="clip" data-start="0" data-duration="4" data-track-index="3" data-layout-ignore>
+      <div id="p06-grain" class="k-grain k-dark"></div>
+    </div>
+
+    <div id="p06-veilclip" class="clip" data-start="0" data-duration="4" data-track-index="4" data-layout-ignore>
+      <div id="p06-veil"></div>
+    </div>
+  </div>
+
+  <script src="assets/vendor/gsap.min.js"></script>
+  <script>
+    (function () {
+      var FID = "06-fin";
+      var T = 4;
+
+      /* ===== kit claude-intro (JS) ===== */
+/* flou en px écran sur un élément (0 = "none") */
+function kBlur(el, px) { el.style.filter = px > 0.25 ? "blur(" + px.toFixed(1) + "px)" : "none"; }
+/* caméra 2D : le point monde (c.x, c.y) au centre de l'écran, échelle c.s ; le monde est un plan 1920x1080 */
+function kCam(worldEl, c) {
+  worldEl.style.transformOrigin = "0 0";
+  worldEl.style.transform = "translate(" + (960 - c.x * c.s).toFixed(2) + "px," + (540 - c.y * c.s).toFixed(2) + "px) scale(" + c.s.toFixed(4) + ")";
+}
+/* un mot du sous-titre arrive : y +10, flou 6 -> 0, opacité 0 -> 1 en 0,16 s */
+function kWord(tl, el, t) {
+  tl.fromTo(el, { opacity: 0, y: 10, filter: "blur(6px)" },
+    { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.16, ease: "power2.out", immediateRender: t <= 0 }, t);
+}
+/* une ligne de sous-titre : mots sur leurs cues, sortie vers le haut à tOut (0,14 s) ; tOut null = reste */
+function kLine(tl, lineEl, wordEls, cues, tOut) {
+  for (var i = 0; i < wordEls.length; i++) kWord(tl, wordEls[i], cues[i]);
+  if (tOut != null) tl.fromTo(lineEl, { y: 0, opacity: 1, filter: "blur(0px)" },
+    { y: -14, opacity: 0, filter: "blur(6px)", duration: 0.14, ease: "power2.in", immediateRender: false }, tOut);
+}
+/* boîte du mot clé : le fond corail se trace (0,16 s power3.out) */
+function kBox(tl, bgEl, t) {
+  tl.fromTo(bgEl, { scaleX: 0 }, { scaleX: 1, duration: 0.16, ease: "power3.out", immediateRender: false }, t);
+}
+/* trait du pic : se dessine de gauche à droite (0,4 s power2.out) */
+function kTrait(tl, svgEl, t) {
+  tl.fromTo(svgEl, { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power2.out", immediateRender: false }, t);
+}
+/* arrivée « trop grand et flou, puis se pose » : ×1,15 flou 10 -> ×1 net en 0,22 s expo.out */
+function kArrive(tl, el, t, from) {
+  from = from || 1.15;
+  tl.fromTo(el, { opacity: 0, scale: from, filter: "blur(10px)" },
+    { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.22, ease: "expo.out", immediateRender: t <= 0 }, t);
+}
+/* curseur : un seul geste courbe de (x0,y0) à (x1,y1), de t à t+d (power3.inOut), puis clic direct à t+d+0.04 :
+   pression 0,86 et anneau corail qui s'ouvre (ringEl optionnel, placé au point d'arrivée) */
+function kCursor(tl, el, x0, y0, x1, y1, t, d, ringEl) {
+  var p = { k: 0 };
+  var cx = (x0 + x1) / 2 + (y1 - y0) * 0.22, cy = (y0 + y1) / 2 - (x1 - x0) * 0.22;
+  function place() {
+    var k = p.k, a = (1 - k) * (1 - k), b = 2 * (1 - k) * k, c = k * k;
+    el.style.left = "0px"; el.style.top = "0px";
+    gsap.set(el, { x: a * x0 + b * cx + c * x1, y: a * y0 + b * cy + c * y1 });
+  }
+  tl.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 0.08, ease: "none", immediateRender: false }, t);
+  tl.fromTo(p, { k: 0 }, { k: 1, duration: d, ease: "power3.inOut", immediateRender: false, onUpdate: place }, t);
+  tl.fromTo(el, { scale: 1 }, { scale: 0.86, duration: 0.06, ease: "power2.in", immediateRender: false }, t + d + 0.04);
+  tl.fromTo(el, { scale: 0.86 }, { scale: 1, duration: 0.12, ease: "power2.out", immediateRender: false }, t + d + 0.10);
+  if (ringEl) {
+    gsap.set(ringEl, { left: x1 + "px", top: y1 + "px" });
+    tl.fromTo(ringEl, { opacity: 1, scale: 0.3 }, { opacity: 0, scale: 1.6, duration: 0.45, ease: "power2.out", immediateRender: false }, t + d + 0.06);
+  }
+  place();
+}
+/* découpe le texte d'un élément en <span class="k-ch"> (opacité 0), chacun avec son caret <i class="k-ch-caret"> (à l'init, une fois) */
+function kSplit(el) {
+  var s = el.textContent; el.textContent = "";
+  var out = [];
+  for (var i = 0; i < s.length; i++) {
+    var c = document.createElement("span"); c.className = "k-ch"; c.style.opacity = "0"; c.textContent = s[i];
+    var k = document.createElement("i"); k.className = "k-ch-caret"; c.appendChild(k);
+    el.appendChild(c); out.push(c);
+  }
+  return out;
+}
+/* frappe : les caractères (de kSplit, un ou plusieurs tableaux concaténés) apparaissent un par un de t à t+d ; le caret
+   corail suit le dernier caractère tapé ; keepCaret = le caret du dernier caractère reste allumé à la fin.
+   Renvoie le caret final (pour le faire clignoter avec kBlink). */
+function kType(tl, chEls, t, d, keepCaret) {
+  var step = d / Math.max(1, chEls.length);
+  for (var i = 0; i < chEls.length; i++) {
+    var ti = t + i * step, car = chEls[i].lastChild;
+    tl.fromTo(chEls[i], { opacity: 0 }, { opacity: 1, duration: 0.01, ease: "none", immediateRender: false }, ti);
+    tl.fromTo(car, { opacity: 0 }, { opacity: 1, duration: 0.01, ease: "none", immediateRender: false }, ti);
+    if (i < chEls.length - 1 || !keepCaret)
+      tl.fromTo(car, { opacity: 1 }, { opacity: 0, duration: 0.01, ease: "none", immediateRender: false }, ti + step);
+  }
+  return chEls.length ? chEls[chEls.length - 1].lastChild : null;
+}
+/* clignotement fini d'un caret : éteint à chaque temps de la liste pendant off s (0,2 par défaut) */
+function kBlink(tl, caretEl, times, off) {
+  off = off || 0.2;
+  for (var i = 0; i < times.length; i++) {
+    tl.fromTo(caretEl, { opacity: 1 }, { opacity: 0, duration: 0.01, ease: "none", immediateRender: false }, times[i]);
+    tl.fromTo(caretEl, { opacity: 0 }, { opacity: 1, duration: 0.01, ease: "none", immediateRender: false }, times[i] + off);
+  }
+}
+/* ===== fin du kit (JS) ===== */
+
+      var byId = function (id) { return document.getElementById(id); };
+      var world = byId("p06-world");
+      var cam = { x: 960, y: 540, s: 1.04, b: 0 };
+      function render() { kCam(world, cam); kBlur(world, cam.b); }
+
+      var tl = gsap.timeline({ paused: true, defaults: { lazy: false }, onUpdate: render });
+
+      /* ---- caméra : recul 1.04 -> 1.00 (expo.out), puis dérive 1.00 -> 1.02 ---- */
+      tl.fromTo(cam, { s: 1.04 }, { s: 1.0, duration: 0.75, ease: "expo.out" }, 0);
+      tl.fromTo(cam, { s: 1.0 }, { s: 1.02, duration: 3.25, ease: "none", immediateRender: false }, 0.75);
+
+      /* ---- grain qui glisse ---- */
+      tl.fromTo(byId("p06-grain"), { x: 0 }, { x: -240, duration: T, ease: "none" }, 0);
+
+      /* ---- « Claude » se pose, puis dérive de 4 px vers le haut ---- */
+      var name = byId("p06-name");
+      kArrive(tl, name, 0.2, 1.2);
+      tl.fromTo(name, { y: 0 }, { y: -4, duration: 1.3, ease: "sine.inOut", immediateRender: false }, 2.1);
+
+      /* ---- lueur corail : naît à 0.35, respire pendant la tenue ---- */
+      var glow = byId("p06-glow");
+      tl.fromTo(glow, { opacity: 0, scale: 0.85 }, { opacity: 0.12, scale: 1, duration: 0.6, ease: "power3.out", immediateRender: false }, 0.35);
+      tl.fromTo(glow, { opacity: 0.12 }, { opacity: 0.18, duration: 0.65, ease: "sine.inOut", immediateRender: false }, 2.1);
+      tl.fromTo(glow, { opacity: 0.18 }, { opacity: 0.12, duration: 0.65, ease: "sine.inOut", immediateRender: false }, 2.75);
+
+      /* ---- frappe « Raconte-moi ton projet » (0.40 à 1.15), le caret suit ---- */
+      var lead = byId("p06-leadcaret");
+      tl.fromTo(lead, { opacity: 1 }, { opacity: 0, duration: 0.01, ease: "none", immediateRender: false }, 0.4);
+      var pch = kSplit(byId("p06-prompt"));
+      var endCaret = kType(tl, pch, 0.4, 0.75, true);
+      kBlink(tl, endCaret, [2.4, 2.9, 3.3]);
+
+      /* ---- curseur : (1600, 900) -> bouton (1240, 540), clic à 1.93 ---- */
+      var cur = byId("p06-cursor");
+      kCursor(tl, cur, 1600, 900, 1240, 540, 1.3, 0.59, byId("p06-ring"));
+      var btn = byId("p06-btn");
+      tl.fromTo(btn, { scale: 1 }, { scale: 0.92, duration: 0.06, ease: "power2.in", immediateRender: false }, 1.93);
+      tl.fromTo(btn, { scale: 0.92 }, { scale: 1, duration: 0.14, ease: "power2.out", immediateRender: false }, 1.99);
+      var hi = byId("p06-btnhi");
+      tl.fromTo(hi, { opacity: 0 }, { opacity: 1, duration: 0.15, ease: "power3.out", immediateRender: false }, 1.93);
+      tl.fromTo(hi, { opacity: 1 }, { opacity: 0, duration: 0.3, ease: "power2.out", immediateRender: false }, 2.08);
+      var arrow = byId("p06-arrow");
+      tl.fromTo(arrow, { x: 0 }, { x: 6, duration: 0.14, ease: "power3.out", immediateRender: false }, 2.05);
+      tl.fromTo(arrow, { x: 6 }, { x: 0, duration: 0.3, ease: "power3.out", immediateRender: false }, 2.19);
+      tl.fromTo(cur, { opacity: 1 }, { opacity: 0, duration: 0.15, ease: "none", immediateRender: false }, 2.1);
+
+      /* ---- sous-titre « À ton tour. Créons ta [vidéo]. » (reste jusqu'à l'extinction) ---- */
+      var w = Array.prototype.slice.call(document.getElementsByClassName("p06-w"));
+      kLine(tl, byId("p06-s1"), w, [0.25, 0.4, 0.55, 0.95, 1.15, 1.3], null);
+      kBox(tl, byId("p06-box"), 1.28);
+
+      /* ---- fin : tout s'éteint au noir ---- */
+      tl.fromTo(byId("p06-veil"), { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power1.in", immediateRender: false }, 3.4);
+
+      render();
+      window.__timelines = window.__timelines || {};
+      window.__timelines[FID] = tl;
+    })();
+  </script>
+</template>

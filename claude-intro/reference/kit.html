@@ -1,0 +1,166 @@
+<!doctype html>
+<!--
+  KIT COMMUN « claude-intro » : la seule source du style. Chaque séquence copie MOT POUR MOT le bloc CSS et le bloc
+  JS ci-dessous (entre les marqueurs ===== kit ===== et ===== fin du kit =====), chemins en "assets/..." (racine du
+  projet). Ouvrir ce fichier dans un navigateur depuis reference/ montre une démo (chemins ../assets/ ici seulement).
+-->
+<html><head><meta charset="utf-8">
+<style>
+/* ===== kit claude-intro (CSS) ===== */
+@font-face { font-family: "Instrument Sans"; src: url("../assets/fonts/InstrumentSans-400.woff2") format("woff2"); font-weight: 400; font-display: block; }
+@font-face { font-family: "Instrument Sans"; src: url("../assets/fonts/InstrumentSans-500.woff2") format("woff2"); font-weight: 500; font-display: block; }
+@font-face { font-family: "Instrument Sans"; src: url("../assets/fonts/InstrumentSans-600.woff2") format("woff2"); font-weight: 600; font-display: block; }
+@font-face { font-family: "Instrument Sans"; src: url("../assets/fonts/InstrumentSans-700.woff2") format("woff2"); font-weight: 700; font-display: block; }
+@font-face { font-family: "Instrument Serif"; src: url("../assets/fonts/InstrumentSerif-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: block; }
+@font-face { font-family: "Instrument Serif"; src: url("../assets/fonts/InstrumentSerif-400i.woff2") format("woff2"); font-weight: 400; font-style: italic; font-display: block; }
+@font-face { font-family: "JetBrains Mono"; src: url("../assets/fonts/JetBrainsMono-400.woff2") format("woff2"); font-weight: 400; font-display: block; }
+@font-face { font-family: "JetBrains Mono"; src: url("../assets/fonts/JetBrainsMono-600.woff2") format("woff2"); font-weight: 600; font-display: block; }
+
+.k-layer { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+.k-ground-dark { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px;
+  background: radial-gradient(ellipse 1400px 860px at 50% 46%, #1d1b19 0%, #141312 58%, #0d0c0b 100%); }
+.k-ground-paper { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px;
+  background: radial-gradient(ellipse 1500px 900px at 50% 42%, #f8f4ed 0%, #f4efe6 55%, #ece4d7 100%); }
+.k-grain { position: absolute; left: 0; top: 0; width: 2160px; height: 1080px; pointer-events: none; opacity: .04; mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23g)'/></svg>");
+  background-size: 240px 240px; }
+.k-grain.k-dark { opacity: .06; mix-blend-mode: screen; }
+
+/* sous-titre : bande y 890 à 980, centré, 62 px ; mots en inline-block (opacité 0 au départ) */
+.k-sub { position: absolute; left: 0; top: 896px; width: 1920px; height: 80px; text-align: center; white-space: nowrap;
+  font: 500 62px/80px "Instrument Sans", sans-serif; letter-spacing: -0.015em; color: #1c1a17; }
+.k-sub.k-on-dark { color: #f4efe6; }
+.k-w { display: inline-block; opacity: 0; }
+
+/* moment typographique : centré, Instrument Serif 84 px au plus */
+.k-type { position: absolute; left: 0; width: 1920px; text-align: center; white-space: nowrap;
+  font: 400 84px/1.1 "Instrument Serif", serif; letter-spacing: -0.01em; color: #1c1a17; }
+.k-type.k-on-dark { color: #f4efe6; }
+
+/* boîte du mot clé : corail, texte papier ; le fond se trace de gauche à droite (scaleX 0 -> 1) */
+.k-box { position: relative; display: inline-block; margin-left: 0.1em; }
+.k-box-bg { position: absolute; left: -0.14em; right: -0.14em; top: 0.08em; bottom: 0.02em; border-radius: 10px; background: #d97757;
+  transform-origin: 0 50%; transform: scaleX(0); }
+.k-box-tx { position: relative; }
+
+/* trait du pic : coup de pinceau effilé corail sous LE mot (svg en 100 % de largeur du mot) */
+.k-trait { position: relative; display: inline-block; }
+.k-trait-svg { position: absolute; left: -0.06em; bottom: -0.10em; width: calc(100% + 0.12em); height: 0.22em; overflow: visible;
+  transform-origin: 0 50%; transform: scaleX(0); }
+
+/* carte d'interface */
+.k-card { position: absolute; background: #fffdf9; border-radius: 20px;
+  box-shadow: 0 1px 0 rgba(28,26,23,.06), 0 18px 40px -12px rgba(28,26,23,.22), 0 4px 10px rgba(28,26,23,.06); }
+.k-card.k-dark { background: #1f1d1b; box-shadow: 0 0 0 1px rgba(244,239,230,.10), 0 30px 60px -20px rgba(0,0,0,.6); }
+
+/* curseur : flèche papier cerclée d'encre, pointe en (0,0) de l'élément */
+.k-cursor { position: absolute; left: 0; top: 0; width: 34px; height: 42px; opacity: 0; transform-origin: 2px 2px; }
+.k-ring { position: absolute; width: 80px; height: 80px; margin: -40px 0 0 -40px; border-radius: 50%; border: 3px solid #d97757; opacity: 0; }
+
+/* caret de frappe */
+.k-caret { display: inline-block; width: 0.08em; height: 1em; background: #d97757; vertical-align: -0.12em; margin-left: 0.04em; border-radius: 2px; }
+/* frappe : chaque caractère porte son propre caret (à son bord droit), allumé seulement quand il est le dernier tapé */
+.k-ch { position: relative; }
+.k-ch-caret { position: absolute; left: 100%; top: 0.1em; width: 0.07em; height: 0.95em; margin-left: 0.03em; background: #d97757; border-radius: 2px; opacity: 0; }
+/* ===== fin du kit (CSS) ===== */
+body { margin: 0; background: #000; }
+</style></head>
+<body>
+<div id="root" style="position:relative;width:1920px;height:1080px;overflow:hidden">
+  <div class="k-ground-paper"></div>
+  <div id="demo-world" class="k-layer">
+    <div class="k-type" style="top:420px">Bonjour. Je suis <span class="k-box"><i class="k-box-bg" style="transform:none"></i><span class="k-box-tx" style="color:#f4efe6">Claude</span></span>.</div>
+  </div>
+  <div class="k-sub"><span class="k-w" style="opacity:1">Et</span> <span class="k-w" style="opacity:1">j’en</span> <span class="k-w" style="opacity:1">tire</span> <span class="k-trait"><span class="k-w" style="opacity:1">l’essentiel.</span><svg class="k-trait-svg" style="transform:none" viewBox="0 0 100 10" preserveAspectRatio="none"><path d="M0 6 C 20 3.6, 60 3.2, 100 4.6 L 100 5.4 C 60 6.4, 20 8.6, 0 7.4 Z" fill="#d97757"/></svg></span></div>
+  <svg class="k-cursor" style="opacity:1;transform:translate(1200px,600px)" viewBox="0 0 34 42"><path d="M2 2 L2 34 L10.5 26 L16 39 L22 36.5 L16.6 24 L28 24 Z" fill="#f4efe6" stroke="#1c1a17" stroke-width="2.4" stroke-linejoin="round"/></svg>
+</div>
+<script>
+/* ===== kit claude-intro (JS) ===== */
+/* flou en px écran sur un élément (0 = "none") */
+function kBlur(el, px) { el.style.filter = px > 0.25 ? "blur(" + px.toFixed(1) + "px)" : "none"; }
+/* caméra 2D : le point monde (c.x, c.y) au centre de l'écran, échelle c.s ; le monde est un plan 1920x1080 */
+function kCam(worldEl, c) {
+  worldEl.style.transformOrigin = "0 0";
+  worldEl.style.transform = "translate(" + (960 - c.x * c.s).toFixed(2) + "px," + (540 - c.y * c.s).toFixed(2) + "px) scale(" + c.s.toFixed(4) + ")";
+}
+/* un mot du sous-titre arrive : y +10, flou 6 -> 0, opacité 0 -> 1 en 0,16 s */
+function kWord(tl, el, t) {
+  tl.fromTo(el, { opacity: 0, y: 10, filter: "blur(6px)" },
+    { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.16, ease: "power2.out", immediateRender: t <= 0 }, t);
+}
+/* une ligne de sous-titre : mots sur leurs cues, sortie vers le haut à tOut (0,14 s) ; tOut null = reste */
+function kLine(tl, lineEl, wordEls, cues, tOut) {
+  for (var i = 0; i < wordEls.length; i++) kWord(tl, wordEls[i], cues[i]);
+  if (tOut != null) tl.fromTo(lineEl, { y: 0, opacity: 1, filter: "blur(0px)" },
+    { y: -14, opacity: 0, filter: "blur(6px)", duration: 0.14, ease: "power2.in", immediateRender: false }, tOut);
+}
+/* boîte du mot clé : le fond corail se trace (0,16 s power3.out) */
+function kBox(tl, bgEl, t) {
+  tl.fromTo(bgEl, { scaleX: 0 }, { scaleX: 1, duration: 0.16, ease: "power3.out", immediateRender: false }, t);
+}
+/* trait du pic : se dessine de gauche à droite (0,4 s power2.out) */
+function kTrait(tl, svgEl, t) {
+  tl.fromTo(svgEl, { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power2.out", immediateRender: false }, t);
+}
+/* arrivée « trop grand et flou, puis se pose » : ×1,15 flou 10 -> ×1 net en 0,22 s expo.out */
+function kArrive(tl, el, t, from) {
+  from = from || 1.15;
+  tl.fromTo(el, { opacity: 0, scale: from, filter: "blur(10px)" },
+    { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.22, ease: "expo.out", immediateRender: t <= 0 }, t);
+}
+/* curseur : un seul geste courbe de (x0,y0) à (x1,y1), de t à t+d (power3.inOut), puis clic direct à t+d+0.04 :
+   pression 0,86 et anneau corail qui s'ouvre (ringEl optionnel, placé au point d'arrivée) */
+function kCursor(tl, el, x0, y0, x1, y1, t, d, ringEl) {
+  var p = { k: 0 };
+  var cx = (x0 + x1) / 2 + (y1 - y0) * 0.22, cy = (y0 + y1) / 2 - (x1 - x0) * 0.22;
+  function place() {
+    var k = p.k, a = (1 - k) * (1 - k), b = 2 * (1 - k) * k, c = k * k;
+    el.style.left = "0px"; el.style.top = "0px";
+    gsap.set(el, { x: a * x0 + b * cx + c * x1, y: a * y0 + b * cy + c * y1 });
+  }
+  tl.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 0.08, ease: "none", immediateRender: false }, t);
+  tl.fromTo(p, { k: 0 }, { k: 1, duration: d, ease: "power3.inOut", immediateRender: false, onUpdate: place }, t);
+  tl.fromTo(el, { scale: 1 }, { scale: 0.86, duration: 0.06, ease: "power2.in", immediateRender: false }, t + d + 0.04);
+  tl.fromTo(el, { scale: 0.86 }, { scale: 1, duration: 0.12, ease: "power2.out", immediateRender: false }, t + d + 0.10);
+  if (ringEl) {
+    gsap.set(ringEl, { left: x1 + "px", top: y1 + "px" });
+    tl.fromTo(ringEl, { opacity: 1, scale: 0.3 }, { opacity: 0, scale: 1.6, duration: 0.45, ease: "power2.out", immediateRender: false }, t + d + 0.06);
+  }
+  place();
+}
+/* découpe le texte d'un élément en <span class="k-ch"> (opacité 0), chacun avec son caret <i class="k-ch-caret"> (à l'init, une fois) */
+function kSplit(el) {
+  var s = el.textContent; el.textContent = "";
+  var out = [];
+  for (var i = 0; i < s.length; i++) {
+    var c = document.createElement("span"); c.className = "k-ch"; c.style.opacity = "0"; c.textContent = s[i];
+    var k = document.createElement("i"); k.className = "k-ch-caret"; c.appendChild(k);
+    el.appendChild(c); out.push(c);
+  }
+  return out;
+}
+/* frappe : les caractères (de kSplit, un ou plusieurs tableaux concaténés) apparaissent un par un de t à t+d ; le caret
+   corail suit le dernier caractère tapé ; keepCaret = le caret du dernier caractère reste allumé à la fin.
+   Renvoie le caret final (pour le faire clignoter avec kBlink). */
+function kType(tl, chEls, t, d, keepCaret) {
+  var step = d / Math.max(1, chEls.length);
+  for (var i = 0; i < chEls.length; i++) {
+    var ti = t + i * step, car = chEls[i].lastChild;
+    tl.fromTo(chEls[i], { opacity: 0 }, { opacity: 1, duration: 0.01, ease: "none", immediateRender: false }, ti);
+    tl.fromTo(car, { opacity: 0 }, { opacity: 1, duration: 0.01, ease: "none", immediateRender: false }, ti);
+    if (i < chEls.length - 1 || !keepCaret)
+      tl.fromTo(car, { opacity: 1 }, { opacity: 0, duration: 0.01, ease: "none", immediateRender: false }, ti + step);
+  }
+  return chEls.length ? chEls[chEls.length - 1].lastChild : null;
+}
+/* clignotement fini d'un caret : éteint à chaque temps de la liste pendant off s (0,2 par défaut) */
+function kBlink(tl, caretEl, times, off) {
+  off = off || 0.2;
+  for (var i = 0; i < times.length; i++) {
+    tl.fromTo(caretEl, { opacity: 1 }, { opacity: 0, duration: 0.01, ease: "none", immediateRender: false }, times[i]);
+    tl.fromTo(caretEl, { opacity: 0 }, { opacity: 1, duration: 0.01, ease: "none", immediateRender: false }, times[i] + off);
+  }
+}
+/* ===== fin du kit (JS) ===== */
+</script>
+</body></html>

@@ -1,0 +1,21 @@
+{
+  "note": "Partition originale synthétisée en code (motion-reel music.py, locale, sans IA ni réseau) pour claude-intro. 120 bpm : le temps 10 tombe sur 5.00 s (la lumière).",
+  "duration": 30,
+  "fps": 30,
+  "bpm": 120,
+  "music": {
+    "source": "synth",
+    "seed": 2026,
+    "chords": ["Am", "F", "C", "G"],
+    "sections": [
+      { "at": 0,  "kind": "dark" },
+      { "at": 6,  "kind": "build" },
+      { "at": 9,  "kind": "gap" },
+      { "at": 10, "kind": "drop" },
+      { "at": 32, "kind": "full" },
+      { "at": 52, "kind": "outro" }
+    ],
+    "accents": [52]
+  },
+  "marks": {}
+}

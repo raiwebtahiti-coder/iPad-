@@ -1,0 +1,440 @@
+<template>
+  <style>
+    /* ===== kit claude-intro (CSS) ===== */
+@font-face { font-family: "Instrument Sans"; src: url("assets/fonts/InstrumentSans-400.woff2") format("woff2"); font-weight: 400; font-display: block; }
+@font-face { font-family: "Instrument Sans"; src: url("assets/fonts/InstrumentSans-500.woff2") format("woff2"); font-weight: 500; font-display: block; }
+@font-face { font-family: "Instrument Sans"; src: url("assets/fonts/InstrumentSans-600.woff2") format("woff2"); font-weight: 600; font-display: block; }
+@font-face { font-family: "Instrument Sans"; src: url("assets/fonts/InstrumentSans-700.woff2") format("woff2"); font-weight: 700; font-display: block; }
+@font-face { font-family: "Instrument Serif"; src: url("assets/fonts/InstrumentSerif-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: block; }
+@font-face { font-family: "Instrument Serif"; src: url("assets/fonts/InstrumentSerif-400i.woff2") format("woff2"); font-weight: 400; font-style: italic; font-display: block; }
+@font-face { font-family: "JetBrains Mono"; src: url("assets/fonts/JetBrainsMono-400.woff2") format("woff2"); font-weight: 400; font-display: block; }
+@font-face { font-family: "JetBrains Mono"; src: url("assets/fonts/JetBrainsMono-600.woff2") format("woff2"); font-weight: 600; font-display: block; }
+
+.k-layer { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+.k-ground-dark { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px;
+  background: radial-gradient(ellipse 1400px 860px at 50% 46%, #1d1b19 0%, #141312 58%, #0d0c0b 100%); }
+.k-ground-paper { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px;
+  background: radial-gradient(ellipse 1500px 900px at 50% 42%, #f8f4ed 0%, #f4efe6 55%, #ece4d7 100%); }
+.k-grain { position: absolute; left: 0; top: 0; width: 2160px; height: 1080px; pointer-events: none; opacity: .04; mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23g)'/></svg>");
+  background-size: 240px 240px; }
+.k-grain.k-dark { opacity: .06; mix-blend-mode: screen; }
+
+/* sous-titre : bande y 890 à 980, centré, 62 px ; mots en inline-block (opacité 0 au départ) */
+.k-sub { position: absolute; left: 0; top: 896px; width: 1920px; height: 80px; text-align: center; white-space: nowrap;
+  font: 500 62px/80px "Instrument Sans", sans-serif; letter-spacing: -0.015em; color: #1c1a17; }
+.k-sub.k-on-dark { color: #f4efe6; }
+.k-w { display: inline-block; opacity: 0; }
+
+/* moment typographique : centré, Instrument Serif 84 px au plus */
+.k-type { position: absolute; left: 0; width: 1920px; text-align: center; white-space: nowrap;
+  font: 400 84px/1.1 "Instrument Serif", serif; letter-spacing: -0.01em; color: #1c1a17; }
+.k-type.k-on-dark { color: #f4efe6; }
+
+/* boîte du mot clé : corail, texte papier ; le fond se trace de gauche à droite (scaleX 0 -> 1) */
+.k-box { position: relative; display: inline-block; margin-left: 0.1em; }
+.k-box-bg { position: absolute; left: -0.14em; right: -0.14em; top: 0.08em; bottom: 0.02em; border-radius: 10px; background: #d97757;
+  transform-origin: 0 50%; transform: scaleX(0); }
+.k-box-tx { position: relative; }
+
+/* trait du pic : coup de pinceau effilé corail sous LE mot (svg en 100 % de largeur du mot) */
+.k-trait { position: relative; display: inline-block; }
+.k-trait-svg { position: absolute; left: -0.06em; bottom: -0.10em; width: calc(100% + 0.12em); height: 0.22em; overflow: visible;
+  transform-origin: 0 50%; transform: scaleX(0); }
+
+/* carte d'interface */
+.k-card { position: absolute; background: #fffdf9; border-radius: 20px;
+  box-shadow: 0 1px 0 rgba(28,26,23,.06), 0 18px 40px -12px rgba(28,26,23,.22), 0 4px 10px rgba(28,26,23,.06); }
+.k-card.k-dark { background: #1f1d1b; box-shadow: 0 0 0 1px rgba(244,239,230,.10), 0 30px 60px -20px rgba(0,0,0,.6); }
+
+/* curseur : flèche papier cerclée d'encre, pointe en (0,0) de l'élément */
+.k-cursor { position: absolute; left: 0; top: 0; width: 34px; height: 42px; opacity: 0; transform-origin: 2px 2px; }
+.k-ring { position: absolute; width: 80px; height: 80px; margin: -40px 0 0 -40px; border-radius: 50%; border: 3px solid #d97757; opacity: 0; }
+
+/* caret de frappe */
+.k-caret { display: inline-block; width: 0.08em; height: 1em; background: #d97757; vertical-align: -0.12em; margin-left: 0.04em; border-radius: 2px; }
+/* frappe : chaque caractère porte son propre caret (à son bord droit), allumé seulement quand il est le dernier tapé */
+.k-ch { position: relative; }
+.k-ch-caret { position: absolute; left: 100%; top: 0.1em; width: 0.07em; height: 0.95em; margin-left: 0.03em; background: #d97757; border-radius: 2px; opacity: 0; }
+/* ===== fin du kit (CSS) ===== */
+
+    #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; -webkit-font-smoothing: antialiased; }
+    #p02-ground, #p02-stage, #p02-subs, #p02-grainclip { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: hidden; }
+
+    /* pastilles de barre de titre */
+    .p02-dot { position: absolute; top: 18px; width: 12px; height: 12px; border-radius: 50%; background: #e4ddd1; }
+    .k-dark .p02-dot { background: rgba(244,239,230,.16); }
+    .p02-rule { position: absolute; left: 0; right: 0; height: 1px; background: #e4ddd1; }
+    .k-dark .p02-rule { background: rgba(244,239,230,.08); }
+
+    /* éditeur (monde : x 120 à 1100, y 150 à 850) */
+    #p02-ed { left: 120px; top: 150px; width: 980px; height: 700px; }
+    #p02-tab { position: absolute; left: 96px; top: 8px; height: 32px; padding: 0 16px; border-radius: 9px; background: #f4efe6;
+      font: 400 16px/32px "JetBrains Mono", monospace; color: #2b2723; white-space: nowrap; }
+    .p02-num { position: absolute; left: 16px; width: 44px; height: 44px; text-align: right;
+      font: 400 20px/44px "JetBrains Mono", monospace; color: #a39b8e; }
+    .p02-ln { position: absolute; left: 90px; height: 44px; white-space: pre;
+      font: 400 24px/44px "JetBrains Mono", monospace; letter-spacing: 0; color: #1c1a17; }
+    .p02-ln.p02-hid { opacity: 0; clip-path: inset(0% 100% 0% 0%); }
+    .p02-kw { color: #b4553a; }
+    .p02-str { color: #3f7d5c; }
+    .p02-tag { color: #3d5fc4; }
+    .p02-com { color: #a39b8e; }
+    .p02-at { color: #2b2723; }
+    #p02-caret { position: absolute; left: 0; top: 0; width: 3px; height: 28px; border-radius: 2px; background: #d97757; }
+
+    /* terminal (monde : x 1160 à 1800, y 150 à 470) */
+    #p02-term { left: 1160px; top: 150px; width: 640px; height: 320px; }
+    .p02-ttl { position: absolute; left: 96px; top: 0; height: 48px; font: 500 17px/48px "Instrument Sans", sans-serif; color: #8a8378; white-space: nowrap; }
+    .p02-tl { position: absolute; left: 32px; height: 36px; white-space: pre; font: 400 22px/36px "JetBrains Mono", monospace; color: #f4efe6; }
+    .p02-test { opacity: 0; transform-origin: 0 50%; }
+    .p02-test svg { display: inline-block; width: 20px; height: 20px; vertical-align: -3px; margin-right: 12px; }
+    #p02-res { top: 264px; opacity: 0; transform-origin: 0 50%; font-weight: 600; color: #3f8f63; }
+
+    /* panneau Aperçu (monde : x 1160 à 1800, y 510 à 850 ; intérieur y 550 à 850) */
+    #p02-ap { left: 1160px; top: 510px; width: 640px; height: 340px; }
+    #p02-ap .p02-dot { top: 14px; }
+    #p02-ap .p02-ttl { height: 40px; line-height: 40px; color: #2b2723; }
+    #p02-apin { position: absolute; left: 0; top: 40px; width: 640px; height: 300px; background: #f1ece3; border-radius: 0 0 20px 20px; overflow: hidden; }
+    /* miniature du tableau de bord : plan 1600 x 740 à l'échelle 0,36, centré en (1480, 700) monde */
+    #p02-mini { position: absolute; left: -480px; top: -220px; width: 1600px; height: 740px; transform-origin: 800px 370px; transform: scale(0.36); }
+    #p02-win { position: absolute; left: 0; top: 0; width: 1600px; height: 740px; border-radius: 26px; background: #fffdf9; opacity: 0;
+      box-shadow: 0 2px 0 rgba(28,26,23,.05), 0 30px 60px -24px rgba(28,26,23,.25); }
+    #p02-side { position: absolute; left: 0; top: 0; width: 240px; height: 740px; border-radius: 26px 0 0 26px; background: #1c1a17; }
+    .p02-sk { position: absolute; height: 18px; border-radius: 9px; background: #e4ddd1; }
+    .p02-sk.p02-dk { background: #d6cdbf; }
+    #p02-side .p02-sk { background: rgba(244,239,230,.16); }
+    #p02-title { position: absolute; left: 280px; top: 58px; width: 380px; height: 40px; border-radius: 12px; background: #d6cdbf; opacity: 0; transform-origin: 0 50%; }
+    .p02-kpi { position: absolute; top: 140px; width: 400px; height: 170px; border-radius: 20px; background: #f7f2ea; box-shadow: inset 0 0 0 2px #e4ddd1; opacity: 0; }
+    #p02-kv { position: absolute; left: 32px; top: 70px; height: 72px; white-space: nowrap; opacity: 0; transform-origin: 0 50%;
+      font: 600 60px/72px "Instrument Sans", sans-serif; letter-spacing: -0.02em; color: #1c1a17; }
+    #p02-table { position: absolute; left: 280px; top: 340px; width: 1280px; height: 360px; border-radius: 20px; background: #fffdf9; box-shadow: inset 0 0 0 2px #e4ddd1; opacity: 0; }
+    .p02-row { position: absolute; left: 32px; right: 32px; height: 1px; background: #ece5d9; }
+
+    /* éclat corail sur le bord du panneau Aperçu */
+    #p02-glint { position: absolute; left: 1160px; top: 510px; width: 640px; height: 340px; box-sizing: border-box; border-radius: 20px;
+      border: 2px solid #d97757; box-shadow: 0 0 18px rgba(217,119,87,.45); opacity: 0; }
+
+    /* sous-titre : mot en boîte, encre puis papier quand la boîte se trace */
+    .p02-w { position: relative; }
+    .p02-pap { position: absolute; left: 0; top: 0; color: #f4efe6; opacity: 0; }
+  </style>
+
+  <div id="root" data-composition-id="02-code" data-width="1920" data-height="1080" data-duration="5.5">
+    <div id="p02-ground" class="clip" data-start="0" data-duration="5.5" data-track-index="0" data-layout-ignore>
+      <div class="k-ground-paper"></div>
+    </div>
+
+    <div id="p02-stage" class="clip" data-start="0" data-duration="5.5" data-track-index="1">
+      <div id="p02-world" class="k-layer">
+
+        <!-- éditeur -->
+        <div id="p02-ed" class="k-card">
+          <i class="p02-dot" style="left:24px"></i><i class="p02-dot" style="left:44px"></i><i class="p02-dot" style="left:64px"></i>
+          <div id="p02-tab">ventes.tsx</div>
+          <i class="p02-rule" style="top:48px"></i>
+          <div class="p02-num" style="top:58px">1</div>
+          <div class="p02-num" style="top:102px">2</div>
+          <div class="p02-num" style="top:146px">3</div>
+          <div class="p02-num" style="top:190px">4</div>
+          <div class="p02-num" style="top:234px">5</div>
+          <div class="p02-num" style="top:278px">6</div>
+          <div class="p02-num" style="top:322px">7</div>
+          <div class="p02-num" style="top:366px">8</div>
+          <div class="p02-num" style="top:410px">9</div>
+          <div class="p02-num" style="top:454px">10</div>
+          <div class="p02-num" style="top:498px">11</div>
+          <div class="p02-num" style="top:542px">12</div>
+          <div id="p02-l1" class="p02-ln" style="top:58px"><span class="p02-com">// Crée une app pour suivre mes ventes</span></div>
+          <div id="p02-l2" class="p02-ln p02-hid" style="top:102px"><span class="p02-kw">import</span> { Chart } <span class="p02-kw">from</span> <span class="p02-str">"./chart"</span>;</div>
+          <div id="p02-l4" class="p02-ln p02-hid" style="top:190px"><span class="p02-kw">export</span> <span class="p02-kw">function</span> Ventes({ data }) {</div>
+          <div id="p02-l5" class="p02-ln p02-hid" style="top:234px">  <span class="p02-kw">const</span> total = somme(data);</div>
+          <div id="p02-l6" class="p02-ln p02-hid" style="top:278px">  <span class="p02-kw">return</span> (</div>
+          <div id="p02-l7" class="p02-ln p02-hid" style="top:322px">    <span class="p02-tag">&lt;Tableau</span> <span class="p02-at">titre</span>=<span class="p02-str">"Ventes"</span><span class="p02-tag">&gt;</span></div>
+          <div id="p02-l8" class="p02-ln p02-hid" style="top:366px">      <span class="p02-tag">&lt;Kpi</span> <span class="p02-at">label</span>=<span class="p02-str">"CA"</span> <span class="p02-at">valeur</span>={total} <span class="p02-tag">/&gt;</span></div>
+          <div id="p02-l9" class="p02-ln p02-hid" style="top:410px">      <span class="p02-tag">&lt;Graphique</span> <span class="p02-at">data</span>={data} <span class="p02-tag">/&gt;</span></div>
+          <div id="p02-l10" class="p02-ln p02-hid" style="top:454px">    <span class="p02-tag">&lt;/Tableau&gt;</span></div>
+          <div id="p02-l11" class="p02-ln p02-hid" style="top:498px">  );</div>
+          <div id="p02-l12" class="p02-ln p02-hid" style="top:542px">}</div>
+          <i id="p02-caret"></i>
+        </div>
+
+        <!-- terminal -->
+        <div id="p02-term" class="k-card k-dark">
+          <i class="p02-dot" style="left:24px"></i><i class="p02-dot" style="left:44px"></i><i class="p02-dot" style="left:64px"></i>
+          <div class="p02-ttl">Terminal</div>
+          <i class="p02-rule" style="top:48px"></i>
+          <div class="p02-tl" style="top:64px">$ <span id="p02-cmd">npm test</span></div>
+          <div class="p02-tl p02-test" style="top:110px"><svg viewBox="0 0 20 20"><path d="M4 10.5 L8.2 14.5 L16 5.8" fill="none" stroke="#3f8f63" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>calcule le total</div>
+          <div class="p02-tl p02-test" style="top:146px"><svg viewBox="0 0 20 20"><path d="M4 10.5 L8.2 14.5 L16 5.8" fill="none" stroke="#3f8f63" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>affiche les ventes</div>
+          <div class="p02-tl p02-test" style="top:182px"><svg viewBox="0 0 20 20"><path d="M4 10.5 L8.2 14.5 L16 5.8" fill="none" stroke="#3f8f63" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>gère un mois vide</div>
+          <div class="p02-tl p02-test" style="top:218px"><svg viewBox="0 0 20 20"><path d="M4 10.5 L8.2 14.5 L16 5.8" fill="none" stroke="#3f8f63" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>formate les euros</div>
+          <div id="p02-res" class="p02-tl"><span id="p02-n">4</span> tests réussis</div>
+        </div>
+
+        <!-- panneau Aperçu -->
+        <div id="p02-ap" class="k-card">
+          <i class="p02-dot" style="left:24px"></i><i class="p02-dot" style="left:44px"></i><i class="p02-dot" style="left:64px"></i>
+          <div class="p02-ttl">Aperçu</div>
+          <div id="p02-apin">
+            <div id="p02-mini">
+              <div id="p02-win">
+                <div id="p02-side">
+                  <i class="p02-sk" style="left:36px;top:52px;width:120px;height:24px;border-radius:12px"></i>
+                  <i class="p02-sk" style="left:36px;top:140px;width:150px"></i>
+                  <i class="p02-sk" style="left:36px;top:196px;width:130px"></i>
+                  <i class="p02-sk" style="left:36px;top:252px;width:150px"></i>
+                  <i class="p02-sk" style="left:36px;top:308px;width:110px"></i>
+                </div>
+                <div id="p02-title"></div>
+                <div id="p02-k1" class="p02-kpi" style="left:280px">
+                  <i class="p02-sk" style="left:32px;top:34px;width:150px"></i>
+                  <div id="p02-kv">48&#8239;320&#8239;€</div>
+                </div>
+                <div id="p02-k2" class="p02-kpi" style="left:720px">
+                  <i class="p02-sk" style="left:32px;top:34px;width:170px"></i>
+                  <i class="p02-sk p02-dk" style="left:32px;top:84px;width:210px;height:44px;border-radius:12px"></i>
+                </div>
+                <div id="p02-k3" class="p02-kpi" style="left:1160px">
+                  <i class="p02-sk" style="left:32px;top:34px;width:130px"></i>
+                  <i class="p02-sk p02-dk" style="left:32px;top:84px;width:180px;height:44px;border-radius:12px"></i>
+                </div>
+                <div id="p02-table">
+                  <i class="p02-sk p02-dk" style="left:32px;top:30px;width:300px;height:26px;border-radius:13px"></i>
+                  <i class="p02-row" style="top:84px"></i>
+                  <i class="p02-sk" style="left:32px;top:110px;width:180px"></i><i class="p02-sk" style="left:420px;top:110px;width:260px"></i><i class="p02-sk" style="left:1096px;top:110px;width:120px"></i>
+                  <i class="p02-row" style="top:152px"></i>
+                  <i class="p02-sk" style="left:32px;top:178px;width:160px"></i><i class="p02-sk" style="left:420px;top:178px;width:220px"></i><i class="p02-sk" style="left:1116px;top:178px;width:100px"></i>
+                  <i class="p02-row" style="top:220px"></i>
+                  <i class="p02-sk" style="left:32px;top:246px;width:190px"></i><i class="p02-sk" style="left:420px;top:246px;width:240px"></i><i class="p02-sk" style="left:1086px;top:246px;width:130px"></i>
+                  <i class="p02-row" style="top:288px"></i>
+                  <i class="p02-sk" style="left:32px;top:314px;width:150px"></i><i class="p02-sk" style="left:420px;top:314px;width:200px"></i><i class="p02-sk" style="left:1106px;top:314px;width:110px"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="p02-glint"></div>
+
+      </div>
+    </div>
+
+    <div id="p02-subs" class="clip" data-start="0" data-duration="5.5" data-track-index="2">
+      <div id="p02-s1" class="k-sub"><span class="k-w p02-w p02-w1">J’écris</span> <span class="k-w p02-w p02-w1">le</span> <span class="k-w p02-w p02-w1"><span class="k-box"><i id="p02-box1" class="k-box-bg"></i><span class="k-box-tx"><span id="p02-ink1">code</span><span id="p02-pap1" class="p02-pap">code</span></span></span>.</span></div>
+      <div id="p02-s2" class="k-sub"><span class="k-w p02-w p02-w2">Je</span> <span class="k-w p02-w p02-w2">le</span> <span class="k-w p02-w p02-w2"><span class="k-box"><i id="p02-box2" class="k-box-bg"></i><span class="k-box-tx"><span id="p02-ink2">teste</span><span id="p02-pap2" class="p02-pap">teste</span></span></span>.</span></div>
+    </div>
+
+    <div id="p02-grainclip" class="clip" data-start="0" data-duration="5.5" data-track-index="3" data-layout-ignore>
+      <div id="p02-grain" class="k-grain"></div>
+    </div>
+  </div>
+
+  <script src="assets/vendor/gsap.min.js"></script>
+  <script>
+    (function () {
+      var FID = "02-code";
+      var T = 5.5;
+
+      /* ===== kit claude-intro (JS) ===== */
+/* flou en px écran sur un élément (0 = "none") */
+function kBlur(el, px) { el.style.filter = px > 0.25 ? "blur(" + px.toFixed(1) + "px)" : "none"; }
+/* caméra 2D : le point monde (c.x, c.y) au centre de l'écran, échelle c.s ; le monde est un plan 1920x1080 */
+function kCam(worldEl, c) {
+  worldEl.style.transformOrigin = "0 0";
+  worldEl.style.transform = "translate(" + (960 - c.x * c.s).toFixed(2) + "px," + (540 - c.y * c.s).toFixed(2) + "px) scale(" + c.s.toFixed(4) + ")";
+}
+/* un mot du sous-titre arrive : y +10, flou 6 -> 0, opacité 0 -> 1 en 0,16 s */
+function kWord(tl, el, t) {
+  tl.fromTo(el, { opacity: 0, y: 10, filter: "blur(6px)" },
+    { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.16, ease: "power2.out", immediateRender: t <= 0 }, t);
+}
+/* une ligne de sous-titre : mots sur leurs cues, sortie vers le haut à tOut (0,14 s) ; tOut null = reste */
+function kLine(tl, lineEl, wordEls, cues, tOut) {
+  for (var i = 0; i < wordEls.length; i++) kWord(tl, wordEls[i], cues[i]);
+  if (tOut != null) tl.fromTo(lineEl, { y: 0, opacity: 1, filter: "blur(0px)" },
+    { y: -14, opacity: 0, filter: "blur(6px)", duration: 0.14, ease: "power2.in", immediateRender: false }, tOut);
+}
+/* boîte du mot clé : le fond corail se trace (0,16 s power3.out) */
+function kBox(tl, bgEl, t) {
+  tl.fromTo(bgEl, { scaleX: 0 }, { scaleX: 1, duration: 0.16, ease: "power3.out", immediateRender: false }, t);
+}
+/* trait du pic : se dessine de gauche à droite (0,4 s power2.out) */
+function kTrait(tl, svgEl, t) {
+  tl.fromTo(svgEl, { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power2.out", immediateRender: false }, t);
+}
+/* arrivée « trop grand et flou, puis se pose » : ×1,15 flou 10 -> ×1 net en 0,22 s expo.out */
+function kArrive(tl, el, t, from) {
+  from = from || 1.15;
+  tl.fromTo(el, { opacity: 0, scale: from, filter: "blur(10px)" },
+    { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.22, ease: "expo.out", immediateRender: t <= 0 }, t);
+}
+/* curseur : un seul geste courbe de (x0,y0) à (x1,y1), de t à t+d (power3.inOut), puis clic direct à t+d+0.04 :
+   pression 0,86 et anneau corail qui s'ouvre (ringEl optionnel, placé au point d'arrivée) */
+function kCursor(tl, el, x0, y0, x1, y1, t, d, ringEl) {
+  var p = { k: 0 };
+  var cx = (x0 + x1) / 2 + (y1 - y0) * 0.22, cy = (y0 + y1) / 2 - (x1 - x0) * 0.22;
+  function place() {
+    var k = p.k, a = (1 - k) * (1 - k), b = 2 * (1 - k) * k, c = k * k;
+    el.style.left = "0px"; el.style.top = "0px";
+    gsap.set(el, { x: a * x0 + b * cx + c * x1, y: a * y0 + b * cy + c * y1 });
+  }
+  tl.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 0.08, ease: "none", immediateRender: false }, t);
+  tl.fromTo(p, { k: 0 }, { k: 1, duration: d, ease: "power3.inOut", immediateRender: false, onUpdate: place }, t);
+  tl.fromTo(el, { scale: 1 }, { scale: 0.86, duration: 0.06, ease: "power2.in", immediateRender: false }, t + d + 0.04);
+  tl.fromTo(el, { scale: 0.86 }, { scale: 1, duration: 0.12, ease: "power2.out", immediateRender: false }, t + d + 0.10);
+  if (ringEl) {
+    gsap.set(ringEl, { left: x1 + "px", top: y1 + "px" });
+    tl.fromTo(ringEl, { opacity: 1, scale: 0.3 }, { opacity: 0, scale: 1.6, duration: 0.45, ease: "power2.out", immediateRender: false }, t + d + 0.06);
+  }
+  place();
+}
+/* découpe le texte d'un élément en <span class="k-ch"> (opacité 0), chacun avec son caret <i class="k-ch-caret"> (à l'init, une fois) */
+function kSplit(el) {
+  var s = el.textContent; el.textContent = "";
+  var out = [];
+  for (var i = 0; i < s.length; i++) {
+    var c = document.createElement("span"); c.className = "k-ch"; c.style.opacity = "0"; c.textContent = s[i];
+    var k = document.createElement("i"); k.className = "k-ch-caret"; c.appendChild(k);
+    el.appendChild(c); out.push(c);
+  }
+  return out;
+}
+/* frappe : les caractères (de kSplit, un ou plusieurs tableaux concaténés) apparaissent un par un de t à t+d ; le caret
+   corail suit le dernier caractère tapé ; keepCaret = le caret du dernier caractère reste allumé à la fin.
+   Renvoie le caret final (pour le faire clignoter avec kBlink). */
+function kType(tl, chEls, t, d, keepCaret) {
+  var step = d / Math.max(1, chEls.length);
+  for (var i = 0; i < chEls.length; i++) {
+    var ti = t + i * step, car = chEls[i].lastChild;
+    tl.fromTo(chEls[i], { opacity: 0 }, { opacity: 1, duration: 0.01, ease: "none", immediateRender: false }, ti);
+    tl.fromTo(car, { opacity: 0 }, { opacity: 1, duration: 0.01, ease: "none", immediateRender: false }, ti);
+    if (i < chEls.length - 1 || !keepCaret)
+      tl.fromTo(car, { opacity: 1 }, { opacity: 0, duration: 0.01, ease: "none", immediateRender: false }, ti + step);
+  }
+  return chEls.length ? chEls[chEls.length - 1].lastChild : null;
+}
+/* clignotement fini d'un caret : éteint à chaque temps de la liste pendant off s (0,2 par défaut) */
+function kBlink(tl, caretEl, times, off) {
+  off = off || 0.2;
+  for (var i = 0; i < times.length; i++) {
+    tl.fromTo(caretEl, { opacity: 1 }, { opacity: 0, duration: 0.01, ease: "none", immediateRender: false }, times[i]);
+    tl.fromTo(caretEl, { opacity: 0 }, { opacity: 1, duration: 0.01, ease: "none", immediateRender: false }, times[i] + off);
+  }
+}
+/* ===== fin du kit (JS) ===== */
+
+      var byId = function (id) { return document.getElementById(id); };
+      var world = byId("p02-world");
+      var cam = { x: 960, y: 540, s: 1.06, b: 0 };
+      function render() { kCam(world, cam); kBlur(world, cam.b); }
+
+      var tl = gsap.timeline({ paused: true, defaults: { lazy: false }, onUpdate: render });
+
+      /* ---- caméra ---- */
+      tl.fromTo(cam, { s: 1.06 }, { s: 1.0, duration: 0.8, ease: "expo.out" }, 0);
+      tl.fromTo(cam, { x: 960, y: 540, s: 1.0 }, { x: 900, y: 520, s: 1.04, duration: 2.1, ease: "none", immediateRender: false }, 0.8);
+      tl.fromTo(cam, { x: 900, y: 520, s: 1.04 }, { x: 1480, y: 330, s: 1.25, duration: 0.4, ease: "power3.inOut", immediateRender: false }, 2.9);
+      tl.fromTo(cam, { s: 1.25 }, { s: 1.28, duration: 1.0, ease: "none", immediateRender: false }, 3.3);
+      tl.fromTo(cam, { x: 1480, y: 330, s: 1.28 }, { x: 1480, y: 700, s: 1.3, duration: 0.45, ease: "power3.inOut", immediateRender: false }, 4.3);
+      tl.fromTo(cam, { s: 1.3 }, { s: 3.0, duration: 0.6, ease: "power2.in", immediateRender: false }, 4.9);
+      tl.fromTo(cam, { b: 0 }, { b: 12, duration: 0.35, ease: "power2.in", immediateRender: false }, 5.15);
+
+      /* ---- grain qui glisse d'un motif ---- */
+      tl.fromTo(byId("p02-grain"), { x: 0 }, { x: -240, duration: T, ease: "none" }, 0);
+
+      /* ===== Scene 1 : le code s'écrit ===== */
+      var CW = 14.4;                       /* avance JetBrains Mono 24 px (600/1000 em) */
+      var LX = 90, LTOP = 58, LH = 44;     /* repères dans l'éditeur */
+      var caret = byId("p02-caret");
+      function lineW(id) { return byId(id).textContent.length * CW; }
+      function cy(n) { return LTOP + (n - 1) * LH + 8; }
+      var LINES = [[2, 0.55], [3, 0.80], [4, 0.95], [5, 1.25], [6, 1.55], [7, 1.75], [8, 2.05], [9, 2.35], [10, 2.60], [11, 2.75], [12, 2.85]];
+      var CEND = [];                       /* bout de chaque ligne (x écran éditeur) */
+      for (var i = 0; i < LINES.length; i++) {
+        var n = LINES[i][0], t = LINES[i][1];
+        if (n === 3) { CEND.push(LX); continue; }
+        var el = byId("p02-l" + n);
+        CEND.push(LX + lineW("p02-l" + n));
+        tl.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 0.01, ease: "none", immediateRender: false }, t);
+        tl.fromTo(el, { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.16, ease: "power2.out", immediateRender: false }, t);
+      }
+      /* le caret suit le bord du masque : position fonction du temps (sûre au seek) */
+      var L1END = LX + lineW("p02-l1");
+      function caretAt(time) {
+        for (var j = LINES.length - 1; j >= 0; j--) {
+          if (time >= LINES[j][1]) {
+            var p = Math.min(1, (time - LINES[j][1]) / 0.16), e = 1 - (1 - p) * (1 - p);
+            return { x: LX + (CEND[j] - LX) * e, y: cy(LINES[j][0]) };
+          }
+        }
+        return { x: L1END, y: cy(1) };
+      }
+      var drv = { t: 0 };
+      tl.fromTo(drv, { t: 0 }, { t: T, duration: T, ease: "none",
+        onUpdate: function () { gsap.set(caret, caretAt(drv.t)); } }, 0);
+      gsap.set(caret, caretAt(0));
+      kBlink(tl, caret, [3.15, 3.65, 4.15]);
+
+      /* l'Aperçu se construit en même temps */
+      kArrive(tl, byId("p02-win"), 1.80, 1.08);
+      kArrive(tl, byId("p02-k1"), 2.10, 1.1);
+      kArrive(tl, byId("p02-k2"), 2.16, 1.1);
+      kArrive(tl, byId("p02-k3"), 2.22, 1.1);
+      kArrive(tl, byId("p02-table"), 2.40, 1.08);
+      kArrive(tl, byId("p02-title"), 2.65, 1.1);
+
+      /* sous-titre « J’écris le [code]. » */
+      var w1 = Array.prototype.slice.call(document.getElementsByClassName("p02-w1"));
+      kLine(tl, byId("p02-s1"), w1, [0.55, 0.95, 1.10], 2.60);
+      kBox(tl, byId("p02-box1"), 1.08);
+      tl.fromTo(byId("p02-pap1"), { opacity: 0 }, { opacity: 1, duration: 0.08, ease: "none", immediateRender: false }, 1.08);
+      tl.fromTo(byId("p02-ink1"), { opacity: 1 }, { opacity: 0, duration: 0.08, ease: "none", immediateRender: false }, 1.08);
+
+      /* ===== Scene 2 : les tests, puis l'aperçu ===== */
+      /* éditeur flou de profondeur quand la caméra part à droite */
+      tl.fromTo(byId("p02-ed"), { filter: "blur(0px)" }, { filter: "blur(2px)", duration: 0.4, ease: "power3.inOut", immediateRender: false }, 2.9);
+
+      /* $ npm test */
+      kType(tl, kSplit(byId("p02-cmd")), 3.0, 0.25, false);
+
+      /* quatre coches */
+      var tests = Array.prototype.slice.call(document.getElementsByClassName("p02-test"));
+      var TT = [3.35, 3.55, 3.75, 3.95];
+      for (var k = 0; k < tests.length; k++) {
+        kArrive(tl, tests[k], TT[k], 1.1);
+        tl.fromTo(tests[k], { x: -12 }, { x: 0, duration: 0.22, ease: "expo.out", immediateRender: false }, TT[k]);
+      }
+
+      /* « 4 tests réussis » : le nombre roule de 0 à 4 */
+      var res = byId("p02-res"), nEl = byId("p02-n");
+      tl.fromTo(res, { opacity: 0, scale: 1.15, filter: "blur(8px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.24, ease: "expo.out", immediateRender: false }, 4.15);
+      var cnt = { v: 0 };
+      tl.fromTo(cnt, { v: 0 }, { v: 4, duration: 0.3, ease: "power3.out", immediateRender: false,
+        onUpdate: function () { nEl.textContent = String(Math.round(cnt.v)); } }, 4.15);
+
+      /* KPI 1 : la valeur s'imprime et roule jusqu'à 48 320 € */
+      var kv = byId("p02-kv");
+      function fmt(v) { return String(Math.round(v)).replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " €"; }
+      kArrive(tl, kv, 4.40, 1.1);
+      var roll = { v: 0 };
+      tl.fromTo(roll, { v: 0 }, { v: 48320, duration: 0.55, ease: "power3.out", immediateRender: false,
+        onUpdate: function () { kv.textContent = fmt(roll.v); } }, 4.40);
+
+      /* éclat corail qui parcourt le bord de l'Aperçu */
+      var glint = byId("p02-glint");
+      tl.fromTo(glint, { opacity: 0, clipPath: "inset(0% 100% 0% 0%)" }, { opacity: 1, clipPath: "inset(0% 0% 0% 0%)", duration: 0.25, ease: "power2.out", immediateRender: false }, 4.80);
+      tl.fromTo(glint, { opacity: 1 }, { opacity: 0, duration: 0.2, ease: "power2.in", immediateRender: false }, 5.05);
+
+      /* sous-titre « Je le [teste]. » */
+      var w2 = Array.prototype.slice.call(document.getElementsByClassName("p02-w2"));
+      kLine(tl, byId("p02-s2"), w2, [3.05, 3.25, 3.40], 5.00);
+      kBox(tl, byId("p02-box2"), 3.38);
+      tl.fromTo(byId("p02-pap2"), { opacity: 0 }, { opacity: 1, duration: 0.08, ease: "none", immediateRender: false }, 3.38);
+      tl.fromTo(byId("p02-ink2"), { opacity: 1 }, { opacity: 0, duration: 0.08, ease: "none", immediateRender: false }, 3.38);
+
+      render();
+      window.__timelines = window.__timelines || {};
+      window.__timelines[FID] = tl;
+    })();
+  </script>
+</template>

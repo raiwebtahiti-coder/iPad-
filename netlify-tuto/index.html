@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1920, height=1080">
+<title>Mettre son site en ligne · Rai Web Design</title>
+<script src="assets/vendor/gsap.min.js"></script>
+<style>
+  @font-face { font-family: "Anton"; src: url("assets/fonts/Anton-400.woff2") format("woff2"); font-weight: 400; font-display: block; }
+  @font-face { font-family: "Inter"; src: url("assets/fonts/Inter-500.woff2") format("woff2"); font-weight: 500; font-display: block; }
+  @font-face { font-family: "Inter"; src: url("assets/fonts/Inter-600.woff2") format("woff2"); font-weight: 600; font-display: block; }
+  @font-face { font-family: "Inter"; src: url("assets/fonts/Inter-800.woff2") format("woff2"); font-weight: 800; font-display: block; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1920px; height: 1080px; overflow: hidden; background: #f3efe8; }
+  :root { --paper: #f3efe8; --ink: #16130f; --ink2: #6f675d; --red: #d8352a; --card: #fffdf9; --line: #e3dccf; }
+  #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; font-family: "Inter", sans-serif; color: var(--ink); -webkit-font-smoothing: antialiased; }
+  .layer { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+  .abs { position: absolute; }
+  /* fond : papier chaud, trame de points, halo doux qui suit le sujet */
+  #bg { background: radial-gradient(ellipse 1500px 900px at 50% 40%, #f8f5ef 0%, #f3efe8 55%, #ebe4d8 100%); }
+  #dots { background-image: radial-gradient(circle, rgba(22,19,15,.10) 1.4px, transparent 1.6px); background-size: 34px 34px; opacity: .55; }
+  #halo { width: 1300px; height: 1300px; left: 310px; top: -110px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(216,53,42,.10) 0%, rgba(216,53,42,0) 60%); }
+  .kicker { font: 800 22px/1 "Inter"; letter-spacing: .32em; text-transform: uppercase; color: var(--ink); }
+  .kicker b { color: var(--red); }
+  .big { font-family: "Anton", sans-serif; font-weight: 400; text-transform: uppercase; line-height: .98; letter-spacing: .005em; white-space: nowrap; }
+  .mask { overflow: hidden; padding: 6px 4px 10px; }
+  .w { display: inline-block; opacity: 0; }
+  .card { background: var(--card); border-radius: 28px;
+    box-shadow: 0 1px 0 rgba(22,19,15,.05), 0 30px 70px -24px rgba(22,19,15,.28), 0 8px 20px -10px rgba(22,19,15,.12); }
+  .chip { display: inline-flex; align-items: center; gap: 14px; padding: 16px 26px; border-radius: 999px; background: var(--card);
+    font: 700 28px/1 "Inter"; box-shadow: 0 14px 34px -14px rgba(22,19,15,.3); opacity: 0; }
+  .step { width: 92px; height: 92px; border-radius: 26px; background: var(--card); font: 400 40px/92px "Anton"; text-align: center; color: var(--ink);
+    box-shadow: 0 14px 30px -14px rgba(22,19,15,.3); opacity: 0; }
+  .step.first { background: var(--red); color: #fff; }
+  .cursor { width: 34px; height: 42px; opacity: 0; }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-width="1920" data-height="1080" data-duration="31.05">
+
+  <!-- fond permanent -->
+  <div id="bg" class="layer clip" data-start="0" data-duration="31.05" data-track-index="0"></div>
+  <div id="dots" class="layer clip" data-start="0" data-duration="31.05" data-track-index="1"></div>
+  <div id="haloLayer" class="layer clip" data-start="0" data-duration="31.05" data-track-index="2"><div id="halo" class="abs"></div></div>
+
+  <!-- ===== A. TITRE (0 → 14.6) ===== -->
+  <div id="sA" class="layer clip" data-start="0" data-duration="14.6" data-track-index="3">
+    <div id="camA" class="layer">
+      <div class="kicker abs" style="left:150px;top:150px">Rai Web Design <b>·</b> Tuto</div>
+      <div class="mask abs" style="left:146px;top:220px"><div class="big" style="font-size:150px">
+        <span class="w aT">Mettre</span> <span class="w aT">son</span> <span class="w aT">site</span></div></div>
+      <div class="mask abs" style="left:146px;top:372px"><div class="big" style="font-size:150px;color:var(--red)">
+        <span class="w aT2">En</span> <span class="w aT2">ligne</span></div></div>
+      <svg id="aStroke" class="abs" style="left:150px;top:530px;width:460px;height:40px;overflow:visible" viewBox="0 0 520 40">
+        <path d="M6 26 C 120 14, 300 10, 514 18" fill="none" stroke="#d8352a" stroke-width="12" stroke-linecap="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
+      </svg>
+      <div id="aChips" class="abs" style="left:150px;top:660px;display:flex;gap:18px">
+        <div class="chip" id="chip1"><svg width="30" height="30" viewBox="0 0 30 30"><rect x="3" y="5" width="24" height="20" rx="5" fill="none" stroke="#d8352a" stroke-width="3"/><path d="M8 11 h14 M8 16 h10 M8 21 h6" stroke="#16130f" stroke-width="3" stroke-linecap="round"/></svg>6 étapes</div>
+        <div class="chip" id="chip2"><svg width="30" height="30" viewBox="0 0 30 30"><circle cx="15" cy="15" r="11.5" fill="none" stroke="#d8352a" stroke-width="3"/><path d="M15 8 V15 L20 18" fill="none" stroke="#16130f" stroke-width="3" stroke-linecap="round"/></svg>≈ 30 minutes</div>
+      </div>
+      <div id="aSteps" class="abs" style="left:150px;top:820px;display:flex;gap:16px">
+        <div class="step first">01</div><div class="step">02</div><div class="step">03</div><div class="step">04</div><div class="step">05</div><div class="step">06</div>
+      </div>
+
+      <!-- navigateur en 3D : le site passe en ligne -->
+      <div id="aBrowserWrap" class="abs" style="left:1110px;top:220px;width:800px;height:620px;perspective:1800px">
+        <div id="aBrowser" class="card abs" style="left:0;top:0;width:800px;height:620px;overflow:hidden;opacity:0;transform-origin:50% 50%">
+          <div class="abs" style="left:0;top:0;width:800px;height:64px;background:#f1ece3;border-bottom:1px solid var(--line)">
+            <div class="abs" style="left:24px;top:25px;width:14px;height:14px;border-radius:50%;background:#e8695f"></div>
+            <div class="abs" style="left:46px;top:25px;width:14px;height:14px;border-radius:50%;background:#efc05a"></div>
+            <div class="abs" style="left:68px;top:25px;width:14px;height:14px;border-radius:50%;background:#7dc47f"></div>
+            <div class="abs" style="left:110px;top:14px;width:560px;height:36px;border-radius:18px;background:#fffdf9;border:1px solid var(--line);font:600 19px/34px Inter;color:#6f675d;padding-left:20px">
+              <span style="color:#3f8f63">●</span>&nbsp; <span id="aUrl"></span><span id="aCaret" style="display:inline-block;width:2px;height:20px;background:#d8352a;vertical-align:-4px;opacity:0"></span></div>
+          </div>
+          <div id="aHero" class="abs" style="left:36px;top:96px;width:728px;height:250px;border-radius:20px;background:linear-gradient(135deg,#efe6d6,#e5d6c0);opacity:0">
+            <div class="abs big" style="left:34px;top:60px;font-size:70px;color:#16130f">Votre<br>entreprise</div>
+            <div class="abs" style="left:520px;top:50px;width:150px;height:150px;border-radius:50%;background:#d8352a;opacity:.18"></div>
+          </div>
+          <div id="aL1" class="abs" style="left:36px;top:378px;width:420px;height:18px;border-radius:9px;background:#e8e1d4;opacity:0"></div>
+          <div id="aL2" class="abs" style="left:36px;top:410px;width:330px;height:18px;border-radius:9px;background:#e8e1d4;opacity:0"></div>
+          <div id="aBtn" class="abs" style="left:36px;top:452px;width:190px;height:58px;border-radius:29px;background:#16130f;color:#fff;font:700 21px/58px Inter;text-align:center;opacity:0">Nous contacter</div>
+          <div id="aCards" class="abs" style="left:500px;top:378px;width:264px;height:132px;opacity:0">
+            <div class="abs" style="left:0;top:0;width:124px;height:132px;border-radius:16px;background:#efe8dc"></div>
+            <div class="abs" style="left:140px;top:0;width:124px;height:132px;border-radius:16px;background:#efe8dc"></div>
+          </div>
+          <div class="abs" style="left:36px;top:556px;width:728px;height:10px;border-radius:5px;background:#ece5d9"></div>
+          <div id="aProg" class="abs" style="left:36px;top:556px;width:728px;height:10px;border-radius:5px;background:#d8352a;transform-origin:0 50%;transform:scaleX(0)"></div>
+        </div>
+        <div id="aLive" class="abs" style="left:560px;top:-34px;padding:16px 26px 16px 52px;border-radius:999px;background:#16130f;color:#fff;font:800 26px/1 Inter;opacity:0;box-shadow:0 18px 40px -14px rgba(22,19,15,.5)">
+          <span class="abs" style="left:22px;top:17px;width:18px;height:18px;border-radius:50%;background:#5fd38e;box-shadow:0 0 14px #5fd38e"></span>En ligne</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== B. AVANT DE COMMENCER (14.3 → 31.05) ===== -->
+  <div id="sB" class="layer clip" data-start="14.3" data-duration="16.75" data-track-index="4">
+    <div id="camB" class="layer">
+      <div class="kicker abs" style="left:150px;top:140px">Étape 0 <b>·</b> Préparer</div>
+      <div class="mask abs" style="left:146px;top:186px"><div class="big" style="font-size:120px">
+        <span class="w bT">Avant</span> <span class="w bT">de</span> <span class="w bT" style="color:var(--red)">commencer</span></div></div>
+
+      <div id="bRow" class="abs" style="left:0;top:380px;width:1920px;height:440px;perspective:2000px">
+        <!-- 3 cartes : ce qu'il faut -->
+        <div id="bC1" class="card abs bCard" style="left:200px;top:0;width:470px;height:360px;opacity:0">
+          <svg class="abs" style="left:175px;top:56px" width="120" height="140" viewBox="0 0 120 140"><path d="M14 8 H76 L106 38 V132 H14 Z" fill="#fff6ee" stroke="#16130f" stroke-width="5" stroke-linejoin="round"/><path d="M76 8 V38 H106" fill="none" stroke="#16130f" stroke-width="5" stroke-linejoin="round"/><path d="M60 50 v8 M60 64 v8 M60 78 v8" stroke="#16130f" stroke-width="5" stroke-linecap="round"/><rect x="49" y="92" width="22" height="22" rx="5" fill="#d8352a"/><text x="60" y="128" text-anchor="middle" font-family="Inter" font-weight="800" font-size="12" fill="#16130f">.ZIP</text></svg>
+          <div class="abs" style="left:0;top:240px;width:470px;text-align:center;font:800 32px/1.2 Inter">Le fichier du site</div>
+          <div class="abs" style="left:0;top:286px;width:470px;text-align:center;font:500 22px/1.3 Inter;color:#6f675d">celui que je vous ai envoyé</div>
+          <div class="abs bCheck" style="left:396px;top:-24px;width:68px;height:68px;border-radius:50%;background:#d8352a;opacity:0;box-shadow:0 10px 24px -8px rgba(216,53,42,.8)"><svg width="68" height="68" viewBox="0 0 68 68"><path d="M20 35 L30 45 L49 24" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div id="bC2" class="card abs bCard" style="left:725px;top:0;width:470px;height:360px;opacity:0">
+          <svg class="abs" style="left:145px;top:70px" width="180" height="130" viewBox="0 0 180 130"><rect x="22" y="8" width="136" height="92" rx="10" fill="#fff6ee" stroke="#16130f" stroke-width="5"/><path d="M6 112 H174 L162 124 H18 Z" fill="#16130f"/><rect x="58" y="32" width="64" height="44" rx="6" fill="#fff" stroke="#d8352a" stroke-width="4"/><path d="M60 36 L90 58 L120 36" fill="none" stroke="#d8352a" stroke-width="4" stroke-linejoin="round"/></svg>
+          <div class="abs" style="left:0;top:240px;width:470px;text-align:center;font:800 32px/1.2 Inter">Un ordinateur et un mail</div>
+          <div class="abs" style="left:0;top:286px;width:470px;text-align:center;font:500 22px/1.3 Inter;color:#6f675d">pour créer votre compte</div>
+          <div class="abs bCheck" style="left:396px;top:-24px;width:68px;height:68px;border-radius:50%;background:#d8352a;opacity:0;box-shadow:0 10px 24px -8px rgba(216,53,42,.8)"><svg width="68" height="68" viewBox="0 0 68 68"><path d="M20 35 L30 45 L49 24" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div id="bC3" class="card abs bCard" style="left:1250px;top:0;width:470px;height:360px;opacity:0">
+          <svg class="abs" style="left:140px;top:74px" width="190" height="124" viewBox="0 0 190 124"><rect x="6" y="6" width="178" height="112" rx="16" fill="#fff6ee" stroke="#16130f" stroke-width="5"/><rect x="6" y="32" width="178" height="20" fill="#16130f"/><rect x="24" y="74" width="40" height="26" rx="6" fill="#d8352a"/><path d="M84 88 H160" stroke="#16130f" stroke-width="5" stroke-linecap="round"/></svg>
+          <div class="abs" style="left:0;top:240px;width:470px;text-align:center;font:800 32px/1.2 Inter">Une carte bancaire</div>
+          <div class="abs" style="left:0;top:286px;width:470px;text-align:center;font:500 22px/1.3 Inter;color:#6f675d">pour le nom de domaine</div>
+          <div class="abs bCheck" style="left:396px;top:-24px;width:68px;height:68px;border-radius:50%;background:#d8352a;opacity:0;box-shadow:0 10px 24px -8px rgba(216,53,42,.8)"><svg width="68" height="68" viewBox="0 0 68 68"><path d="M20 35 L30 45 L49 24" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+      </div>
+
+      <!-- le prix, en clair -->
+      <div id="bP1" class="abs" style="left:560px;top:808px;width:800px;height:84px;border-radius:42px;background:#16130f;color:#fff;font:700 32px/84px Inter;text-align:center;opacity:0;box-shadow:0 20px 44px -18px rgba(22,19,15,.6)">
+        Hébergement : <span style="color:#ff6a5c;font-weight:800">0 F</span> par mois</div>
+      <div id="bP2" class="abs" style="left:560px;top:912px;width:800px;text-align:center;font:600 30px/1.2 Inter;color:#16130f;opacity:0">
+        Nom de domaine : environ <span id="bPrice" style="color:#d8352a;font-weight:800">0 F</span> par an</div>
+    </div>
+  </div>
+
+  <audio id="voix" data-start="0" data-duration="31.05" data-track-index="10" src="assets/audio/voix-pilote.wav" data-volume="1"></audio>
+
+  <script>
+    (function () {
+      var T = 31.05;
+      var tl = gsap.timeline({ paused: true, defaults: { lazy: false } });
+      var $ = function (s) { return document.querySelector(s); };
+      var $$ = function (s) { return Array.prototype.slice.call(document.querySelectorAll(s)); };
+      tl.to({}, { duration: T }, 0);
+
+      /* halo qui suit le sujet, trame qui dérive */
+      tl.fromTo("#halo", { x: 0, y: 0 }, { x: 420, y: 60, duration: 14, ease: "sine.inOut" }, 0);
+      tl.fromTo("#halo", { x: 420, y: 60 }, { x: -60, y: 260, duration: 16, ease: "sine.inOut", immediateRender: false }, 14.6);
+      tl.fromTo("#dots", { x: 0 }, { x: -68, duration: T, ease: "none" }, 0);
+
+      /* mots qui montent dans leur masque */
+      function words(sel, t, step) {
+        $$(sel).forEach(function (w, i) {
+          tl.fromTo(w, { opacity: 0, yPercent: 110, filter: "blur(10px)" },
+            { opacity: 1, yPercent: 0, filter: "blur(0px)", duration: 0.5, ease: "expo.out", immediateRender: t + i * step <= 0 }, t + i * step);
+        });
+      }
+
+      /* ===== A ===== */
+      tl.fromTo("#camA", { scale: 1.04 }, { scale: 1.0, duration: 13.4, ease: "none", transformOrigin: "50% 50%" }, 0);
+      words(".aT", 0.0, 0.16);
+      words(".aT2", 1.4, 0.16);
+      tl.fromTo("#aStroke path", { attr: { "stroke-dashoffset": 100 } }, { attr: { "stroke-dashoffset": 0 }, duration: 0.6, ease: "power2.out", immediateRender: false }, 2.0);
+      // le navigateur arrive des profondeurs, penché
+      tl.fromTo("#aBrowser", { opacity: 0, z: -900, rotationY: -48, rotationX: 18, y: 80, filter: "blur(12px)" },
+        { opacity: 1, z: 0, rotationY: -16, rotationX: 6, y: 0, filter: "blur(0px)", duration: 1.0, ease: "expo.out", immediateRender: false }, 2.3);
+      tl.fromTo("#aBrowser", { rotationY: -16 }, { rotationY: -8, duration: 10.5, ease: "sine.inOut", immediateRender: false }, 3.3);
+      // l'adresse se tape
+      var url = "votresite.com", urlEl = $("#aUrl"), caret = $("#aCaret");
+      var typ = { n: 0 };
+      tl.fromTo(typ, { n: 0 }, { n: url.length, duration: 0.9, ease: "none", immediateRender: false,
+        onUpdate: function () { urlEl.textContent = url.slice(0, Math.round(typ.n)); } }, 3.6);
+      tl.fromTo(caret, { opacity: 0 }, { opacity: 1, duration: 0.01, immediateRender: false }, 3.55);
+      tl.fromTo(caret, { opacity: 1 }, { opacity: 0, duration: 0.01, immediateRender: false }, 4.7);
+      // la page s'assemble
+      [["#aHero", 4.7], ["#aL1", 5.2], ["#aL2", 5.35], ["#aBtn", 5.7], ["#aCards", 6.1]].forEach(function (p) {
+        tl.fromTo(p[0], { opacity: 0, y: 30, filter: "blur(8px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.45, ease: "power3.out", immediateRender: false }, p[1]);
+      });
+      tl.fromTo("#aProg", { scaleX: 0 }, { scaleX: 1, duration: 1.8, ease: "power2.inOut", immediateRender: false }, 6.8);
+      tl.fromTo("#aLive", { opacity: 0, scale: 0.5, y: 20 }, { opacity: 1, scale: 1, y: 0, duration: 0.4, ease: "back.out(2)", immediateRender: false }, 8.7);
+      // 6 étapes · 30 minutes
+      tl.fromTo("#chip1", { opacity: 0, y: 24, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.4, ease: "power3.out", immediateRender: false }, 9.25);
+      tl.fromTo("#chip2", { opacity: 0, y: 24, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.4, ease: "power3.out", immediateRender: false }, 9.6);
+      $$("#aSteps .step").forEach(function (s, i) {
+        tl.fromTo(s, { opacity: 0, y: 40, rotation: -8 }, { opacity: 1, y: 0, rotation: 0, duration: 0.45, ease: "back.out(1.6)", immediateRender: false }, 11.35 + i * 0.22);
+      });
+      // sortie : poussée floue vers le haut
+      tl.fromTo("#camA", { y: 0, filter: "blur(0px)", opacity: 1 }, { y: -260, filter: "blur(18px)", opacity: 0, duration: 0.7, ease: "power3.in", immediateRender: false }, 13.9);
+
+      /* ===== B ===== */
+      tl.fromTo("#camB", { y: 220, filter: "blur(16px)", opacity: 0 }, { y: 0, filter: "blur(0px)", opacity: 1, duration: 0.7, ease: "expo.out", immediateRender: false }, 14.3);
+      tl.fromTo("#camB", { scale: 1 }, { scale: 1.035, duration: 16, ease: "none", immediateRender: false, transformOrigin: "50% 45%" }, 15);
+      words(".bT", 15.75, 0.18);
+      var cueC = [17.3, 19.6, 21.7];
+      ["#bC1", "#bC2", "#bC3"].forEach(function (c, i) {
+        var t = cueC[i];
+        tl.fromTo(c, { opacity: 0, z: -700, rotationX: 32, rotationY: (i - 1) * -22, y: 120, filter: "blur(10px)" },
+          { opacity: 1, z: 0, rotationX: 8, rotationY: (i - 1) * -8, y: 0, filter: "blur(0px)", duration: 0.8, ease: "expo.out", immediateRender: false }, t);
+        tl.fromTo(c, { rotationX: 8 }, { rotationX: 3, duration: 31.05 - t - 0.8, ease: "sine.inOut", immediateRender: false }, t + 0.8);
+        tl.fromTo(c + " .bCheck", { opacity: 0, scale: 0.3, rotation: -40 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.45, ease: "back.out(2.2)", immediateRender: false }, t + 0.55);
+      });
+      // la carte en cours s'éclaire, les autres reculent un peu
+      tl.fromTo("#bP1", { opacity: 0, y: 30, scale: 0.92 }, { opacity: 1, y: 0, scale: 1, duration: 0.45, ease: "power3.out", immediateRender: false }, 23.3);
+      tl.fromTo("#bP2", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out", immediateRender: false }, 25.7);
+      var price = { v: 0 }, priceEl = $("#bPrice");
+      tl.fromTo(price, { v: 0 }, { v: 1500, duration: 1.2, ease: "power3.out", immediateRender: false,
+        onUpdate: function () { var n = Math.round(price.v / 10) * 10; priceEl.textContent = (n >= 1000 ? Math.floor(n / 1000) + "\u00a0" + String(n % 1000).padStart(3, "0") : n) + "\u00a0F"; } }, 25.9);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    })();
+  </script>
+</div>
+</body>
+</html>

@@ -1,0 +1,206 @@
+<!doctype html>
+<!--
+  KIT COMMUN « netlify-tuto » (ambiance claire YouTube) : la SEULE source du style. Chaque section copie MOT POUR MOT le
+  bloc CSS et le bloc JS (marqueurs /*@@KIT-CSS@@*/ et /*@@KIT-JS@@*/ + python3 reference/inject-kit.py <fichier>).
+  Chemins : "assets/..." (racine du projet). Ce fichier s'ouvre aussi seul dans un navigateur (démo en bas).
+-->
+<html><head><meta charset="utf-8"><style>
+/* ===== kit netlify-tuto (CSS) ===== */
+@font-face { font-family: "Jakarta"; src: url("assets/fonts/Jakarta-800.woff2") format("woff2"); font-weight: 800; font-display: block; }
+@font-face { font-family: "Jakarta"; src: url("assets/fonts/Jakarta-700.woff2") format("woff2"); font-weight: 700; font-display: block; }
+@font-face { font-family: "Inter"; src: url("assets/fonts/Inter-500.woff2") format("woff2"); font-weight: 500; font-display: block; }
+@font-face { font-family: "Inter"; src: url("assets/fonts/Inter-600.woff2") format("woff2"); font-weight: 600; font-display: block; }
+@font-face { font-family: "Inter"; src: url("assets/fonts/Inter-800.woff2") format("woff2"); font-weight: 800; font-display: block; }
+@font-face { font-family: "Caveat"; src: url("assets/fonts/Caveat-700.woff2") format("woff2"); font-weight: 700; font-display: block; }
+@font-face { font-family: "Mono"; src: url("assets/fonts/Mono-500.woff2") format("woff2"); font-weight: 500; font-display: block; }
+
+/* palette : bleu nuit (texte), violet électrique (accent), surligneur jaune (mot clé), vert (réussi), orange (attention) */
+.k-layer { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+.k-abs { position: absolute; }
+.k-ground { position: absolute; inset: 0; background: #f6f7fb; overflow: hidden; }
+.k-blob { position: absolute; border-radius: 50%; filter: blur(80px); }
+.k-blob.k-b1 { left: 1180px; top: -260px; width: 900px; height: 700px; background: #e6dfff; }
+.k-blob.k-b2 { left: -280px; top: 640px; width: 900px; height: 640px; background: #dcecff; }
+.k-dots { position: absolute; left: 0; top: 0; width: 2000px; height: 1080px; opacity: .5;
+  background-image: radial-gradient(circle, rgba(21,23,58,.10) 1.3px, transparent 1.5px); background-size: 36px 36px; }
+
+.k-brand { position: absolute; left: 90px; top: 52px; font: 800 20px/1 "Inter"; letter-spacing: .28em; color: #15173a; white-space: nowrap; }
+.k-brand b { color: #6c47ff; }
+/* barre d'étapes (en haut à droite) : 6 pastilles ; .k-done = faite, .k-now = en cours */
+.k-stepper { position: absolute; right: 90px; top: 40px; display: flex; gap: 10px; }
+.k-stepper i { display: block; width: 46px; height: 46px; border-radius: 14px; background: #fff; border: 2px solid #e2e4ef;
+  font: 800 20px/42px "Jakarta"; font-style: normal; text-align: center; color: #9aa0bd; }
+.k-stepper i.k-done { background: #efeaff; border-color: #efeaff; color: #6c47ff; }
+.k-stepper i.k-now { background: #6c47ff; border-color: #6c47ff; color: #fff; box-shadow: 0 10px 24px -8px rgba(108,71,255,.7); }
+
+/* en-tête d'étape (colonne gauche) */
+.k-badge { display: inline-block; padding: 12px 22px; border-radius: 999px; background: #6c47ff; color: #fff; font: 800 24px/1 "Jakarta"; letter-spacing: .06em;
+  box-shadow: 0 12px 26px -10px rgba(108,71,255,.75); white-space: nowrap; }
+.k-title { font: 800 74px/1.04 "Jakarta"; letter-spacing: -0.02em; color: #15173a; }
+.k-title .k-mk { position: relative; display: inline-block; z-index: 0; }
+.k-mk-bg { position: absolute; left: -0.08em; right: -0.08em; top: 0.52em; bottom: 0.02em; background: #ffe36b; border-radius: 6px; z-index: -1;
+  transform-origin: 0 50%; transform: scaleX(0); }
+.k-lead { font: 500 30px/1.4 "Inter"; color: #5b6080; }
+
+/* carte, boutons, champs */
+.k-card { position: absolute; background: #fff; border-radius: 24px; box-shadow: 0 1px 0 rgba(21,23,58,.04), 0 26px 60px -24px rgba(21,23,58,.25), 0 6px 16px -8px rgba(21,23,58,.10); }
+.k-btn { position: absolute; border-radius: 12px; background: #6c47ff; color: #fff; font: 700 22px/1 "Inter"; display: flex; align-items: center; justify-content: center; white-space: nowrap; }
+.k-btn.k-dark { background: #15173a; }
+.k-btn.k-ghost { background: #fff; color: #15173a; border: 2px solid #e2e4ef; }
+.k-btn.k-green { background: #1fb871; }
+.k-input { position: absolute; border-radius: 12px; background: #fff; border: 2px solid #e2e4ef; font: 500 22px/1 "Inter"; color: #15173a; display: flex; align-items: center; padding: 0 18px; white-space: nowrap; overflow: hidden; }
+.k-input.k-focus { border-color: #6c47ff; box-shadow: 0 0 0 5px rgba(108,71,255,.15); }
+.k-caret { display: inline-block; width: 2px; height: 1.1em; background: #6c47ff; margin-left: 2px; vertical-align: -0.15em; }
+.k-skel { position: absolute; border-radius: 8px; background: #eef0f6; }
+
+/* fenêtre de navigateur (voir kBrowser) */
+.k-browser { position: absolute; background: #fff; border-radius: 22px; overflow: hidden;
+  box-shadow: 0 2px 0 rgba(21,23,58,.04), 0 40px 90px -30px rgba(21,23,58,.35), 0 10px 24px -12px rgba(21,23,58,.15); }
+.k-bbar { position: absolute; left: 0; top: 0; right: 0; height: 58px; background: #f2f3f8; border-bottom: 1px solid #e6e8f0; }
+.k-bbar i { position: absolute; top: 22px; width: 14px; height: 14px; border-radius: 50%; }
+.k-url { position: absolute; left: 120px; right: 120px; top: 12px; height: 34px; border-radius: 17px; background: #fff; border: 1px solid #e6e8f0;
+  font: 500 18px/32px "Inter"; color: #5b6080; padding-left: 40px; white-space: nowrap; overflow: hidden; }
+.k-url:before { content: ""; position: absolute; left: 16px; top: 10px; width: 10px; height: 12px; border: 2px solid #9aa0bd; border-radius: 3px; box-sizing: border-box; }
+.k-app { position: absolute; left: 0; top: 58px; right: 0; bottom: 0; background: #fff; }
+.k-apphead { position: absolute; left: 0; top: 0; right: 0; height: 64px; border-bottom: 1px solid #eef0f6; }
+.k-logo { position: absolute; left: 28px; top: 18px; font: 800 24px/28px "Jakarta"; color: #15173a; letter-spacing: -0.01em; }
+.k-logo:before { content: ""; display: inline-block; width: 22px; height: 22px; border-radius: 7px; background: linear-gradient(135deg,#2fd1c4,#1a9f9a); margin-right: 10px; vertical-align: -3px; }
+.k-side { position: absolute; left: 0; top: 64px; bottom: 0; width: 260px; border-right: 1px solid #eef0f6; padding: 22px 16px; }
+.k-side div { height: 44px; border-radius: 10px; font: 600 19px/44px "Inter"; color: #5b6080; padding-left: 16px; margin-bottom: 4px; white-space: nowrap; }
+.k-side div.k-on { background: #efeaff; color: #6c47ff; }
+.k-main { position: absolute; left: 260px; top: 64px; right: 0; bottom: 0; padding: 30px 36px; }
+.k-h { font: 800 32px/1.2 "Jakarta"; color: #15173a; white-space: nowrap; }
+.k-p { font: 500 20px/1.4 "Inter"; color: #5b6080; }
+.k-drop { position: absolute; border: 3px dashed #c9cde0; border-radius: 20px; background: #fafbff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+  font: 600 22px/1.3 "Inter"; color: #5b6080; text-align: center; }
+.k-drop.k-hot { border-color: #6c47ff; background: #f4f0ff; color: #6c47ff; }
+
+/* fichier .zip (icône) */
+.k-zip { position: absolute; width: 120px; height: 150px; }
+
+/* annotations façon YouTube */
+.k-hand { position: absolute; font: 700 50px/1 "Caveat"; color: #6c47ff; white-space: nowrap; }
+.k-hand.k-orange { color: #ff6a1a; }
+.k-spot { position: absolute; border: 4px solid #6c47ff; border-radius: 16px; box-shadow: 0 0 0 8px rgba(108,71,255,.14); opacity: 0; }
+.k-spot.k-orange { border-color: #ff6a1a; box-shadow: 0 0 0 8px rgba(255,106,26,.16); }
+.k-check { position: absolute; width: 64px; height: 64px; border-radius: 50%; background: #1fb871; box-shadow: 0 12px 26px -10px rgba(31,184,113,.8); opacity: 0; }
+.k-check:after { content: ""; position: absolute; left: 22px; top: 13px; width: 16px; height: 28px; border: solid #fff; border-width: 0 6px 6px 0; transform: rotate(45deg); }
+.k-pill { position: absolute; padding: 14px 24px; border-radius: 999px; font: 800 26px/1 "Inter"; white-space: nowrap; }
+.k-pill.k-ok { background: #e3f8ee; color: #128a52; }
+.k-pill.k-warn { background: #fff0e6; color: #d4520e; }
+
+/* curseur (pointe en 0,0) et onde de clic */
+.k-cursor { position: absolute; left: 0; top: 0; width: 36px; height: 44px; opacity: 0; transform-origin: 2px 2px; z-index: 50; }
+.k-ring { position: absolute; width: 90px; height: 90px; margin: -45px 0 0 -45px; border-radius: 50%; border: 4px solid #6c47ff; opacity: 0; z-index: 49; }
+
+/* sous-titres : pastille blanche en bas, centrée */
+.k-subs { position: absolute; left: 0; top: 948px; width: 1920px; height: 90px; }
+.k-sub { position: absolute; left: 0; right: 0; top: 0; margin: 0 auto; width: fit-content; max-width: 1500px; padding: 18px 34px; border-radius: 18px; background: rgba(21,23,58,.92);
+  color: #fff; font: 600 34px/1.25 "Inter"; text-align: center; white-space: nowrap; opacity: 0; }
+.k-sub b { color: #ffe36b; font-weight: 800; }
+/* ===== fin du kit (CSS) ===== */
+html,body{margin:0;background:#000}
+</style></head><body>
+<div id="demo" style="position:relative;width:1920px;height:1080px;overflow:hidden"></div>
+<script>
+/* ===== kit netlify-tuto (JS) ===== */
+/* caméra 2D : le point monde (c.x, c.y) au centre de l'écran, échelle c.s ; flou en px écran (c.b) */
+function kCam(world, c) {
+  world.style.transformOrigin = "0 0";
+  world.style.transform = "translate(" + (960 - c.x * c.s).toFixed(2) + "px," + (540 - c.y * c.s).toFixed(2) + "px) scale(" + c.s.toFixed(4) + ")";
+  world.style.filter = c.b > 0.3 ? "blur(" + c.b.toFixed(1) + "px)" : "none";
+}
+/* arrivée : un peu trop grand et flou, puis se pose (0,4 s expo.out) */
+function kArrive(tl, el, t, from, dy) {
+  tl.fromTo(el, { opacity: 0, scale: from || 1.12, y: dy || 0, filter: "blur(10px)" },
+    { opacity: 1, scale: 1, y: 0, filter: "blur(0px)", duration: 0.45, ease: "expo.out", immediateRender: t <= 0 }, t);
+}
+/* sortie rapide */
+function kLeave(tl, el, t, dy) {
+  tl.fromTo(el, { opacity: 1, y: 0, filter: "blur(0px)" }, { opacity: 0, y: dy || -24, filter: "blur(8px)", duration: 0.25, ease: "power2.in", immediateRender: false }, t);
+}
+/* surligneur jaune qui passe derrière un mot (.k-mk-bg) */
+function kMark(tl, bg, t) { tl.fromTo(bg, { scaleX: 0 }, { scaleX: 1, duration: 0.35, ease: "power2.out", immediateRender: false }, t); }
+/* cadre de mise en évidence (.k-spot) : se resserre sur la cible */
+function kSpot(tl, el, t, tOut) {
+  tl.fromTo(el, { opacity: 0, scale: 1.25 }, { opacity: 1, scale: 1, duration: 0.35, ease: "expo.out", immediateRender: false }, t);
+  if (tOut != null) tl.fromTo(el, { opacity: 1 }, { opacity: 0, duration: 0.2, ease: "power1.in", immediateRender: false }, tOut);
+}
+/* pastille / coche qui « pop » */
+function kPop(tl, el, t) { tl.fromTo(el, { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(2.2)", immediateRender: false }, t); }
+/* trait SVG qui se dessine (le chemin porte pathLength="100" stroke-dasharray="100" stroke-dashoffset="100") */
+function kDraw(tl, path, t, d) { tl.fromTo(path, { attr: { "stroke-dashoffset": 100 } }, { attr: { "stroke-dashoffset": 0 }, duration: d || 0.5, ease: "power2.out", immediateRender: false }, t); }
+/* frappe au clavier dans un élément (texte remplacé à chaque image ; caret optionnel) */
+function kType(tl, el, text, t, d, caret) {
+  var p = { n: 0 };
+  tl.fromTo(p, { n: 0 }, { n: text.length, duration: d, ease: "none", immediateRender: false,
+    onUpdate: function () { el.textContent = text.slice(0, Math.round(p.n)); if (caret) el.appendChild(caret); } }, t);
+}
+/* curseur : un seul geste courbe de (x0,y0) à (x1,y1) entre t et t+d, puis clic direct (pression + onde) */
+function kCursor(tl, el, x0, y0, x1, y1, t, d, ring) {
+  var p = { k: 0 };
+  var cx = (x0 + x1) / 2 + (y1 - y0) * 0.2, cy = (y0 + y1) / 2 - (x1 - x0) * 0.2;
+  function place() { var k = p.k, a = (1 - k) * (1 - k), b = 2 * (1 - k) * k, c = k * k; gsap.set(el, { x: a * x0 + b * cx + c * x1, y: a * y0 + b * cy + c * y1 }); }
+  tl.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "none", immediateRender: false }, t);
+  tl.fromTo(p, { k: 0 }, { k: 1, duration: d, ease: "power3.inOut", immediateRender: false, onUpdate: place }, t);
+  kClick(tl, el, t + d + 0.04, ring, x1, y1);
+  place();
+}
+/* déplacement du curseur déjà visible (sans le faire réapparaître), puis clic */
+function kCursorMove(tl, el, x0, y0, x1, y1, t, d, ring, noClick) {
+  var p = { k: 0 };
+  var cx = (x0 + x1) / 2 + (y1 - y0) * 0.15, cy = (y0 + y1) / 2 - (x1 - x0) * 0.15;
+  tl.fromTo(p, { k: 0 }, { k: 1, duration: d, ease: "power3.inOut", immediateRender: false,
+    onUpdate: function () { var k = p.k, a = (1 - k) * (1 - k), b = 2 * (1 - k) * k, c = k * k; gsap.set(el, { x: a * x0 + b * cx + c * x1, y: a * y0 + b * cy + c * y1 }); } }, t);
+  if (!noClick) kClick(tl, el, t + d + 0.04, ring, x1, y1);
+}
+function kClick(tl, el, t, ring, x, y) {
+  tl.fromTo(el, { scale: 1 }, { scale: 0.84, duration: 0.06, ease: "power2.in", immediateRender: false }, t);
+  tl.fromTo(el, { scale: 0.84 }, { scale: 1, duration: 0.14, ease: "power2.out", immediateRender: false }, t + 0.07);
+  if (ring) {
+    tl.set(ring, { left: x + "px", top: y + "px" }, t);
+    tl.fromTo(ring, { opacity: 1, scale: 0.3 }, { opacity: 0, scale: 1.5, duration: 0.5, ease: "power2.out", immediateRender: false }, t + 0.03);
+  }
+}
+/* sous-titres : une pastille par phrase, [{sub, t0, t1}] en temps LOCAUX ; le mot entre ** ** passe en jaune */
+function kSubs(tl, box, lines, tEnd) {
+  lines.forEach(function (ln, i) {
+    var d = document.createElement("div"); d.className = "k-sub";
+    d.innerHTML = ln.sub.replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
+    box.appendChild(d);
+    var tin = Math.max(0, ln.t0 - 0.08), tout = i < lines.length - 1 ? Math.min(lines[i + 1].t0 - 0.12, ln.t1 + 0.45) : Math.min(tEnd - 0.3, ln.t1 + 0.6);
+    tl.fromTo(d, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.2, ease: "power2.out", immediateRender: tin <= 0 }, tin);
+    tl.fromTo(d, { opacity: 1 }, { opacity: 0, duration: 0.15, ease: "power1.in", immediateRender: false }, tout);
+  });
+}
+/* barre d'étapes : step = 0 (intro) à 6 ; la pastille « en cours » s'allume à t */
+function kStepper(parent, step) {
+  var s = document.createElement("div"); s.className = "k-stepper";
+  for (var i = 1; i <= 6; i++) { var e = document.createElement("i"); e.textContent = i; if (i < step) e.className = "k-done"; s.appendChild(e); }
+  parent.appendChild(s); return s;
+}
+function kStepNow(tl, stepper, step, t) {
+  var e = stepper.children[step - 1]; if (!e) return;
+  tl.fromTo(e, { backgroundColor: "#ffffff", borderColor: "#e2e4ef", color: "#9aa0bd" }, { backgroundColor: "#6c47ff", borderColor: "#6c47ff", color: "#ffffff", duration: 0.2, ease: "none", immediateRender: false }, t);
+  tl.fromTo(e, { scale: 0.7 }, { scale: 1, duration: 0.4, ease: "back.out(2.5)", immediateRender: false }, t);
+}
+/* fenêtre de navigateur générique (aucun logo réel) : renvoie {win, url, app, head, side, main} */
+function kBrowser(parent, o) {
+  var w = document.createElement("div"); w.className = "k-browser"; w.id = o.id;
+  w.style.left = o.x + "px"; w.style.top = o.y + "px"; w.style.width = o.w + "px"; w.style.height = o.h + "px";
+  w.innerHTML = '<div class="k-bbar"><i style="left:24px;background:#ff6b6b"></i><i style="left:46px;background:#ffc94d"></i><i style="left:68px;background:#4fd28a"></i>' +
+    '<div class="k-url"><span>' + (o.url || "") + '</span></div></div><div class="k-app"></div>';
+  parent.appendChild(w);
+  var app = w.querySelector(".k-app");
+  var r = { win: w, url: w.querySelector(".k-url span"), app: app };
+  if (o.netlify) {
+    app.innerHTML = '<div class="k-apphead"><div class="k-logo">netlify</div></div>' +
+      (o.side ? '<div class="k-side">' + o.side.map(function (s, i) { return '<div' + (i === o.sideOn ? ' class="k-on"' : '') + '>' + s + '</div>'; }).join("") + '</div>' : '') +
+      '<div class="k-main"' + (o.side ? '' : ' style="left:0"') + '></div>';
+    r.head = app.querySelector(".k-apphead"); r.main = app.querySelector(".k-main"); r.side = app.querySelector(".k-side");
+  }
+  return r;
+}
+/* ===== fin du kit (JS) ===== */
+</script>
+</body></html>

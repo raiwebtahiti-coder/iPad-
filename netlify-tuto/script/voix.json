@@ -1,0 +1,48 @@
+{
+  "voice": "ff_siwis",
+  "speed": 0.95,
+  "note": "Voix off du tuto (Kokoro v1.0, local, sans compte). Une ligne = une phrase, découpée par section. 'say' = texte prononcé (orthographe adaptée), 'sub' = sous-titre affiché.",
+  "sections": [
+    { "id": "s0-intro", "lines": [
+      { "sub": "Mettre son site en ligne, c'est plus simple que vous ne le pensez." },
+      { "sub": "En six étapes et environ trente minutes, votre site sera visible par tout le monde." } ] },
+    { "id": "s1-avant", "lines": [
+      { "sub": "Avant de commencer, il vous faut trois choses." },
+      { "sub": "Le fichier de votre site, que je vous ai envoyé." },
+      { "sub": "Un ordinateur et une adresse mail." },
+      { "sub": "Et une carte bancaire, pour le nom de domaine." },
+      { "sub": "Bonne nouvelle : l'hébergement est gratuit. Zéro franc par mois." },
+      { "sub": "Seul le nom de domaine est payant : environ 1 500 francs par an.", "say": "Seul le nom de domaine est payant : environ mille cinq cents francs par an." } ] },
+    { "id": "s2-compte", "lines": [
+      { "sub": "Étape 1 : créez votre compte.", "say": "Étape un : créez votre compte." },
+      { "sub": "Allez sur netlify.com, puis cliquez sur Sign up.", "say": "Allez sur Netlify point com, puis cliquez sur Sign up." },
+      { "sub": "Choisissez Sign up with email, puis entrez votre adresse et un mot de passe." },
+      { "sub": "Vous recevez un mail : cliquez sur le lien pour confirmer votre compte." } ] },
+    { "id": "s3-publier", "lines": [
+      { "sub": "Étape 2 : publiez votre site.", "say": "Étape deux : publiez votre site." },
+      { "sub": "Important : ne décompressez pas le fichier. Gardez-le en .zip.", "say": "Important : ne décompressez pas le fichier. Gardez-le en zip." },
+      { "sub": "Dans Projects, cliquez sur Add new project, puis Deploy manually." },
+      { "sub": "Glissez votre fichier .zip dans la zone prévue.", "say": "Glissez votre fichier zip dans la zone prévue." },
+      { "sub": "Quelques secondes plus tard, votre site est en ligne, avec une adresse provisoire." } ] },
+    { "id": "s4-adresse", "lines": [
+      { "sub": "Étape 3 : choisissez une adresse plus jolie.", "say": "Étape trois : choisissez une adresse plus jolie." },
+      { "sub": "Ouvrez Project configuration, puis Change project name." },
+      { "sub": "Tapez le nom de votre entreprise, et enregistrez." } ] },
+    { "id": "s5-domaine", "lines": [
+      { "sub": "Étape 4 : votre propre nom de domaine.", "say": "Étape quatre : votre propre nom de domaine." },
+      { "sub": "Allez dans Domain management, puis Add a domain." },
+      { "sub": "Tapez le nom que vous voulez. S'il est libre, cliquez sur Buy." },
+      { "sub": "Attention : le renouvellement est automatique chaque année. Notez bien la date." } ] },
+    { "id": "s6-verifier", "lines": [
+      { "sub": "Étape 5 : vérifiez.", "say": "Étape cinq : vérifiez." },
+      { "sub": "Tapez votre adresse dans le navigateur : votre site apparaît !" },
+      { "sub": "Sinon, patientez : cela peut prendre de quelques minutes à 24 heures.", "say": "Sinon, patientez : cela peut prendre de quelques minutes à vingt-quatre heures." } ] },
+    { "id": "s7-maj", "lines": [
+      { "sub": "Étape 6 : mettez à jour votre site.", "say": "Étape six : mettez à jour votre site." },
+      { "sub": "Quand je vous envoie une nouvelle version, ouvrez l'onglet Deploys." },
+      { "sub": "Glissez le nouveau fichier .zip dans la zone. C'est tout : votre site est à jour.", "say": "Glissez le nouveau fichier zip dans la zone. C'est tout : votre site est à jour." } ] },
+    { "id": "s8-fin", "lines": [
+      { "sub": "Et voilà ! Votre site est en ligne, et il vous appartient." },
+      { "sub": "Une question ? Écrivez-moi sur WhatsApp.", "say": "Une question ? Écrivez-moi sur WhatsApp. Raï Web Design." } ] }
+  ]
+}

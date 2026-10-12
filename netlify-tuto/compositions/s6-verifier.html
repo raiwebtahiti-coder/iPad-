@@ -1,0 +1,407 @@
+<!doctype html>
+<html><head><meta charset="utf-8"></head><body>
+<template>
+  <style>
+    /* ===== kit netlify-tuto (CSS) ===== */
+@font-face { font-family: "Jakarta"; src: url("assets/fonts/Jakarta-800.woff2") format("woff2"); font-weight: 800; font-display: block; }
+@font-face { font-family: "Jakarta"; src: url("assets/fonts/Jakarta-700.woff2") format("woff2"); font-weight: 700; font-display: block; }
+@font-face { font-family: "Inter"; src: url("assets/fonts/Inter-500.woff2") format("woff2"); font-weight: 500; font-display: block; }
+@font-face { font-family: "Inter"; src: url("assets/fonts/Inter-600.woff2") format("woff2"); font-weight: 600; font-display: block; }
+@font-face { font-family: "Inter"; src: url("assets/fonts/Inter-800.woff2") format("woff2"); font-weight: 800; font-display: block; }
+@font-face { font-family: "Caveat"; src: url("assets/fonts/Caveat-700.woff2") format("woff2"); font-weight: 700; font-display: block; }
+@font-face { font-family: "Mono"; src: url("assets/fonts/Mono-500.woff2") format("woff2"); font-weight: 500; font-display: block; }
+
+/* palette : bleu nuit (texte), violet électrique (accent), surligneur jaune (mot clé), vert (réussi), orange (attention) */
+.k-layer { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+.k-abs { position: absolute; }
+.k-ground { position: absolute; inset: 0; background: #f6f7fb; overflow: hidden; }
+.k-blob { position: absolute; border-radius: 50%; filter: blur(80px); }
+.k-blob.k-b1 { left: 1180px; top: -260px; width: 900px; height: 700px; background: #e6dfff; }
+.k-blob.k-b2 { left: -280px; top: 640px; width: 900px; height: 640px; background: #dcecff; }
+.k-dots { position: absolute; left: 0; top: 0; width: 2000px; height: 1080px; opacity: .5;
+  background-image: radial-gradient(circle, rgba(21,23,58,.10) 1.3px, transparent 1.5px); background-size: 36px 36px; }
+
+.k-brand { position: absolute; left: 90px; top: 52px; font: 800 20px/1 "Inter"; letter-spacing: .28em; color: #15173a; white-space: nowrap; }
+.k-brand b { color: #6c47ff; }
+/* barre d'étapes (en haut à droite) : 6 pastilles ; .k-done = faite, .k-now = en cours */
+.k-stepper { position: absolute; right: 90px; top: 40px; display: flex; gap: 10px; }
+.k-stepper i { display: block; width: 46px; height: 46px; border-radius: 14px; background: #fff; border: 2px solid #e2e4ef;
+  font: 800 20px/42px "Jakarta"; font-style: normal; text-align: center; color: #9aa0bd; }
+.k-stepper i.k-done { background: #efeaff; border-color: #efeaff; color: #6c47ff; }
+.k-stepper i.k-now { background: #6c47ff; border-color: #6c47ff; color: #fff; box-shadow: 0 10px 24px -8px rgba(108,71,255,.7); }
+
+/* en-tête d'étape (colonne gauche) */
+.k-badge { display: inline-block; padding: 12px 22px; border-radius: 999px; background: #6c47ff; color: #fff; font: 800 24px/1 "Jakarta"; letter-spacing: .06em;
+  box-shadow: 0 12px 26px -10px rgba(108,71,255,.75); white-space: nowrap; }
+.k-title { font: 800 74px/1.04 "Jakarta"; letter-spacing: -0.02em; color: #15173a; }
+.k-title .k-mk { position: relative; display: inline-block; z-index: 0; }
+.k-mk-bg { position: absolute; left: -0.08em; right: -0.08em; top: 0.52em; bottom: 0.02em; background: #ffe36b; border-radius: 6px; z-index: -1;
+  transform-origin: 0 50%; transform: scaleX(0); }
+.k-lead { font: 500 30px/1.4 "Inter"; color: #5b6080; }
+
+/* carte, boutons, champs */
+.k-card { position: absolute; background: #fff; border-radius: 24px; box-shadow: 0 1px 0 rgba(21,23,58,.04), 0 26px 60px -24px rgba(21,23,58,.25), 0 6px 16px -8px rgba(21,23,58,.10); }
+.k-btn { position: absolute; border-radius: 12px; background: #6c47ff; color: #fff; font: 700 22px/1 "Inter"; display: flex; align-items: center; justify-content: center; white-space: nowrap; }
+.k-btn.k-dark { background: #15173a; }
+.k-btn.k-ghost { background: #fff; color: #15173a; border: 2px solid #e2e4ef; }
+.k-btn.k-green { background: #1fb871; }
+.k-input { position: absolute; border-radius: 12px; background: #fff; border: 2px solid #e2e4ef; font: 500 22px/1 "Inter"; color: #15173a; display: flex; align-items: center; padding: 0 18px; white-space: nowrap; overflow: hidden; }
+.k-input.k-focus { border-color: #6c47ff; box-shadow: 0 0 0 5px rgba(108,71,255,.15); }
+.k-caret { display: inline-block; width: 2px; height: 1.1em; background: #6c47ff; margin-left: 2px; vertical-align: -0.15em; }
+.k-skel { position: absolute; border-radius: 8px; background: #eef0f6; }
+
+/* fenêtre de navigateur (voir kBrowser) */
+.k-browser { position: absolute; background: #fff; border-radius: 22px; overflow: hidden;
+  box-shadow: 0 2px 0 rgba(21,23,58,.04), 0 40px 90px -30px rgba(21,23,58,.35), 0 10px 24px -12px rgba(21,23,58,.15); }
+.k-bbar { position: absolute; left: 0; top: 0; right: 0; height: 58px; background: #f2f3f8; border-bottom: 1px solid #e6e8f0; }
+.k-bbar i { position: absolute; top: 22px; width: 14px; height: 14px; border-radius: 50%; }
+.k-url { position: absolute; left: 120px; right: 120px; top: 12px; height: 34px; border-radius: 17px; background: #fff; border: 1px solid #e6e8f0;
+  font: 500 18px/32px "Inter"; color: #5b6080; padding-left: 40px; white-space: nowrap; overflow: hidden; }
+.k-url:before { content: ""; position: absolute; left: 16px; top: 10px; width: 10px; height: 12px; border: 2px solid #9aa0bd; border-radius: 3px; box-sizing: border-box; }
+.k-app { position: absolute; left: 0; top: 58px; right: 0; bottom: 0; background: #fff; }
+.k-apphead { position: absolute; left: 0; top: 0; right: 0; height: 64px; border-bottom: 1px solid #eef0f6; }
+.k-logo { position: absolute; left: 28px; top: 18px; font: 800 24px/28px "Jakarta"; color: #15173a; letter-spacing: -0.01em; }
+.k-logo:before { content: ""; display: inline-block; width: 22px; height: 22px; border-radius: 7px; background: linear-gradient(135deg,#2fd1c4,#1a9f9a); margin-right: 10px; vertical-align: -3px; }
+.k-side { position: absolute; left: 0; top: 64px; bottom: 0; width: 260px; border-right: 1px solid #eef0f6; padding: 22px 16px; }
+.k-side div { height: 44px; border-radius: 10px; font: 600 19px/44px "Inter"; color: #5b6080; padding-left: 16px; margin-bottom: 4px; white-space: nowrap; }
+.k-side div.k-on { background: #efeaff; color: #6c47ff; }
+.k-main { position: absolute; left: 260px; top: 64px; right: 0; bottom: 0; padding: 30px 36px; }
+.k-h { font: 800 32px/1.2 "Jakarta"; color: #15173a; white-space: nowrap; }
+.k-p { font: 500 20px/1.4 "Inter"; color: #5b6080; }
+.k-drop { position: absolute; border: 3px dashed #c9cde0; border-radius: 20px; background: #fafbff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+  font: 600 22px/1.3 "Inter"; color: #5b6080; text-align: center; }
+.k-drop.k-hot { border-color: #6c47ff; background: #f4f0ff; color: #6c47ff; }
+
+/* fichier .zip (icône) */
+.k-zip { position: absolute; width: 120px; height: 150px; }
+
+/* annotations façon YouTube */
+.k-hand { position: absolute; font: 700 50px/1 "Caveat"; color: #6c47ff; white-space: nowrap; }
+.k-hand.k-orange { color: #ff6a1a; }
+.k-spot { position: absolute; border: 4px solid #6c47ff; border-radius: 16px; box-shadow: 0 0 0 8px rgba(108,71,255,.14); opacity: 0; }
+.k-spot.k-orange { border-color: #ff6a1a; box-shadow: 0 0 0 8px rgba(255,106,26,.16); }
+.k-check { position: absolute; width: 64px; height: 64px; border-radius: 50%; background: #1fb871; box-shadow: 0 12px 26px -10px rgba(31,184,113,.8); opacity: 0; }
+.k-check:after { content: ""; position: absolute; left: 22px; top: 13px; width: 16px; height: 28px; border: solid #fff; border-width: 0 6px 6px 0; transform: rotate(45deg); }
+.k-pill { position: absolute; padding: 14px 24px; border-radius: 999px; font: 800 26px/1 "Inter"; white-space: nowrap; }
+.k-pill.k-ok { background: #e3f8ee; color: #128a52; }
+.k-pill.k-warn { background: #fff0e6; color: #d4520e; }
+
+/* curseur (pointe en 0,0) et onde de clic */
+.k-cursor { position: absolute; left: 0; top: 0; width: 36px; height: 44px; opacity: 0; transform-origin: 2px 2px; z-index: 50; }
+.k-ring { position: absolute; width: 90px; height: 90px; margin: -45px 0 0 -45px; border-radius: 50%; border: 4px solid #6c47ff; opacity: 0; z-index: 49; }
+
+/* sous-titres : pastille blanche en bas, centrée */
+.k-subs { position: absolute; left: 0; top: 948px; width: 1920px; height: 90px; }
+.k-sub { position: absolute; left: 0; right: 0; top: 0; margin: 0 auto; width: fit-content; max-width: 1500px; padding: 18px 34px; border-radius: 18px; background: rgba(21,23,58,.92);
+  color: #fff; font: 600 34px/1.25 "Inter"; text-align: center; white-space: nowrap; opacity: 0; }
+.k-sub b { color: #ffe36b; font-weight: 800; }
+/* ===== fin du kit (CSS) ===== */
+    #root { position: absolute; inset: 0; overflow: hidden; font-family: "Inter", sans-serif; color: #15173a; -webkit-font-smoothing: antialiased; }
+    #s6-world { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+    .s6-bb { box-sizing: border-box; }
+    .s6-a { opacity: 0; }
+    #s6-head { left: 110px; top: 300px; width: 540px; }
+    #s6-badge { opacity: 0; }
+    #s6-title { margin-top: 26px; }
+    #s6-title .s6-w { display: inline-block; opacity: 0; }
+    #s6-bwrap { left: 720px; top: 190px; width: 1110px; height: 720px; }
+    #s6-browser { opacity: 0; }
+    /* nouvel onglet (aucun texte) */
+    #s6-ntsearch { left: 255px; top: 230px; width: 600px; height: 64px; border-radius: 32px; background: #f3f4f9; border: 2px solid #e6e8f0; }
+    .s6-ntdot { top: 350px; width: 72px; height: 72px; border-radius: 22px; background: #eef0f6; }
+    #s6-load { left: 0; top: 0; width: 1110px; height: 5px; background: #6c47ff; transform-origin: 0 50%; opacity: 0; }
+    /* le site (même maquette que l'intro) */
+    #s6-hero { left: 30px; top: 28px; width: 1050px; height: 330px; border-radius: 18px; background: linear-gradient(120deg,#ece7ff,#dcecff); opacity: 0; overflow: hidden; }
+    #s6-hero .s6-ht { position: absolute; left: 40px; top: 70px; font: 800 64px/1.05 "Jakarta"; color: #15173a; white-space: nowrap; }
+    #s6-hero .s6-hb { position: absolute; left: 40px; top: 230px; width: 220px; height: 58px; border-radius: 12px; background: #15173a; }
+    #s6-hero .s6-hbl { position: absolute; left: 40px; top: 25px; width: 140px; height: 8px; border-radius: 4px; background: rgba(255,255,255,.55); }
+    #s6-hero .s6-sun { position: absolute; left: 760px; top: 60px; width: 210px; height: 210px; border-radius: 50%; background: #ffe36b; opacity: .8; }
+    #s6-shine { position: absolute; left: -260px; top: -40px; width: 160px; height: 420px; background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.75), rgba(255,255,255,0)); opacity: 0; }
+    .s6-tile { top: 390px; width: 330px; height: 210px; border-radius: 16px; background: #f3f4f9; opacity: 0; }
+    .s6-star { position: absolute; width: 54px; height: 54px; opacity: 0; overflow: visible; }
+    #s6-ok { left: 1430px; top: 524px; opacity: 0; z-index: 6; }
+    #s6-check { left: 1712px; top: 510px; z-index: 6; }
+    #s6-key { left: 1746px; top: 198px; width: 64px; height: 44px; border-radius: 10px; background: #15173a; color: #fff; font: 800 26px/44px "Inter"; text-align: center; opacity: 0;
+      box-shadow: 0 6px 0 #3a3d66, 0 14px 24px -10px rgba(21,23,58,.6); }
+    #s6-dim { left: 720px; top: 190px; width: 1110px; height: 720px; border-radius: 22px; background: rgba(246,247,251,.72); opacity: 0; }
+    #s6-card { left: 960px; top: 320px; width: 680px; height: 400px; opacity: 0; }
+    #s6-clock { position: absolute; left: 56px; top: 64px; width: 150px; height: 150px; overflow: visible; }
+    #s6-ctitle { left: 240px; top: 96px; }
+    #s6-cline1 { left: 240px; top: 160px; width: 360px; height: 16px; }
+    #s6-cline2 { left: 240px; top: 190px; width: 260px; height: 16px; }
+    #s6-wait { left: 56px; top: 280px; background: #efeaff; color: #6c47ff; opacity: 0; }
+    #s6-hand { left: 1560px; top: 770px; opacity: 0; }
+    #s6-arrow { left: 1450px; top: 686px; width: 120px; height: 90px; overflow: visible; }
+  </style>
+
+  <div id="root" data-composition-id="s6-verifier" data-width="1920" data-height="1080">
+    <div id="s6-groundclip" class="k-layer clip" data-start="0" data-duration="11.309" data-track-index="0">
+      <div class="k-ground"><div class="k-blob k-b1" id="s6-b1"></div><div class="k-blob k-b2" id="s6-b2"></div><div class="k-dots" id="s6-dots"></div></div>
+    </div>
+
+    <div id="s6-stage" class="k-layer clip" data-start="0" data-duration="11.309" data-track-index="1">
+      <div id="s6-world">
+        <div id="s6-head" class="k-abs">
+          <div id="s6-badge" class="k-badge">ÉTAPE 5</div>
+          <div id="s6-title" class="k-title"><span class="k-mk s6-w"><i class="k-mk-bg" id="s6-mk"></i>Vérifiez</span> <span class="s6-w">votre</span> <span class="s6-w">site</span></div>
+        </div>
+        <div id="s6-bwrap" class="k-abs"></div>
+        <div id="s6-key" class="k-abs">↵</div>
+        <svg id="s6-st1" class="s6-star" style="left:740px;top:230px" viewBox="0 0 54 54"><path d="M27 2 C29 20 34 25 52 27 C34 29 29 34 27 52 C25 34 20 29 2 27 C20 25 25 20 27 2 Z" fill="#ffe36b" stroke="#15173a" stroke-width="2.5" stroke-linejoin="round"/></svg>
+        <svg id="s6-st2" class="s6-star" style="left:1770px;top:300px" viewBox="0 0 54 54"><path d="M27 2 C29 20 34 25 52 27 C34 29 29 34 27 52 C25 34 20 29 2 27 C20 25 25 20 27 2 Z" fill="#6c47ff"/></svg>
+        <svg id="s6-st3" class="s6-star" style="left:1700px;top:820px" viewBox="0 0 54 54"><path d="M27 2 C29 20 34 25 52 27 C34 29 29 34 27 52 C25 34 20 29 2 27 C20 25 25 20 27 2 Z" fill="#ffe36b" stroke="#15173a" stroke-width="2.5" stroke-linejoin="round"/></svg>
+        <svg id="s6-st4" class="s6-star" style="left:690px;top:640px" viewBox="0 0 54 54"><path d="M27 2 C29 20 34 25 52 27 C34 29 29 34 27 52 C25 34 20 29 2 27 C20 25 25 20 27 2 Z" fill="#6c47ff"/></svg>
+        <div id="s6-ok" class="k-pill k-ok k-abs">Ça marche !</div>
+        <div id="s6-check" class="k-check"></div>
+        <div id="s6-dim" class="k-abs"></div>
+        <div id="s6-card" class="k-card">
+          <svg id="s6-clock" viewBox="0 0 150 150">
+            <circle cx="75" cy="75" r="66" fill="#f4f0ff" stroke="#6c47ff" stroke-width="7"/>
+            <path id="s6-tick" d="M75 17 v10 M133 75 h-10 M75 133 v-10 M17 75 h10" stroke="#15173a" stroke-width="6" stroke-linecap="round"/>
+            <path id="s6-hh" d="M75 75 L75 46" stroke="#15173a" stroke-width="8" stroke-linecap="round"/>
+            <path id="s6-mh" d="M75 75 L75 28" stroke="#6c47ff" stroke-width="6" stroke-linecap="round"/>
+            <circle cx="75" cy="75" r="7" fill="#15173a"/>
+          </svg>
+          <div id="s6-ctitle" class="k-abs k-h">Pas encore visible ?</div>
+          <div id="s6-cline1" class="k-skel"></div>
+          <div id="s6-cline2" class="k-skel"></div>
+          <div id="s6-wait" class="k-pill k-abs">de quelques minutes à 24 h</div>
+        </div>
+        <div id="s6-hand" class="k-hand k-abs">patience !</div>
+        <svg id="s6-arrow" class="k-abs" viewBox="0 0 120 90"><path id="s6-arrowp" d="M108 80 C 80 82, 40 70, 18 16 M18 16 L 10 38 M18 16 L 36 30" fill="none" stroke="#6c47ff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/></svg>
+        <div id="s6-ring" class="k-ring"></div>
+        <svg id="s6-cursor" class="k-cursor" viewBox="0 0 36 44"><path d="M3 2 L3 34 L11 26 L17 40 L23 37 L17 24 L28 24 Z" fill="#15173a" stroke="#ffffff" stroke-width="2.5" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+
+    <div id="s6-chrome" class="k-layer clip" data-start="0" data-duration="11.309" data-track-index="2">
+      <div class="k-brand">RAI WEB DESIGN <b>·</b> TUTO</div>
+      <div id="s6-stepwrap"></div>
+    </div>
+    <div id="s6-subsclip" class="k-layer clip" data-start="0" data-duration="11.309" data-track-index="3">
+      <div id="s6-subs" class="k-subs"></div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var T = 11.309, FID = "s6-verifier";
+      /* ===== kit netlify-tuto (JS) ===== */
+/* caméra 2D : le point monde (c.x, c.y) au centre de l'écran, échelle c.s ; flou en px écran (c.b) */
+function kCam(world, c) {
+  world.style.transformOrigin = "0 0";
+  world.style.transform = "translate(" + (960 - c.x * c.s).toFixed(2) + "px," + (540 - c.y * c.s).toFixed(2) + "px) scale(" + c.s.toFixed(4) + ")";
+  world.style.filter = c.b > 0.3 ? "blur(" + c.b.toFixed(1) + "px)" : "none";
+}
+/* arrivée : un peu trop grand et flou, puis se pose (0,4 s expo.out) */
+function kArrive(tl, el, t, from, dy) {
+  tl.fromTo(el, { opacity: 0, scale: from || 1.12, y: dy || 0, filter: "blur(10px)" },
+    { opacity: 1, scale: 1, y: 0, filter: "blur(0px)", duration: 0.45, ease: "expo.out", immediateRender: t <= 0 }, t);
+}
+/* sortie rapide */
+function kLeave(tl, el, t, dy) {
+  tl.fromTo(el, { opacity: 1, y: 0, filter: "blur(0px)" }, { opacity: 0, y: dy || -24, filter: "blur(8px)", duration: 0.25, ease: "power2.in", immediateRender: false }, t);
+}
+/* surligneur jaune qui passe derrière un mot (.k-mk-bg) */
+function kMark(tl, bg, t) { tl.fromTo(bg, { scaleX: 0 }, { scaleX: 1, duration: 0.35, ease: "power2.out", immediateRender: false }, t); }
+/* cadre de mise en évidence (.k-spot) : se resserre sur la cible */
+function kSpot(tl, el, t, tOut) {
+  tl.fromTo(el, { opacity: 0, scale: 1.25 }, { opacity: 1, scale: 1, duration: 0.35, ease: "expo.out", immediateRender: false }, t);
+  if (tOut != null) tl.fromTo(el, { opacity: 1 }, { opacity: 0, duration: 0.2, ease: "power1.in", immediateRender: false }, tOut);
+}
+/* pastille / coche qui « pop » */
+function kPop(tl, el, t) { tl.fromTo(el, { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(2.2)", immediateRender: false }, t); }
+/* trait SVG qui se dessine (le chemin porte pathLength="100" stroke-dasharray="100" stroke-dashoffset="100") */
+function kDraw(tl, path, t, d) { tl.fromTo(path, { attr: { "stroke-dashoffset": 100 } }, { attr: { "stroke-dashoffset": 0 }, duration: d || 0.5, ease: "power2.out", immediateRender: false }, t); }
+/* frappe au clavier dans un élément (texte remplacé à chaque image ; caret optionnel) */
+function kType(tl, el, text, t, d, caret) {
+  var p = { n: 0 };
+  tl.fromTo(p, { n: 0 }, { n: text.length, duration: d, ease: "none", immediateRender: false,
+    onUpdate: function () { el.textContent = text.slice(0, Math.round(p.n)); if (caret) el.appendChild(caret); } }, t);
+}
+/* curseur : un seul geste courbe de (x0,y0) à (x1,y1) entre t et t+d, puis clic direct (pression + onde) */
+function kCursor(tl, el, x0, y0, x1, y1, t, d, ring) {
+  var p = { k: 0 };
+  var cx = (x0 + x1) / 2 + (y1 - y0) * 0.2, cy = (y0 + y1) / 2 - (x1 - x0) * 0.2;
+  function place() { var k = p.k, a = (1 - k) * (1 - k), b = 2 * (1 - k) * k, c = k * k; gsap.set(el, { x: a * x0 + b * cx + c * x1, y: a * y0 + b * cy + c * y1 }); }
+  tl.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "none", immediateRender: false }, t);
+  tl.fromTo(p, { k: 0 }, { k: 1, duration: d, ease: "power3.inOut", immediateRender: false, onUpdate: place }, t);
+  kClick(tl, el, t + d + 0.04, ring, x1, y1);
+  place();
+}
+/* déplacement du curseur déjà visible (sans le faire réapparaître), puis clic */
+function kCursorMove(tl, el, x0, y0, x1, y1, t, d, ring, noClick) {
+  var p = { k: 0 };
+  var cx = (x0 + x1) / 2 + (y1 - y0) * 0.15, cy = (y0 + y1) / 2 - (x1 - x0) * 0.15;
+  tl.fromTo(p, { k: 0 }, { k: 1, duration: d, ease: "power3.inOut", immediateRender: false,
+    onUpdate: function () { var k = p.k, a = (1 - k) * (1 - k), b = 2 * (1 - k) * k, c = k * k; gsap.set(el, { x: a * x0 + b * cx + c * x1, y: a * y0 + b * cy + c * y1 }); } }, t);
+  if (!noClick) kClick(tl, el, t + d + 0.04, ring, x1, y1);
+}
+function kClick(tl, el, t, ring, x, y) {
+  tl.fromTo(el, { scale: 1 }, { scale: 0.84, duration: 0.06, ease: "power2.in", immediateRender: false }, t);
+  tl.fromTo(el, { scale: 0.84 }, { scale: 1, duration: 0.14, ease: "power2.out", immediateRender: false }, t + 0.07);
+  if (ring) {
+    tl.set(ring, { left: x + "px", top: y + "px" }, t);
+    tl.fromTo(ring, { opacity: 1, scale: 0.3 }, { opacity: 0, scale: 1.5, duration: 0.5, ease: "power2.out", immediateRender: false }, t + 0.03);
+  }
+}
+/* sous-titres : une pastille par phrase, [{sub, t0, t1}] en temps LOCAUX ; le mot entre ** ** passe en jaune */
+function kSubs(tl, box, lines, tEnd) {
+  lines.forEach(function (ln, i) {
+    var d = document.createElement("div"); d.className = "k-sub";
+    d.innerHTML = ln.sub.replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
+    box.appendChild(d);
+    var tin = Math.max(0, ln.t0 - 0.08), tout = i < lines.length - 1 ? Math.min(lines[i + 1].t0 - 0.12, ln.t1 + 0.45) : Math.min(tEnd - 0.3, ln.t1 + 0.6);
+    tl.fromTo(d, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.2, ease: "power2.out", immediateRender: tin <= 0 }, tin);
+    tl.fromTo(d, { opacity: 1 }, { opacity: 0, duration: 0.15, ease: "power1.in", immediateRender: false }, tout);
+  });
+}
+/* barre d'étapes : step = 0 (intro) à 6 ; la pastille « en cours » s'allume à t */
+function kStepper(parent, step) {
+  var s = document.createElement("div"); s.className = "k-stepper";
+  for (var i = 1; i <= 6; i++) { var e = document.createElement("i"); e.textContent = i; if (i < step) e.className = "k-done"; s.appendChild(e); }
+  parent.appendChild(s); return s;
+}
+function kStepNow(tl, stepper, step, t) {
+  var e = stepper.children[step - 1]; if (!e) return;
+  tl.fromTo(e, { backgroundColor: "#ffffff", borderColor: "#e2e4ef", color: "#9aa0bd" }, { backgroundColor: "#6c47ff", borderColor: "#6c47ff", color: "#ffffff", duration: 0.2, ease: "none", immediateRender: false }, t);
+  tl.fromTo(e, { scale: 0.7 }, { scale: 1, duration: 0.4, ease: "back.out(2.5)", immediateRender: false }, t);
+}
+/* fenêtre de navigateur générique (aucun logo réel) : renvoie {win, url, app, head, side, main} */
+function kBrowser(parent, o) {
+  var w = document.createElement("div"); w.className = "k-browser"; w.id = o.id;
+  w.style.left = o.x + "px"; w.style.top = o.y + "px"; w.style.width = o.w + "px"; w.style.height = o.h + "px";
+  w.innerHTML = '<div class="k-bbar"><i style="left:24px;background:#ff6b6b"></i><i style="left:46px;background:#ffc94d"></i><i style="left:68px;background:#4fd28a"></i>' +
+    '<div class="k-url"><span>' + (o.url || "") + '</span></div></div><div class="k-app"></div>';
+  parent.appendChild(w);
+  var app = w.querySelector(".k-app");
+  var r = { win: w, url: w.querySelector(".k-url span"), app: app };
+  if (o.netlify) {
+    app.innerHTML = '<div class="k-apphead"><div class="k-logo">netlify</div></div>' +
+      (o.side ? '<div class="k-side">' + o.side.map(function (s, i) { return '<div' + (i === o.sideOn ? ' class="k-on"' : '') + '>' + s + '</div>'; }).join("") + '</div>' : '') +
+      '<div class="k-main"' + (o.side ? '' : ' style="left:0"') + '></div>';
+    r.head = app.querySelector(".k-apphead"); r.main = app.querySelector(".k-main"); r.side = app.querySelector(".k-side");
+  }
+  return r;
+}
+/* ===== fin du kit (JS) ===== */
+      var $ = function (id) { return document.getElementById(id); };
+      var tl = gsap.timeline({ paused: true, defaults: { lazy: false } });
+      tl.to({}, { duration: 11.309 }, 0);
+
+      // ---------- navigateur (nouvel onglet) ----------
+      var B = kBrowser($("s6-bwrap"), { id: "s6-browser", x: 0, y: 0, w: 1110, h: 720, url: "" });
+      B.app.innerHTML =
+        '<div id="s6-load" class="k-abs"></div>' +
+        '<div id="s6-ntsearch" class="k-abs s6-nt s6-a"></div>' +
+        '<div class="k-abs s6-ntdot s6-nt s6-a" style="left:339px"></div><div class="k-abs s6-ntdot s6-nt s6-a" style="left:447px"></div>' +
+        '<div class="k-abs s6-ntdot s6-nt s6-a" style="left:555px"></div><div class="k-abs s6-ntdot s6-nt s6-a" style="left:663px"></div>' +
+        '<div id="s6-hero" class="k-abs"><div class="s6-sun"></div><div class="s6-ht">Votre<br>entreprise</div><div class="s6-hb"><div class="s6-hbl"></div></div><div id="s6-shine"></div></div>' +
+        '<div class="k-abs s6-tile" style="left:30px"></div><div class="k-abs s6-tile" style="left:390px"></div><div class="k-abs s6-tile" style="left:750px"></div>';
+      var urlBox = B.url.parentNode;
+      var stepper = kStepper($("s6-stepwrap"), 5);
+
+      // ---------- caméra (un seul proxy, écrit par kCam) ----------
+      var world = $("s6-world"), cam = { x: 820, y: 540, s: 1, b: 14 };
+      var D = { k: 0 }, O = { x: -140, b: 14 };
+      var Z = [
+        { w: 0, x: 1180, y: 330, s: 1.38 },  // barre d'adresse
+        { w: 0, x: 1220, y: 530, s: 1.14 }   // carte « Pas encore visible ? »
+      ];
+      function render() {
+        var s = 1 + 0.026 * D.k, x = 960 + 22 * D.k, y = 540;
+        for (var i = 0; i < Z.length; i++) { var z = Z[i]; x += z.w * (z.x - x); y += z.w * (z.y - y); s += z.w * (z.s - s); }
+        cam.x = x + O.x; cam.y = y; cam.s = s; cam.b = O.b;
+        kCam(world, cam);
+      }
+      tl.eventCallback("onUpdate", render);
+      tl.fromTo(D, { k: 0 }, { k: 1, duration: T, ease: "none" }, 0);
+      // entrée : le monde arrive de la droite (cam.x 820 -> 960, flou 14 -> 0)
+      tl.fromTo(O, { x: -140, b: 14 }, { x: 0, b: 0, duration: 0.45, ease: "expo.out" }, 0);
+      // sortie (cam.x +140, flou 0 -> 14)
+      tl.fromTo(O, { x: 0, b: 0 }, { x: 140, b: 14, duration: 0.35, ease: "power2.in", immediateRender: false }, T - 0.35);
+      function zIn(z, t) { tl.fromTo(z, { w: 0 }, { w: 1, duration: 0.45, ease: "power3.inOut", immediateRender: false }, t); }
+      function zOut(z, t) { tl.fromTo(z, { w: 1 }, { w: 0, duration: 0.45, ease: "power3.inOut", immediateRender: false }, t); }
+      zIn(Z[0], 1.55);
+      zOut(Z[0], 3.55);
+      zIn(Z[1], 5.75);
+      zOut(Z[1], 9.9);
+      tl.fromTo("#s6-dots", { x: 0 }, { x: -72, duration: T, ease: "none" }, 0);
+      tl.fromTo("#s6-b1", { x: 0, y: 0 }, { x: -80, y: 40, duration: T, ease: "sine.inOut" }, 0);
+
+      // ---------- ligne 1 : « Étape 5 : vérifiez. » (0.00 → 1.32) ----------
+      kArrive(tl, $("s6-badge"), 0, 1.1);
+      kStepNow(tl, stepper, 5, 0.3);
+      Array.prototype.forEach.call(document.querySelectorAll("#s6-title .s6-w"), function (w, i) {
+        tl.fromTo(w, { opacity: 0, y: 40, filter: "blur(8px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.45, ease: "expo.out", immediateRender: false }, 0.3 + i * 0.2);
+      });
+      kMark(tl, $("s6-mk"), 0.8);
+      tl.fromTo(B.win, { opacity: 0, scale: 1.06, y: 30, filter: "blur(10px)" },
+        { opacity: 1, scale: 1, y: 0, filter: "blur(0px)", duration: 0.6, ease: "expo.out", immediateRender: false }, 0.3);
+      Array.prototype.forEach.call(document.querySelectorAll(".s6-nt"), function (e, i) { kArrive(tl, e, 0.6 + i * 0.08, 1.1, 10); });
+
+      // ---------- ligne 2 : « Tapez votre adresse dans le navigateur : votre site apparaît ! » (1.94 → 5.09) ----------
+      var cur = $("s6-cursor"), ring = $("s6-ring");
+      kCursor(tl, cur, 1660, 860, 1010, 222, 1.2, 0.6, ring);  // clic dans la barre d'adresse à 1.84
+      tl.fromTo(urlBox, { borderColor: "#e6e8f0", boxShadow: "0 0 0 0px rgba(108,71,255,0)" },
+        { borderColor: "#6c47ff", boxShadow: "0 0 0 5px rgba(108,71,255,0.15)", duration: 0.2, ease: "power1.out", immediateRender: false }, 1.86);
+      var caret = document.createElement("i"); caret.className = "k-caret";
+      kType(tl, B.url, "votreentreprise.com", 2.1, 1.2, caret);
+      kCursorMove(tl, cur, 1010, 222, 1300, 780, 2.2, 0.7, ring, true);
+      // « Entrée »
+      kPop(tl, $("s6-key"), 3.3);
+      tl.fromTo("#s6-key", { y: 0 }, { y: 5, duration: 0.07, ease: "power2.in", immediateRender: false }, 3.5);
+      tl.fromTo("#s6-key", { y: 5 }, { y: 0, duration: 0.15, ease: "power2.out", immediateRender: false }, 3.58);
+      kLeave(tl, $("s6-key"), 4.0, -12);
+      tl.fromTo(caret, { opacity: 1 }, { opacity: 0, duration: 0.01, immediateRender: false }, 3.5);
+      tl.fromTo(urlBox, { borderColor: "#6c47ff", boxShadow: "0 0 0 5px rgba(108,71,255,0.15)" },
+        { borderColor: "#e6e8f0", boxShadow: "0 0 0 0px rgba(108,71,255,0)", duration: 0.25, ease: "power1.in", immediateRender: false }, 3.52);
+      tl.fromTo("#s6-load", { opacity: 1, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: 0.35, ease: "power2.inOut", immediateRender: false }, 3.5);
+      tl.fromTo("#s6-load", { opacity: 1 }, { opacity: 0, duration: 0.2, ease: "power1.in", immediateRender: false }, 3.9);
+      Array.prototype.forEach.call(document.querySelectorAll(".s6-nt"), function (e, i) { kLeave(tl, e, 3.52 + i * 0.02, -12); });
+      kArrive(tl, $("s6-hero"), 3.62, 1.05, 20);
+      Array.prototype.forEach.call(document.querySelectorAll(".s6-tile"), function (e, i) { kArrive(tl, e, 3.8 + i * 0.12, 1.08, 20); });
+      // scintillement
+      tl.fromTo("#s6-shine", { opacity: 1, x: 0 }, { opacity: 1, x: 1500, duration: 0.8, ease: "power2.inOut", immediateRender: false }, 3.9);
+      ["#s6-st1", "#s6-st2", "#s6-st3", "#s6-st4"].forEach(function (s, i) {
+        var t = 3.7 + i * 0.1;
+        tl.fromTo(s, { opacity: 0, scale: 0.2, rotation: -40 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.4, ease: "back.out(2.4)", immediateRender: false }, t);
+        tl.fromTo(s, { opacity: 1, scale: 1 }, { opacity: 0, scale: 0.4, duration: 0.3, ease: "power2.in", immediateRender: false }, t + 0.9);
+      });
+      kPop(tl, $("s6-check"), 4.2);
+      kPop(tl, $("s6-ok"), 4.3);
+      tl.fromTo("#s6-ok", { scale: 1 }, { scale: 1.1, duration: 0.25, ease: "power2.out", immediateRender: false }, 4.85);
+      tl.fromTo("#s6-ok", { scale: 1.1 }, { scale: 1, duration: 0.3, ease: "power2.inOut", immediateRender: false }, 5.1);
+      kCursorMove(tl, cur, 1300, 780, 1380, 860, 4.4, 0.6, ring, true);
+      tl.fromTo(cur, { opacity: 1 }, { opacity: 0, duration: 0.2, ease: "power1.in", immediateRender: false }, 5.4);
+
+      // ---------- ligne 3 : « Sinon, patientez : cela peut prendre de quelques minutes à 24 heures. » (5.71 → 9.81) ----------
+      tl.fromTo("#s6-dim", { opacity: 0 }, { opacity: 1, duration: 0.35, ease: "power1.out", immediateRender: false }, 5.75);
+      tl.fromTo(["#s6-ok", "#s6-check"], { opacity: 1 }, { opacity: 0, duration: 0.3, ease: "power1.out", immediateRender: false }, 5.75);
+      kArrive(tl, $("s6-card"), 5.8, 1.1, 24);
+      kArrive(tl, $("s6-ctitle"), 6.05, 1.1, 10);
+      kArrive(tl, $("s6-cline1"), 6.2, 1.06, 8);
+      kArrive(tl, $("s6-cline2"), 6.3, 1.06, 8);
+      // l'horloge tourne lentement
+      tl.fromTo("#s6-mh", { rotation: 0 }, { rotation: 720, svgOrigin: "75 75", duration: T - 5.9, ease: "none", immediateRender: false }, 5.9);
+      tl.fromTo("#s6-hh", { rotation: 0 }, { rotation: 60, svgOrigin: "75 75", duration: T - 5.9, ease: "none", immediateRender: false }, 5.9);
+      tl.fromTo("#s6-clock", { rotation: -8 }, { rotation: 8, duration: 2.4, ease: "sine.inOut", immediateRender: false }, 6.0);
+      tl.fromTo("#s6-clock", { rotation: 8 }, { rotation: 0, duration: 2.4, ease: "sine.inOut", immediateRender: false }, 8.4);
+      kPop(tl, $("s6-wait"), 7.0);
+      tl.fromTo("#s6-wait", { scale: 1 }, { scale: 1.08, duration: 0.25, ease: "power2.out", immediateRender: false }, 9.1);
+      tl.fromTo("#s6-wait", { scale: 1.08 }, { scale: 1, duration: 0.3, ease: "power2.inOut", immediateRender: false }, 9.35);
+      tl.fromTo("#s6-hand", { opacity: 0, scale: 0.6, rotation: -6 }, { opacity: 1, scale: 1, rotation: -6, duration: 0.35, ease: "back.out(2)", immediateRender: false }, 8.4);
+      kDraw(tl, $("s6-arrowp"), 8.45, 0.45);
+
+      kSubs(tl, $("s6-subs"), [
+        { sub: "Étape 5 : **vérifiez**.", t0: 0.00, t1: 1.32 },
+        { sub: "Tapez votre adresse dans le navigateur : votre site **apparaît** !", t0: 1.94, t1: 5.09 },
+        { sub: "Sinon, patientez : cela peut prendre de quelques minutes à **24 heures**.", t0: 5.71, t1: 9.81 }
+      ], T);
+
+      render();
+      window.__timelines[FID] = tl;
+    })();
+  </script>
+</template>
+</body></html>

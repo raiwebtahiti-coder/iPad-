@@ -1,0 +1,406 @@
+<!doctype html>
+<html><head><meta charset="utf-8"></head><body>
+<template>
+  <style>
+    /* ===== kit netlify-tuto (CSS) ===== */
+@font-face { font-family: "Jakarta"; src: url("assets/fonts/Jakarta-800.woff2") format("woff2"); font-weight: 800; font-display: block; }
+@font-face { font-family: "Jakarta"; src: url("assets/fonts/Jakarta-700.woff2") format("woff2"); font-weight: 700; font-display: block; }
+@font-face { font-family: "Inter"; src: url("assets/fonts/Inter-500.woff2") format("woff2"); font-weight: 500; font-display: block; }
+@font-face { font-family: "Inter"; src: url("assets/fonts/Inter-600.woff2") format("woff2"); font-weight: 600; font-display: block; }
+@font-face { font-family: "Inter"; src: url("assets/fonts/Inter-800.woff2") format("woff2"); font-weight: 800; font-display: block; }
+@font-face { font-family: "Caveat"; src: url("assets/fonts/Caveat-700.woff2") format("woff2"); font-weight: 700; font-display: block; }
+@font-face { font-family: "Mono"; src: url("assets/fonts/Mono-500.woff2") format("woff2"); font-weight: 500; font-display: block; }
+
+/* palette : bleu nuit (texte), violet électrique (accent), surligneur jaune (mot clé), vert (réussi), orange (attention) */
+.k-layer { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+.k-abs { position: absolute; }
+.k-ground { position: absolute; inset: 0; background: #f6f7fb; overflow: hidden; }
+.k-blob { position: absolute; border-radius: 50%; filter: blur(80px); }
+.k-blob.k-b1 { left: 1180px; top: -260px; width: 900px; height: 700px; background: #e6dfff; }
+.k-blob.k-b2 { left: -280px; top: 640px; width: 900px; height: 640px; background: #dcecff; }
+.k-dots { position: absolute; left: 0; top: 0; width: 2000px; height: 1080px; opacity: .5;
+  background-image: radial-gradient(circle, rgba(21,23,58,.10) 1.3px, transparent 1.5px); background-size: 36px 36px; }
+
+.k-brand { position: absolute; left: 90px; top: 52px; font: 800 20px/1 "Inter"; letter-spacing: .28em; color: #15173a; white-space: nowrap; }
+.k-brand b { color: #6c47ff; }
+/* barre d'étapes (en haut à droite) : 6 pastilles ; .k-done = faite, .k-now = en cours */
+.k-stepper { position: absolute; right: 90px; top: 40px; display: flex; gap: 10px; }
+.k-stepper i { display: block; width: 46px; height: 46px; border-radius: 14px; background: #fff; border: 2px solid #e2e4ef;
+  font: 800 20px/42px "Jakarta"; font-style: normal; text-align: center; color: #9aa0bd; }
+.k-stepper i.k-done { background: #efeaff; border-color: #efeaff; color: #6c47ff; }
+.k-stepper i.k-now { background: #6c47ff; border-color: #6c47ff; color: #fff; box-shadow: 0 10px 24px -8px rgba(108,71,255,.7); }
+
+/* en-tête d'étape (colonne gauche) */
+.k-badge { display: inline-block; padding: 12px 22px; border-radius: 999px; background: #6c47ff; color: #fff; font: 800 24px/1 "Jakarta"; letter-spacing: .06em;
+  box-shadow: 0 12px 26px -10px rgba(108,71,255,.75); white-space: nowrap; }
+.k-title { font: 800 74px/1.04 "Jakarta"; letter-spacing: -0.02em; color: #15173a; }
+.k-title .k-mk { position: relative; display: inline-block; z-index: 0; }
+.k-mk-bg { position: absolute; left: -0.08em; right: -0.08em; top: 0.52em; bottom: 0.02em; background: #ffe36b; border-radius: 6px; z-index: -1;
+  transform-origin: 0 50%; transform: scaleX(0); }
+.k-lead { font: 500 30px/1.4 "Inter"; color: #5b6080; }
+
+/* carte, boutons, champs */
+.k-card { position: absolute; background: #fff; border-radius: 24px; box-shadow: 0 1px 0 rgba(21,23,58,.04), 0 26px 60px -24px rgba(21,23,58,.25), 0 6px 16px -8px rgba(21,23,58,.10); }
+.k-btn { position: absolute; border-radius: 12px; background: #6c47ff; color: #fff; font: 700 22px/1 "Inter"; display: flex; align-items: center; justify-content: center; white-space: nowrap; }
+.k-btn.k-dark { background: #15173a; }
+.k-btn.k-ghost { background: #fff; color: #15173a; border: 2px solid #e2e4ef; }
+.k-btn.k-green { background: #1fb871; }
+.k-input { position: absolute; border-radius: 12px; background: #fff; border: 2px solid #e2e4ef; font: 500 22px/1 "Inter"; color: #15173a; display: flex; align-items: center; padding: 0 18px; white-space: nowrap; overflow: hidden; }
+.k-input.k-focus { border-color: #6c47ff; box-shadow: 0 0 0 5px rgba(108,71,255,.15); }
+.k-caret { display: inline-block; width: 2px; height: 1.1em; background: #6c47ff; margin-left: 2px; vertical-align: -0.15em; }
+.k-skel { position: absolute; border-radius: 8px; background: #eef0f6; }
+
+/* fenêtre de navigateur (voir kBrowser) */
+.k-browser { position: absolute; background: #fff; border-radius: 22px; overflow: hidden;
+  box-shadow: 0 2px 0 rgba(21,23,58,.04), 0 40px 90px -30px rgba(21,23,58,.35), 0 10px 24px -12px rgba(21,23,58,.15); }
+.k-bbar { position: absolute; left: 0; top: 0; right: 0; height: 58px; background: #f2f3f8; border-bottom: 1px solid #e6e8f0; }
+.k-bbar i { position: absolute; top: 22px; width: 14px; height: 14px; border-radius: 50%; }
+.k-url { position: absolute; left: 120px; right: 120px; top: 12px; height: 34px; border-radius: 17px; background: #fff; border: 1px solid #e6e8f0;
+  font: 500 18px/32px "Inter"; color: #5b6080; padding-left: 40px; white-space: nowrap; overflow: hidden; }
+.k-url:before { content: ""; position: absolute; left: 16px; top: 10px; width: 10px; height: 12px; border: 2px solid #9aa0bd; border-radius: 3px; box-sizing: border-box; }
+.k-app { position: absolute; left: 0; top: 58px; right: 0; bottom: 0; background: #fff; }
+.k-apphead { position: absolute; left: 0; top: 0; right: 0; height: 64px; border-bottom: 1px solid #eef0f6; }
+.k-logo { position: absolute; left: 28px; top: 18px; font: 800 24px/28px "Jakarta"; color: #15173a; letter-spacing: -0.01em; }
+.k-logo:before { content: ""; display: inline-block; width: 22px; height: 22px; border-radius: 7px; background: linear-gradient(135deg,#2fd1c4,#1a9f9a); margin-right: 10px; vertical-align: -3px; }
+.k-side { position: absolute; left: 0; top: 64px; bottom: 0; width: 260px; border-right: 1px solid #eef0f6; padding: 22px 16px; }
+.k-side div { height: 44px; border-radius: 10px; font: 600 19px/44px "Inter"; color: #5b6080; padding-left: 16px; margin-bottom: 4px; white-space: nowrap; }
+.k-side div.k-on { background: #efeaff; color: #6c47ff; }
+.k-main { position: absolute; left: 260px; top: 64px; right: 0; bottom: 0; padding: 30px 36px; }
+.k-h { font: 800 32px/1.2 "Jakarta"; color: #15173a; white-space: nowrap; }
+.k-p { font: 500 20px/1.4 "Inter"; color: #5b6080; }
+.k-drop { position: absolute; border: 3px dashed #c9cde0; border-radius: 20px; background: #fafbff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+  font: 600 22px/1.3 "Inter"; color: #5b6080; text-align: center; }
+.k-drop.k-hot { border-color: #6c47ff; background: #f4f0ff; color: #6c47ff; }
+
+/* fichier .zip (icône) */
+.k-zip { position: absolute; width: 120px; height: 150px; }
+
+/* annotations façon YouTube */
+.k-hand { position: absolute; font: 700 50px/1 "Caveat"; color: #6c47ff; white-space: nowrap; }
+.k-hand.k-orange { color: #ff6a1a; }
+.k-spot { position: absolute; border: 4px solid #6c47ff; border-radius: 16px; box-shadow: 0 0 0 8px rgba(108,71,255,.14); opacity: 0; }
+.k-spot.k-orange { border-color: #ff6a1a; box-shadow: 0 0 0 8px rgba(255,106,26,.16); }
+.k-check { position: absolute; width: 64px; height: 64px; border-radius: 50%; background: #1fb871; box-shadow: 0 12px 26px -10px rgba(31,184,113,.8); opacity: 0; }
+.k-check:after { content: ""; position: absolute; left: 22px; top: 13px; width: 16px; height: 28px; border: solid #fff; border-width: 0 6px 6px 0; transform: rotate(45deg); }
+.k-pill { position: absolute; padding: 14px 24px; border-radius: 999px; font: 800 26px/1 "Inter"; white-space: nowrap; }
+.k-pill.k-ok { background: #e3f8ee; color: #128a52; }
+.k-pill.k-warn { background: #fff0e6; color: #d4520e; }
+
+/* curseur (pointe en 0,0) et onde de clic */
+.k-cursor { position: absolute; left: 0; top: 0; width: 36px; height: 44px; opacity: 0; transform-origin: 2px 2px; z-index: 50; }
+.k-ring { position: absolute; width: 90px; height: 90px; margin: -45px 0 0 -45px; border-radius: 50%; border: 4px solid #6c47ff; opacity: 0; z-index: 49; }
+
+/* sous-titres : pastille blanche en bas, centrée */
+.k-subs { position: absolute; left: 0; top: 948px; width: 1920px; height: 90px; }
+.k-sub { position: absolute; left: 0; right: 0; top: 0; margin: 0 auto; width: fit-content; max-width: 1500px; padding: 18px 34px; border-radius: 18px; background: rgba(21,23,58,.92);
+  color: #fff; font: 600 34px/1.25 "Inter"; text-align: center; white-space: nowrap; opacity: 0; }
+.k-sub b { color: #ffe36b; font-weight: 800; }
+/* ===== fin du kit (CSS) ===== */
+    #root { position: absolute; inset: 0; overflow: hidden; font-family: "Inter", sans-serif; color: #15173a; -webkit-font-smoothing: antialiased; }
+    #s5-world { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+    #s5-head { left: 110px; top: 300px; width: 600px; }
+    #s5-badge { opacity: 0; }
+    #s5-title { margin-top: 26px; }
+    #s5-title .s5-w { display: inline-block; opacity: 0; }
+
+    /* navigateur (zone principale : origine monde 980, 312 ; 850 x 598) */
+    #s5-bwrap { left: 720px; top: 190px; width: 1110px; height: 720px; opacity: 0; }
+    .s5-pane { position: absolute; left: 0; top: 0; width: 850px; height: 598px; }
+    .s5-pane .k-h { position: absolute; left: 36px; top: 30px; }
+    .s5-sk { height: 14px !important; margin: 15px 0 15px 16px; width: 150px; border-radius: 7px; background: #eef0f6; padding: 0 !important; }
+
+    /* aperçu du projet */
+    #s5-ovhero { position: absolute; left: 36px; top: 100px; width: 778px; height: 230px; border-radius: 16px; background: linear-gradient(120deg,#ece7ff,#dcecff); }
+    #s5-ovhero i { position: absolute; left: 34px; height: 22px; border-radius: 11px; background: rgba(21,23,58,.12); }
+    .s5-ovrow { position: absolute; left: 36px; width: 778px; height: 62px; border-radius: 12px; background: #f6f7fb; }
+    .s5-ovrow i { position: absolute; left: 22px; top: 24px; height: 14px; border-radius: 7px; background: #e6e8f0; }
+
+    /* Domain management */
+    #s5-dom { opacity: 0; }
+    #s5-prod { position: absolute; left: 36px; top: 100px; width: 778px; height: 140px; border-radius: 16px; background: #f6f7fb; }
+    #s5-prodl { position: absolute; left: 26px; top: 24px; font: 600 19px/1 "Inter"; color: #5b6080; white-space: nowrap; }
+    #s5-prodd { position: absolute; left: 26px; top: 70px; font: 500 28px/1 "Mono"; color: #15173a; white-space: nowrap; }
+    #s5-addbtn { left: 36px; top: 270px; width: 240px; height: 58px; opacity: 0; }
+
+    /* Add a domain */
+    #s5-addp { opacity: 0; }
+    #s5-input { left: 36px; top: 100px; width: 778px; height: 66px; box-sizing: border-box; font-size: 26px; opacity: 0; }
+    #s5-ph { position: absolute; left: 20px; top: 20px; color: #9aa0bd; }
+    #s5-typed { font: 500 26px/1 "Mono"; color: #15173a; }
+    #s5-row { position: absolute; left: 36px; top: 196px; width: 778px; height: 96px; border-radius: 16px; background: #fff; border: 2px solid #e2e4ef; box-sizing: border-box; opacity: 0; }
+    #s5-rname { position: absolute; left: 26px; top: 32px; font: 700 28px/1 "Inter"; color: #15173a; white-space: nowrap; }
+    #s5-avail { position: absolute; left: 330px; top: 26px; padding: 10px 16px; border-radius: 999px; background: #e3f8ee; color: #128a52; font: 800 19px/1 "Inter"; white-space: nowrap; opacity: 0; }
+    #s5-price { position: absolute; left: 498px; top: 34px; font: 600 22px/1 "Inter"; color: #9aa0bd; white-space: nowrap; opacity: 0; }
+    #s5-buy { left: 650px; top: 20px; width: 108px; height: 52px; opacity: 0; }
+    #s5-check { left: 672px; top: 14px; }
+
+    /* carte attention */
+    #s5-warn { position: absolute; left: 36px; top: 320px; width: 778px; height: 150px; border: 3px solid #ff6a1a; box-sizing: border-box; opacity: 0; }
+    #s5-cal { position: absolute; left: 26px; top: 26px; width: 92px; height: 92px; }
+    #s5-wtxt { position: absolute; left: 140px; top: 56px; font: 700 30px/1 "Inter"; color: #15173a; white-space: nowrap; }
+    #s5-tog { position: absolute; left: 658px; top: 51px; width: 84px; height: 44px; border-radius: 22px; background: #c9cde0; }
+    #s5-tog i { position: absolute; left: 6px; top: 5px; width: 34px; height: 34px; border-radius: 50%; background: #fff; box-shadow: 0 2px 6px rgba(21,23,58,.25); }
+
+    /* annotations, curseur */
+    #s5-bspot { left: 1654px; top: 518px; width: 132px; height: 76px; }
+    #s5-tspot { left: 1662px; top: 671px; width: 112px; height: 72px; }
+    #s5-hand { left: 1176px; top: 800px; opacity: 0; }
+    #s5-arrow { left: 1080px; top: 732px; width: 90px; height: 100px; overflow: visible; }
+  </style>
+
+  <div id="root" data-composition-id="s5-domaine" data-width="1920" data-height="1080">
+    <div id="s5-groundclip" class="k-layer clip" data-start="0" data-duration="15.493" data-track-index="0">
+      <div class="k-ground"><div class="k-blob k-b1" id="s5-b1"></div><div class="k-blob k-b2" id="s5-b2"></div><div class="k-dots" id="s5-dots"></div></div>
+    </div>
+
+    <div id="s5-stage" class="k-layer clip" data-start="0" data-duration="15.493" data-track-index="1">
+      <div id="s5-world">
+        <div id="s5-head" class="k-abs">
+          <div id="s5-badge" class="k-badge">ÉTAPE 4</div>
+          <div id="s5-title" class="k-title"><span class="s5-w">Votre</span> <span class="k-mk s5-w"><i class="k-mk-bg" id="s5-mk1"></i>nom</span><br><span class="k-mk s5-w"><i class="k-mk-bg" id="s5-mk2"></i>de domaine</span></div>
+        </div>
+
+        <div id="s5-bwrap" class="k-abs"></div>
+
+        <div id="s5-bspot" class="k-spot"></div>
+        <div id="s5-tspot" class="k-spot k-orange"></div>
+        <div id="s5-hand" class="k-hand k-orange">notez la date !</div>
+        <svg id="s5-arrow" class="k-abs" viewBox="0 0 90 100"><path id="s5-arrowp" d="M88 90 C 54 94, 24 70, 20 10 M20 10 L 8 32 M20 10 L 36 28" fill="none" stroke="#ff6a1a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/></svg>
+
+        <div id="s5-ring" class="k-ring"></div>
+        <svg id="s5-cursor" class="k-cursor" viewBox="0 0 36 44"><path d="M3 3 L3 36 L12 28 L18 41 L24 38 L18 26 L30 26 Z" fill="#15173a" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+
+    <div id="s5-chrome" class="k-layer clip" data-start="0" data-duration="15.493" data-track-index="2">
+      <div class="k-brand">RAI WEB DESIGN <b>·</b> TUTO</div>
+      <div id="s5-stepwrap"></div>
+    </div>
+    <div id="s5-subsclip" class="k-layer clip" data-start="0" data-duration="15.493" data-track-index="3">
+      <div id="s5-subs" class="k-subs"></div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var T = 15.493, FID = "s5-domaine";
+      /* ===== kit netlify-tuto (JS) ===== */
+/* caméra 2D : le point monde (c.x, c.y) au centre de l'écran, échelle c.s ; flou en px écran (c.b) */
+function kCam(world, c) {
+  world.style.transformOrigin = "0 0";
+  world.style.transform = "translate(" + (960 - c.x * c.s).toFixed(2) + "px," + (540 - c.y * c.s).toFixed(2) + "px) scale(" + c.s.toFixed(4) + ")";
+  world.style.filter = c.b > 0.3 ? "blur(" + c.b.toFixed(1) + "px)" : "none";
+}
+/* arrivée : un peu trop grand et flou, puis se pose (0,4 s expo.out) */
+function kArrive(tl, el, t, from, dy) {
+  tl.fromTo(el, { opacity: 0, scale: from || 1.12, y: dy || 0, filter: "blur(10px)" },
+    { opacity: 1, scale: 1, y: 0, filter: "blur(0px)", duration: 0.45, ease: "expo.out", immediateRender: t <= 0 }, t);
+}
+/* sortie rapide */
+function kLeave(tl, el, t, dy) {
+  tl.fromTo(el, { opacity: 1, y: 0, filter: "blur(0px)" }, { opacity: 0, y: dy || -24, filter: "blur(8px)", duration: 0.25, ease: "power2.in", immediateRender: false }, t);
+}
+/* surligneur jaune qui passe derrière un mot (.k-mk-bg) */
+function kMark(tl, bg, t) { tl.fromTo(bg, { scaleX: 0 }, { scaleX: 1, duration: 0.35, ease: "power2.out", immediateRender: false }, t); }
+/* cadre de mise en évidence (.k-spot) : se resserre sur la cible */
+function kSpot(tl, el, t, tOut) {
+  tl.fromTo(el, { opacity: 0, scale: 1.25 }, { opacity: 1, scale: 1, duration: 0.35, ease: "expo.out", immediateRender: false }, t);
+  if (tOut != null) tl.fromTo(el, { opacity: 1 }, { opacity: 0, duration: 0.2, ease: "power1.in", immediateRender: false }, tOut);
+}
+/* pastille / coche qui « pop » */
+function kPop(tl, el, t) { tl.fromTo(el, { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(2.2)", immediateRender: false }, t); }
+/* trait SVG qui se dessine (le chemin porte pathLength="100" stroke-dasharray="100" stroke-dashoffset="100") */
+function kDraw(tl, path, t, d) { tl.fromTo(path, { attr: { "stroke-dashoffset": 100 } }, { attr: { "stroke-dashoffset": 0 }, duration: d || 0.5, ease: "power2.out", immediateRender: false }, t); }
+/* frappe au clavier dans un élément (texte remplacé à chaque image ; caret optionnel) */
+function kType(tl, el, text, t, d, caret) {
+  var p = { n: 0 };
+  tl.fromTo(p, { n: 0 }, { n: text.length, duration: d, ease: "none", immediateRender: false,
+    onUpdate: function () { el.textContent = text.slice(0, Math.round(p.n)); if (caret) el.appendChild(caret); } }, t);
+}
+/* curseur : un seul geste courbe de (x0,y0) à (x1,y1) entre t et t+d, puis clic direct (pression + onde) */
+function kCursor(tl, el, x0, y0, x1, y1, t, d, ring) {
+  var p = { k: 0 };
+  var cx = (x0 + x1) / 2 + (y1 - y0) * 0.2, cy = (y0 + y1) / 2 - (x1 - x0) * 0.2;
+  function place() { var k = p.k, a = (1 - k) * (1 - k), b = 2 * (1 - k) * k, c = k * k; gsap.set(el, { x: a * x0 + b * cx + c * x1, y: a * y0 + b * cy + c * y1 }); }
+  tl.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "none", immediateRender: false }, t);
+  tl.fromTo(p, { k: 0 }, { k: 1, duration: d, ease: "power3.inOut", immediateRender: false, onUpdate: place }, t);
+  kClick(tl, el, t + d + 0.04, ring, x1, y1);
+  place();
+}
+/* déplacement du curseur déjà visible (sans le faire réapparaître), puis clic */
+function kCursorMove(tl, el, x0, y0, x1, y1, t, d, ring, noClick) {
+  var p = { k: 0 };
+  var cx = (x0 + x1) / 2 + (y1 - y0) * 0.15, cy = (y0 + y1) / 2 - (x1 - x0) * 0.15;
+  tl.fromTo(p, { k: 0 }, { k: 1, duration: d, ease: "power3.inOut", immediateRender: false,
+    onUpdate: function () { var k = p.k, a = (1 - k) * (1 - k), b = 2 * (1 - k) * k, c = k * k; gsap.set(el, { x: a * x0 + b * cx + c * x1, y: a * y0 + b * cy + c * y1 }); } }, t);
+  if (!noClick) kClick(tl, el, t + d + 0.04, ring, x1, y1);
+}
+function kClick(tl, el, t, ring, x, y) {
+  tl.fromTo(el, { scale: 1 }, { scale: 0.84, duration: 0.06, ease: "power2.in", immediateRender: false }, t);
+  tl.fromTo(el, { scale: 0.84 }, { scale: 1, duration: 0.14, ease: "power2.out", immediateRender: false }, t + 0.07);
+  if (ring) {
+    tl.set(ring, { left: x + "px", top: y + "px" }, t);
+    tl.fromTo(ring, { opacity: 1, scale: 0.3 }, { opacity: 0, scale: 1.5, duration: 0.5, ease: "power2.out", immediateRender: false }, t + 0.03);
+  }
+}
+/* sous-titres : une pastille par phrase, [{sub, t0, t1}] en temps LOCAUX ; le mot entre ** ** passe en jaune */
+function kSubs(tl, box, lines, tEnd) {
+  lines.forEach(function (ln, i) {
+    var d = document.createElement("div"); d.className = "k-sub";
+    d.innerHTML = ln.sub.replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
+    box.appendChild(d);
+    var tin = Math.max(0, ln.t0 - 0.08), tout = i < lines.length - 1 ? Math.min(lines[i + 1].t0 - 0.12, ln.t1 + 0.45) : Math.min(tEnd - 0.3, ln.t1 + 0.6);
+    tl.fromTo(d, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.2, ease: "power2.out", immediateRender: tin <= 0 }, tin);
+    tl.fromTo(d, { opacity: 1 }, { opacity: 0, duration: 0.15, ease: "power1.in", immediateRender: false }, tout);
+  });
+}
+/* barre d'étapes : step = 0 (intro) à 6 ; la pastille « en cours » s'allume à t */
+function kStepper(parent, step) {
+  var s = document.createElement("div"); s.className = "k-stepper";
+  for (var i = 1; i <= 6; i++) { var e = document.createElement("i"); e.textContent = i; if (i < step) e.className = "k-done"; s.appendChild(e); }
+  parent.appendChild(s); return s;
+}
+function kStepNow(tl, stepper, step, t) {
+  var e = stepper.children[step - 1]; if (!e) return;
+  tl.fromTo(e, { backgroundColor: "#ffffff", borderColor: "#e2e4ef", color: "#9aa0bd" }, { backgroundColor: "#6c47ff", borderColor: "#6c47ff", color: "#ffffff", duration: 0.2, ease: "none", immediateRender: false }, t);
+  tl.fromTo(e, { scale: 0.7 }, { scale: 1, duration: 0.4, ease: "back.out(2.5)", immediateRender: false }, t);
+}
+/* fenêtre de navigateur générique (aucun logo réel) : renvoie {win, url, app, head, side, main} */
+function kBrowser(parent, o) {
+  var w = document.createElement("div"); w.className = "k-browser"; w.id = o.id;
+  w.style.left = o.x + "px"; w.style.top = o.y + "px"; w.style.width = o.w + "px"; w.style.height = o.h + "px";
+  w.innerHTML = '<div class="k-bbar"><i style="left:24px;background:#ff6b6b"></i><i style="left:46px;background:#ffc94d"></i><i style="left:68px;background:#4fd28a"></i>' +
+    '<div class="k-url"><span>' + (o.url || "") + '</span></div></div><div class="k-app"></div>';
+  parent.appendChild(w);
+  var app = w.querySelector(".k-app");
+  var r = { win: w, url: w.querySelector(".k-url span"), app: app };
+  if (o.netlify) {
+    app.innerHTML = '<div class="k-apphead"><div class="k-logo">netlify</div></div>' +
+      (o.side ? '<div class="k-side">' + o.side.map(function (s, i) { return '<div' + (i === o.sideOn ? ' class="k-on"' : '') + '>' + s + '</div>'; }).join("") + '</div>' : '') +
+      '<div class="k-main"' + (o.side ? '' : ' style="left:0"') + '></div>';
+    r.head = app.querySelector(".k-apphead"); r.main = app.querySelector(".k-main"); r.side = app.querySelector(".k-side");
+  }
+  return r;
+}
+/* ===== fin du kit (JS) ===== */
+      var $ = function (id) { return document.getElementById(id); };
+      var tl = gsap.timeline({ paused: true, defaults: { lazy: false } });
+      tl.to({}, { duration: T }, 0);
+
+      // navigateur : projet « votre-entreprise »
+      var B = kBrowser($("s5-bwrap"), { id: "s5-browser", x: 0, y: 0, w: 1110, h: 720, url: "app.netlify.com/projects/votre-entreprise", netlify: true,
+        side: ["Project overview", "Deploys", "Domain management", "Project configuration"], sideOn: 0 });
+      B.side.children[0].id = "s5-si0"; B.side.children[2].id = "s5-si2";
+      B.side.insertAdjacentHTML("beforeend", '<div class="s5-sk" style="width:120px"></div><div class="s5-sk" style="width:150px"></div>');
+      var cal = '<svg id="s5-cal" viewBox="0 0 92 92"><rect x="6" y="14" width="80" height="72" rx="14" fill="#fff0e6" stroke="#ff6a1a" stroke-width="5"/>' +
+        '<path d="M6 36 H86" stroke="#ff6a1a" stroke-width="5"/><path d="M28 6 V22 M64 6 V22" stroke="#ff6a1a" stroke-width="6" stroke-linecap="round"/>' +
+        '<text x="46" y="70" text-anchor="middle" font-family="Jakarta" font-weight="800" font-size="24" fill="#d4520e">1 an</text></svg>';
+      B.main.innerHTML =
+        '<div class="s5-pane" id="s5-ov"><div class="k-h">votre-entreprise</div>' +
+          '<div id="s5-ovhero"><i style="top:60px;width:300px"></i><i style="top:100px;width:220px"></i><i style="top:160px;width:140px;height:40px;border-radius:10px;background:rgba(21,23,58,.2)"></i></div>' +
+          '<div class="s5-ovrow" style="top:356px"><i style="width:240px"></i></div><div class="s5-ovrow" style="top:436px"><i style="width:180px"></i></div></div>' +
+        '<div class="s5-pane" id="s5-dom"><div class="k-h">Domain management</div>' +
+          '<div id="s5-prod"><div id="s5-prodl">Production domains</div><div id="s5-prodd">votre-entreprise.netlify.app</div></div>' +
+          '<div class="k-btn" id="s5-addbtn">Add a domain</div></div>' +
+        '<div class="s5-pane" id="s5-addp"><div class="k-h">Add a domain</div>' +
+          '<div class="k-input k-focus" id="s5-input"><span id="s5-ph">Enter a domain</span><span id="s5-typed"></span></div>' +
+          '<div id="s5-row"><div id="s5-rname">votreentreprise.com</div><div id="s5-avail">● Available</div><div id="s5-price">≈ 1 500 F / an</div>' +
+            '<div class="k-btn" id="s5-buy"><span id="s5-buyt">Buy</span></div><div class="k-check" id="s5-check"></div></div>' +
+          '<div class="k-card" id="s5-warn">' + cal + '<div id="s5-wtxt">Renouvellement automatique</div><div id="s5-tog"><i></i></div></div></div>';
+      var stepper = kStepper($("s5-stepwrap"), 4);
+
+      // caméra : un proxy écrit par kCam ; dérive (d) × cadrages (z) + coutures entrée/sortie (e)
+      var world = $("s5-world"), cam = { x: 960, y: 540, s: 1, b: 0 };
+      var d = { s: 1 }, z = { x: 960, y: 540, s: 1 }, e = { x: -140, b: 14 };
+      function render() { cam.x = z.x + e.x; cam.y = z.y; cam.s = z.s * d.s; cam.b = e.b; kCam(world, cam); }
+      tl.eventCallback("onUpdate", render);
+      tl.fromTo(d, { s: 1 }, { s: 1.025, duration: T, ease: "none" }, 0);
+      tl.fromTo(e, { x: -140, b: 14 }, { x: 0, b: 0, duration: 0.45, ease: "expo.out" }, 0);
+      tl.fromTo(e, { x: 0, b: 0 }, { x: 140, b: 14, duration: 0.35, ease: "power2.in", immediateRender: false }, T - 0.35);
+      function camTo(t, a, b, dur, ease) { tl.fromTo(z, a, { x: b.x, y: b.y, s: b.s, duration: dur || 0.45, ease: ease || "power3.inOut", immediateRender: false }, t); }
+      var C0 = { x: 960, y: 540, s: 1 }, C1 = { x: 1030, y: 500, s: 1.32 }, C2 = { x: 1330, y: 500, s: 1.18 }, C3 = { x: 1480, y: 556, s: 1.5 },
+          C4 = { x: 1300, y: 640, s: 1.16 }, C5 = { x: 1260, y: 660, s: 1.22 };
+      camTo(2.9, C0, C1); camTo(5.35, C1, C2); camTo(7.65, C2, C3); camTo(9.45, C3, C4, 0.55); camTo(12.9, C4, C5, 1.6, "sine.inOut");
+
+      tl.fromTo("#s5-dots", { x: 0 }, { x: -72, duration: T, ease: "none" }, 0);
+      tl.fromTo("#s5-b1", { x: 0, y: 0 }, { x: -80, y: 40, duration: T, ease: "sine.inOut" }, 0);
+
+      // ligne 1 : « Étape 4 : votre propre nom de domaine. » (0.00 → 2.34)
+      kArrive(tl, $("s5-badge"), 0, 1.1);
+      Array.prototype.forEach.call(document.querySelectorAll("#s5-title .s5-w"), function (w, i) {
+        tl.fromTo(w, { opacity: 0, y: 40, filter: "blur(8px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.45, ease: "expo.out", immediateRender: false }, 0.3 + i * 0.22);
+      });
+      kStepNow(tl, stepper, 4, 0.3);
+      tl.fromTo("#s5-bwrap", { opacity: 0, x: 90, scale: 1.04, filter: "blur(10px)" },
+        { opacity: 1, x: 0, scale: 1, filter: "blur(0px)", duration: 0.6, ease: "expo.out", immediateRender: false }, 0.3);
+      kMark(tl, $("s5-mk1"), 1.3);
+      kMark(tl, $("s5-mk2"), 1.6);
+      tl.fromTo("#s5-ovhero", { scale: 1 }, { scale: 1.02, duration: 1.6, ease: "sine.inOut", immediateRender: false }, 1.0);
+
+      // ligne 2 : « Allez dans Domain management, puis Add a domain. » (2.96 → 5.28)
+      var cur = $("s5-cursor"), ring = $("s5-ring");
+      kCursor(tl, cur, 1880, 820, 830, 452, 3.2, 0.66, ring);
+      tl.fromTo("#s5-si2", { scale: 1 }, { scale: 0.94, duration: 0.07, ease: "power2.in", immediateRender: false }, 3.9);
+      tl.fromTo("#s5-si2", { scale: 0.94 }, { scale: 1, duration: 0.2, ease: "back.out(2)", immediateRender: false }, 3.97);
+      tl.fromTo("#s5-si2", { backgroundColor: "#ffffff", color: "#5b6080" }, { backgroundColor: "#efeaff", color: "#6c47ff", duration: 0.15, ease: "none", immediateRender: false }, 3.95);
+      tl.fromTo("#s5-si0", { backgroundColor: "#efeaff", color: "#6c47ff" }, { backgroundColor: "#ffffff", color: "#5b6080", duration: 0.15, ease: "none", immediateRender: false }, 3.95);
+      kLeave(tl, $("s5-ov"), 3.95, -14);
+      kArrive(tl, $("s5-dom"), 4.05, 1.04, 16);
+      kArrive(tl, $("s5-addbtn"), 4.35, 1.15, 10);
+      kCursorMove(tl, cur, 830, 452, 1136, 611, 4.3, 0.66, ring);
+      tl.fromTo("#s5-addbtn", { scale: 1 }, { scale: 0.94, duration: 0.07, ease: "power2.in", immediateRender: false }, 5.0);
+      tl.fromTo("#s5-addbtn", { scale: 0.94 }, { scale: 1, duration: 0.2, ease: "back.out(2)", immediateRender: false }, 5.07);
+      kLeave(tl, $("s5-dom"), 5.3, -14);
+
+      // ligne 3 : « Tapez le nom que vous voulez. S'il est libre, cliquez sur Buy. » (5.90 → 9.13)
+      kCursorMove(tl, cur, 1136, 611, 1440, 760, 5.35, 0.6, null, true);
+      tl.fromTo("#s5-addp", { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "power1.out", immediateRender: false }, 5.45);
+      kArrive(tl, $("s5-input"), 5.6, 1.06, 14);
+      tl.fromTo("#s5-ph", { opacity: 1 }, { opacity: 0, duration: 0.08, ease: "none", immediateRender: false }, 6.05);
+      var caret = document.createElement("i"); caret.className = "k-caret";
+      kType(tl, $("s5-typed"), "votreentreprise.com", 6.1, 1.2, caret);
+      tl.fromTo(caret, { opacity: 1 }, { opacity: 0, duration: 0.01, immediateRender: false }, 7.6);
+      kArrive(tl, $("s5-row"), 7.5, 1.08, 16);
+      kPop(tl, $("s5-avail"), 7.75);
+      kArrive(tl, $("s5-price"), 7.85, 1.1, 8);
+      kArrive(tl, $("s5-buy"), 7.95, 1.2, 8);
+      kSpot(tl, $("s5-bspot"), 8.15, 8.85);
+      kCursorMove(tl, cur, 1440, 760, 1720, 556, 7.9, 0.66, ring);
+      tl.fromTo("#s5-buy", { scale: 1 }, { scale: 0.94, duration: 0.07, ease: "power2.in", immediateRender: false }, 8.6);
+      tl.fromTo("#s5-buy", { scale: 0.94 }, { scale: 1, duration: 0.2, ease: "back.out(2)", immediateRender: false }, 8.67);
+      tl.fromTo("#s5-buy", { backgroundColor: "#6c47ff" }, { backgroundColor: "#1fb871", duration: 0.15, ease: "none", immediateRender: false }, 8.7);
+      tl.fromTo("#s5-buyt", { opacity: 1 }, { opacity: 0, duration: 0.1, ease: "none", immediateRender: false }, 8.7);
+      kPop(tl, $("s5-check"), 8.75);
+      tl.fromTo("#s5-row", { borderColor: "#e2e4ef" }, { borderColor: "#1fb871", duration: 0.25, ease: "none", immediateRender: false }, 8.75);
+      kCursorMove(tl, cur, 1720, 556, 1800, 760, 9.0, 0.5, null, true);
+      tl.fromTo(cur, { opacity: 1 }, { opacity: 0, duration: 0.2, ease: "power1.in", immediateRender: false }, 9.3);
+
+      // ligne 4 : « Attention : le renouvellement est automatique chaque année. Notez bien la date. » (9.75 → 13.99)
+      kArrive(tl, $("s5-warn"), 9.8, 1.08, 20);
+      tl.fromTo("#s5-tog i", { x: 0 }, { x: 38, duration: 0.3, ease: "back.out(2)", immediateRender: false }, 10.25);
+      tl.fromTo("#s5-tog", { backgroundColor: "#c9cde0" }, { backgroundColor: "#6c47ff", duration: 0.2, ease: "none", immediateRender: false }, 10.25);
+      kSpot(tl, $("s5-tspot"), 10.6);
+      tl.fromTo("#s5-cal", { scale: 1, rotation: 0 }, { scale: 1.12, rotation: -6, duration: 0.25, ease: "power2.out", immediateRender: false }, 11.2);
+      tl.fromTo("#s5-cal", { scale: 1.12, rotation: -6 }, { scale: 1, rotation: 0, duration: 0.4, ease: "back.out(2)", immediateRender: false }, 11.45);
+      tl.fromTo("#s5-warn", { borderColor: "#ff6a1a" }, { borderColor: "#ff9a5c", duration: 0.5, ease: "sine.inOut", immediateRender: false }, 11.9);
+      tl.fromTo("#s5-hand", { opacity: 0, scale: 0.6, rotation: -5 }, { opacity: 1, scale: 1, rotation: -5, duration: 0.35, ease: "back.out(2)", immediateRender: false }, 12.4);
+      kDraw(tl, $("s5-arrowp"), 12.45, 0.45);
+      tl.fromTo("#s5-warn", { borderColor: "#ff9a5c" }, { borderColor: "#ff6a1a", duration: 0.4, ease: "sine.inOut", immediateRender: false }, 12.6);
+      tl.fromTo("#s5-cal", { scale: 1 }, { scale: 1.1, duration: 0.25, ease: "power2.out", immediateRender: false }, 13.4);
+      tl.fromTo("#s5-cal", { scale: 1.1 }, { scale: 1, duration: 0.35, ease: "power2.inOut", immediateRender: false }, 13.65);
+      tl.fromTo("#s5-hand", { scale: 1 }, { scale: 1.06, duration: 0.3, ease: "power2.out", immediateRender: false }, 14.1);
+      tl.fromTo("#s5-hand", { scale: 1.06 }, { scale: 1, duration: 0.4, ease: "power2.inOut", immediateRender: false }, 14.4);
+
+      kSubs(tl, $("s5-subs"), [
+        { sub: "Étape 4 : votre propre **nom de domaine**.", t0: 0.00, t1: 2.34 },
+        { sub: "Allez dans **Domain management**, puis Add a domain.", t0: 2.96, t1: 5.28 },
+        { sub: "Tapez le nom que vous voulez. S'il est libre, cliquez sur **Buy**.", t0: 5.90, t1: 9.13 },
+        { sub: "Attention : le renouvellement est **automatique** chaque année. Notez bien la date.", t0: 9.75, t1: 13.99 }
+      ], T);
+
+      render();
+      window.__timelines[FID] = tl;
+    })();
+  </script>
+</template>
+</body></html>

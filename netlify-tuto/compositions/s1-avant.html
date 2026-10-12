@@ -1,0 +1,406 @@
+<!doctype html>
+<html><head><meta charset="utf-8"></head><body>
+<template>
+  <style>
+    /* ===== kit netlify-tuto (CSS) ===== */
+@font-face { font-family: "Jakarta"; src: url("assets/fonts/Jakarta-800.woff2") format("woff2"); font-weight: 800; font-display: block; }
+@font-face { font-family: "Jakarta"; src: url("assets/fonts/Jakarta-700.woff2") format("woff2"); font-weight: 700; font-display: block; }
+@font-face { font-family: "Inter"; src: url("assets/fonts/Inter-500.woff2") format("woff2"); font-weight: 500; font-display: block; }
+@font-face { font-family: "Inter"; src: url("assets/fonts/Inter-600.woff2") format("woff2"); font-weight: 600; font-display: block; }
+@font-face { font-family: "Inter"; src: url("assets/fonts/Inter-800.woff2") format("woff2"); font-weight: 800; font-display: block; }
+@font-face { font-family: "Caveat"; src: url("assets/fonts/Caveat-700.woff2") format("woff2"); font-weight: 700; font-display: block; }
+@font-face { font-family: "Mono"; src: url("assets/fonts/Mono-500.woff2") format("woff2"); font-weight: 500; font-display: block; }
+
+/* palette : bleu nuit (texte), violet électrique (accent), surligneur jaune (mot clé), vert (réussi), orange (attention) */
+.k-layer { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+.k-abs { position: absolute; }
+.k-ground { position: absolute; inset: 0; background: #f6f7fb; overflow: hidden; }
+.k-blob { position: absolute; border-radius: 50%; filter: blur(80px); }
+.k-blob.k-b1 { left: 1180px; top: -260px; width: 900px; height: 700px; background: #e6dfff; }
+.k-blob.k-b2 { left: -280px; top: 640px; width: 900px; height: 640px; background: #dcecff; }
+.k-dots { position: absolute; left: 0; top: 0; width: 2000px; height: 1080px; opacity: .5;
+  background-image: radial-gradient(circle, rgba(21,23,58,.10) 1.3px, transparent 1.5px); background-size: 36px 36px; }
+
+.k-brand { position: absolute; left: 90px; top: 52px; font: 800 20px/1 "Inter"; letter-spacing: .28em; color: #15173a; white-space: nowrap; }
+.k-brand b { color: #6c47ff; }
+/* barre d'étapes (en haut à droite) : 6 pastilles ; .k-done = faite, .k-now = en cours */
+.k-stepper { position: absolute; right: 90px; top: 40px; display: flex; gap: 10px; }
+.k-stepper i { display: block; width: 46px; height: 46px; border-radius: 14px; background: #fff; border: 2px solid #e2e4ef;
+  font: 800 20px/42px "Jakarta"; font-style: normal; text-align: center; color: #9aa0bd; }
+.k-stepper i.k-done { background: #efeaff; border-color: #efeaff; color: #6c47ff; }
+.k-stepper i.k-now { background: #6c47ff; border-color: #6c47ff; color: #fff; box-shadow: 0 10px 24px -8px rgba(108,71,255,.7); }
+
+/* en-tête d'étape (colonne gauche) */
+.k-badge { display: inline-block; padding: 12px 22px; border-radius: 999px; background: #6c47ff; color: #fff; font: 800 24px/1 "Jakarta"; letter-spacing: .06em;
+  box-shadow: 0 12px 26px -10px rgba(108,71,255,.75); white-space: nowrap; }
+.k-title { font: 800 74px/1.04 "Jakarta"; letter-spacing: -0.02em; color: #15173a; }
+.k-title .k-mk { position: relative; display: inline-block; z-index: 0; }
+.k-mk-bg { position: absolute; left: -0.08em; right: -0.08em; top: 0.52em; bottom: 0.02em; background: #ffe36b; border-radius: 6px; z-index: -1;
+  transform-origin: 0 50%; transform: scaleX(0); }
+.k-lead { font: 500 30px/1.4 "Inter"; color: #5b6080; }
+
+/* carte, boutons, champs */
+.k-card { position: absolute; background: #fff; border-radius: 24px; box-shadow: 0 1px 0 rgba(21,23,58,.04), 0 26px 60px -24px rgba(21,23,58,.25), 0 6px 16px -8px rgba(21,23,58,.10); }
+.k-btn { position: absolute; border-radius: 12px; background: #6c47ff; color: #fff; font: 700 22px/1 "Inter"; display: flex; align-items: center; justify-content: center; white-space: nowrap; }
+.k-btn.k-dark { background: #15173a; }
+.k-btn.k-ghost { background: #fff; color: #15173a; border: 2px solid #e2e4ef; }
+.k-btn.k-green { background: #1fb871; }
+.k-input { position: absolute; border-radius: 12px; background: #fff; border: 2px solid #e2e4ef; font: 500 22px/1 "Inter"; color: #15173a; display: flex; align-items: center; padding: 0 18px; white-space: nowrap; overflow: hidden; }
+.k-input.k-focus { border-color: #6c47ff; box-shadow: 0 0 0 5px rgba(108,71,255,.15); }
+.k-caret { display: inline-block; width: 2px; height: 1.1em; background: #6c47ff; margin-left: 2px; vertical-align: -0.15em; }
+.k-skel { position: absolute; border-radius: 8px; background: #eef0f6; }
+
+/* fenêtre de navigateur (voir kBrowser) */
+.k-browser { position: absolute; background: #fff; border-radius: 22px; overflow: hidden;
+  box-shadow: 0 2px 0 rgba(21,23,58,.04), 0 40px 90px -30px rgba(21,23,58,.35), 0 10px 24px -12px rgba(21,23,58,.15); }
+.k-bbar { position: absolute; left: 0; top: 0; right: 0; height: 58px; background: #f2f3f8; border-bottom: 1px solid #e6e8f0; }
+.k-bbar i { position: absolute; top: 22px; width: 14px; height: 14px; border-radius: 50%; }
+.k-url { position: absolute; left: 120px; right: 120px; top: 12px; height: 34px; border-radius: 17px; background: #fff; border: 1px solid #e6e8f0;
+  font: 500 18px/32px "Inter"; color: #5b6080; padding-left: 40px; white-space: nowrap; overflow: hidden; }
+.k-url:before { content: ""; position: absolute; left: 16px; top: 10px; width: 10px; height: 12px; border: 2px solid #9aa0bd; border-radius: 3px; box-sizing: border-box; }
+.k-app { position: absolute; left: 0; top: 58px; right: 0; bottom: 0; background: #fff; }
+.k-apphead { position: absolute; left: 0; top: 0; right: 0; height: 64px; border-bottom: 1px solid #eef0f6; }
+.k-logo { position: absolute; left: 28px; top: 18px; font: 800 24px/28px "Jakarta"; color: #15173a; letter-spacing: -0.01em; }
+.k-logo:before { content: ""; display: inline-block; width: 22px; height: 22px; border-radius: 7px; background: linear-gradient(135deg,#2fd1c4,#1a9f9a); margin-right: 10px; vertical-align: -3px; }
+.k-side { position: absolute; left: 0; top: 64px; bottom: 0; width: 260px; border-right: 1px solid #eef0f6; padding: 22px 16px; }
+.k-side div { height: 44px; border-radius: 10px; font: 600 19px/44px "Inter"; color: #5b6080; padding-left: 16px; margin-bottom: 4px; white-space: nowrap; }
+.k-side div.k-on { background: #efeaff; color: #6c47ff; }
+.k-main { position: absolute; left: 260px; top: 64px; right: 0; bottom: 0; padding: 30px 36px; }
+.k-h { font: 800 32px/1.2 "Jakarta"; color: #15173a; white-space: nowrap; }
+.k-p { font: 500 20px/1.4 "Inter"; color: #5b6080; }
+.k-drop { position: absolute; border: 3px dashed #c9cde0; border-radius: 20px; background: #fafbff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+  font: 600 22px/1.3 "Inter"; color: #5b6080; text-align: center; }
+.k-drop.k-hot { border-color: #6c47ff; background: #f4f0ff; color: #6c47ff; }
+
+/* fichier .zip (icône) */
+.k-zip { position: absolute; width: 120px; height: 150px; }
+
+/* annotations façon YouTube */
+.k-hand { position: absolute; font: 700 50px/1 "Caveat"; color: #6c47ff; white-space: nowrap; }
+.k-hand.k-orange { color: #ff6a1a; }
+.k-spot { position: absolute; border: 4px solid #6c47ff; border-radius: 16px; box-shadow: 0 0 0 8px rgba(108,71,255,.14); opacity: 0; }
+.k-spot.k-orange { border-color: #ff6a1a; box-shadow: 0 0 0 8px rgba(255,106,26,.16); }
+.k-check { position: absolute; width: 64px; height: 64px; border-radius: 50%; background: #1fb871; box-shadow: 0 12px 26px -10px rgba(31,184,113,.8); opacity: 0; }
+.k-check:after { content: ""; position: absolute; left: 22px; top: 13px; width: 16px; height: 28px; border: solid #fff; border-width: 0 6px 6px 0; transform: rotate(45deg); }
+.k-pill { position: absolute; padding: 14px 24px; border-radius: 999px; font: 800 26px/1 "Inter"; white-space: nowrap; }
+.k-pill.k-ok { background: #e3f8ee; color: #128a52; }
+.k-pill.k-warn { background: #fff0e6; color: #d4520e; }
+
+/* curseur (pointe en 0,0) et onde de clic */
+.k-cursor { position: absolute; left: 0; top: 0; width: 36px; height: 44px; opacity: 0; transform-origin: 2px 2px; z-index: 50; }
+.k-ring { position: absolute; width: 90px; height: 90px; margin: -45px 0 0 -45px; border-radius: 50%; border: 4px solid #6c47ff; opacity: 0; z-index: 49; }
+
+/* sous-titres : pastille blanche en bas, centrée */
+.k-subs { position: absolute; left: 0; top: 948px; width: 1920px; height: 90px; }
+.k-sub { position: absolute; left: 0; right: 0; top: 0; margin: 0 auto; width: fit-content; max-width: 1500px; padding: 18px 34px; border-radius: 18px; background: rgba(21,23,58,.92);
+  color: #fff; font: 600 34px/1.25 "Inter"; text-align: center; white-space: nowrap; opacity: 0; }
+.k-sub b { color: #ffe36b; font-weight: 800; }
+/* ===== fin du kit (CSS) ===== */
+    #root { position: absolute; inset: 0; overflow: hidden; font-family: "Inter", sans-serif; color: #15173a; -webkit-font-smoothing: antialiased; }
+    #s1-world { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+    #s1-head { left: 110px; top: 300px; width: 560px; }
+    #s1-badge { opacity: 0; }
+    #s1-title { margin-top: 26px; }
+    #s1-title .s1-w { display: inline-block; opacity: 0; }
+    .s1-slot { position: absolute; top: 260px; width: 340px; height: 380px; box-sizing: border-box; border: 3px dashed #c9cde0; border-radius: 24px; background: rgba(255,255,255,.45);
+      font: 800 120px/374px "Jakarta"; color: #d9dcea; text-align: center; opacity: 0; }
+    .s1-card { top: 260px; width: 340px; height: 380px; opacity: 0; }
+    .s1-icon { position: absolute; left: 100px; top: 46px; width: 140px; height: 140px; overflow: visible; }
+    .s1-fill { opacity: 0; }
+    .s1-ct { position: absolute; left: 20px; right: 20px; top: 222px; font: 800 32px/1.1 "Jakarta"; color: #15173a; text-align: center; white-space: nowrap; }
+    .s1-cl { position: absolute; left: 20px; right: 20px; top: 272px; font: 500 21px/1.35 "Inter"; color: #8a8fab; text-align: center; }
+    .s1-card .k-check { left: 296px; top: -22px; }
+    .s1-row { left: 755px; width: 1040px; height: 150px; opacity: 0; }
+    .s1-ri { position: absolute; left: 40px; top: 39px; width: 72px; height: 72px; border-radius: 20px; background: #efeaff; }
+    .s1-ri svg { position: absolute; left: 14px; top: 14px; width: 44px; height: 44px; }
+    .s1-rl { position: absolute; left: 136px; top: 51px; font: 800 42px/48px "Jakarta"; color: #15173a; white-space: nowrap; }
+    .s1-rs { position: absolute; right: 48px; top: 63px; width: 220px; height: 24px; }
+    .s1-price { position: absolute; right: 48px; top: 45px; font: 800 54px/60px "Jakarta"; white-space: nowrap; opacity: 0; letter-spacing: -0.01em; }
+    #s1-p1 { color: #1fb871; }
+    #s1-p2 { color: #6c47ff; }
+    #s1-h1 { left: 1180px; top: 486px; color: #1fb871; opacity: 0; }
+    #s1-a1 { left: 1372px; top: 486px; width: 100px; height: 60px; overflow: visible; }
+    #s1-h2 { left: 1270px; top: 808px; opacity: 0; }
+    #s1-a2 { left: 1520px; top: 772px; width: 110px; height: 80px; overflow: visible; }
+  </style>
+
+  <div id="root" data-composition-id="s1-avant" data-width="1920" data-height="1080">
+    <div id="s1-groundclip" class="k-layer clip" data-start="0" data-duration="21.358" data-track-index="0">
+      <div class="k-ground"><div class="k-blob k-b1" id="s1-b1"></div><div class="k-blob k-b2" id="s1-b2"></div><div class="k-dots" id="s1-dots"></div></div>
+    </div>
+
+    <div id="s1-stage" class="k-layer clip" data-start="0" data-duration="21.358" data-track-index="1">
+      <div id="s1-world">
+        <div id="s1-head" class="k-abs">
+          <div id="s1-badge" class="k-badge">AVANT DE COMMENCER</div>
+          <div id="s1-title" class="k-title"><span class="s1-w">Il</span> <span class="s1-w">vous</span> <span class="s1-w">faut</span> <span class="k-mk s1-w"><i class="k-mk-bg" id="s1-mk"></i>3 choses</span></div>
+        </div>
+
+        <div class="s1-slot" id="s1-slot1" style="left:720px">1</div>
+        <div class="s1-slot" id="s1-slot2" style="left:1105px">2</div>
+        <div class="s1-slot" id="s1-slot3" style="left:1490px">3</div>
+
+        <div class="k-card s1-card" id="s1-card1" style="left:720px">
+          <svg class="s1-icon" viewBox="0 0 140 140">
+            <path class="s1-fill" d="M34 12 H86 L110 36 V128 H34 Z" fill="#f4f0ff"/>
+            <path class="s1-draw" d="M34 12 H86 L110 36 V128 H34 Z" fill="none" stroke="#15173a" stroke-width="5" stroke-linejoin="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
+            <path class="s1-draw" d="M86 12 V36 H110" fill="none" stroke="#15173a" stroke-width="5" stroke-linejoin="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
+            <g class="s1-fill" fill="#15173a">
+              <rect x="64" y="16" width="8" height="6" rx="1.5"/><rect x="70" y="25" width="8" height="6" rx="1.5"/><rect x="64" y="34" width="8" height="6" rx="1.5"/>
+              <rect x="70" y="43" width="8" height="6" rx="1.5"/><rect x="64" y="52" width="8" height="6" rx="1.5"/><rect x="70" y="61" width="8" height="6" rx="1.5"/>
+              <rect x="63" y="70" width="16" height="22" rx="4"/>
+            </g>
+            <g class="s1-fill"><rect x="44" y="102" width="56" height="22" rx="7" fill="#6c47ff"/><text x="72" y="118" text-anchor="middle" font-family="Inter" font-weight="800" font-size="15" fill="#fff">.zip</text></g>
+          </svg>
+          <div class="s1-ct">Le fichier du site</div>
+          <div class="s1-cl">celui que je vous ai envoyé</div>
+          <div class="k-check" id="s1-chk1"></div>
+        </div>
+
+        <div class="k-card s1-card" id="s1-card2" style="left:1105px">
+          <svg class="s1-icon" viewBox="0 0 140 140">
+            <path class="s1-fill" d="M28 26 H112 V98 H28 Z" fill="#f4f0ff"/>
+            <path class="s1-draw" d="M36 26 H104 Q112 26 112 34 V98 H28 V34 Q28 26 36 26 Z" fill="none" stroke="#15173a" stroke-width="5" stroke-linejoin="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
+            <path class="s1-draw" d="M10 106 H130 L122 120 H18 Z" fill="none" stroke="#15173a" stroke-width="5" stroke-linejoin="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
+            <path class="s1-draw" d="M48 46 H92 V82 H48 Z M48 46 L70 66 L92 46" fill="none" stroke="#6c47ff" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
+            <g class="s1-fill"><circle cx="112" cy="26" r="18" fill="#6c47ff"/><text x="112" y="33" text-anchor="middle" font-family="Inter" font-weight="800" font-size="21" fill="#fff">@</text></g>
+          </svg>
+          <div class="s1-ct">Ordinateur + mail</div>
+          <div class="s1-cl">pour créer votre compte</div>
+          <div class="k-check" id="s1-chk2"></div>
+        </div>
+
+        <div class="k-card s1-card" id="s1-card3" style="left:1490px">
+          <svg class="s1-icon" viewBox="0 0 140 140">
+            <rect class="s1-fill" x="12" y="30" width="116" height="80" rx="12" fill="#f4f0ff"/>
+            <rect class="s1-fill" x="12" y="46" width="116" height="15" fill="#15173a"/>
+            <path class="s1-draw" d="M24 30 H116 Q128 30 128 42 V98 Q128 110 116 110 H24 Q12 110 12 98 V42 Q12 30 24 30 Z" fill="none" stroke="#15173a" stroke-width="5" stroke-linejoin="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
+            <rect class="s1-fill" x="26" y="74" width="26" height="20" rx="4" fill="#ffe36b"/>
+            <path class="s1-draw" d="M68 90 H112" fill="none" stroke="#6c47ff" stroke-width="5" stroke-linecap="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
+          </svg>
+          <div class="s1-ct">Carte bancaire</div>
+          <div class="s1-cl">pour le nom de domaine</div>
+          <div class="k-check" id="s1-chk3"></div>
+        </div>
+
+        <div class="k-card s1-row" id="s1-row1" style="top:440px">
+          <div class="s1-ri"><svg viewBox="0 0 44 44"><rect x="5" y="6" width="34" height="13" rx="4" fill="none" stroke="#6c47ff" stroke-width="3.5"/><rect x="5" y="25" width="34" height="13" rx="4" fill="none" stroke="#6c47ff" stroke-width="3.5"/><circle cx="12" cy="12.5" r="2.4" fill="#15173a"/><circle cx="12" cy="31.5" r="2.4" fill="#15173a"/></svg></div>
+          <div class="s1-rl">Hébergement</div>
+          <div class="k-skel s1-rs" id="s1-sk1"></div>
+          <div class="s1-price" id="s1-p1">0 F / mois</div>
+        </div>
+        <div class="k-card s1-row" id="s1-row2" style="top:630px">
+          <div class="s1-ri"><svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="16" fill="none" stroke="#6c47ff" stroke-width="3.5"/><ellipse cx="22" cy="22" rx="7" ry="16" fill="none" stroke="#6c47ff" stroke-width="3"/><path d="M7 22 H37" stroke="#15173a" stroke-width="3" stroke-linecap="round"/></svg></div>
+          <div class="s1-rl">Nom de domaine</div>
+          <div class="k-skel s1-rs" id="s1-sk2"></div>
+          <div class="s1-price" id="s1-p2">≈ <span id="s1-num">0</span> F / an</div>
+        </div>
+
+        <div id="s1-h1" class="k-hand k-abs">gratuit !</div>
+        <svg id="s1-a1" class="k-abs" viewBox="0 0 100 60"><path id="s1-a1p" d="M8 34 C 30 22, 58 20, 84 30 M84 30 L 66 16 M84 30 L 68 44" fill="none" stroke="#1fb871" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/></svg>
+        <div id="s1-h2" class="k-hand k-abs">le seul coût</div>
+        <svg id="s1-a2" class="k-abs" viewBox="0 0 110 80"><path id="s1-a2p" d="M10 60 C 50 66, 80 50, 88 14 M88 14 L 74 30 M88 14 L 100 32" fill="none" stroke="#6c47ff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/></svg>
+      </div>
+    </div>
+
+    <div id="s1-chrome" class="k-layer clip" data-start="0" data-duration="21.358" data-track-index="2">
+      <div class="k-brand">RAI WEB DESIGN <b>·</b> TUTO</div>
+      <div id="s1-stepwrap"></div>
+    </div>
+    <div id="s1-subsclip" class="k-layer clip" data-start="0" data-duration="21.358" data-track-index="3">
+      <div id="s1-subs" class="k-subs"></div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var T = 21.358, FID = "s1-avant";
+      /* ===== kit netlify-tuto (JS) ===== */
+/* caméra 2D : le point monde (c.x, c.y) au centre de l'écran, échelle c.s ; flou en px écran (c.b) */
+function kCam(world, c) {
+  world.style.transformOrigin = "0 0";
+  world.style.transform = "translate(" + (960 - c.x * c.s).toFixed(2) + "px," + (540 - c.y * c.s).toFixed(2) + "px) scale(" + c.s.toFixed(4) + ")";
+  world.style.filter = c.b > 0.3 ? "blur(" + c.b.toFixed(1) + "px)" : "none";
+}
+/* arrivée : un peu trop grand et flou, puis se pose (0,4 s expo.out) */
+function kArrive(tl, el, t, from, dy) {
+  tl.fromTo(el, { opacity: 0, scale: from || 1.12, y: dy || 0, filter: "blur(10px)" },
+    { opacity: 1, scale: 1, y: 0, filter: "blur(0px)", duration: 0.45, ease: "expo.out", immediateRender: t <= 0 }, t);
+}
+/* sortie rapide */
+function kLeave(tl, el, t, dy) {
+  tl.fromTo(el, { opacity: 1, y: 0, filter: "blur(0px)" }, { opacity: 0, y: dy || -24, filter: "blur(8px)", duration: 0.25, ease: "power2.in", immediateRender: false }, t);
+}
+/* surligneur jaune qui passe derrière un mot (.k-mk-bg) */
+function kMark(tl, bg, t) { tl.fromTo(bg, { scaleX: 0 }, { scaleX: 1, duration: 0.35, ease: "power2.out", immediateRender: false }, t); }
+/* cadre de mise en évidence (.k-spot) : se resserre sur la cible */
+function kSpot(tl, el, t, tOut) {
+  tl.fromTo(el, { opacity: 0, scale: 1.25 }, { opacity: 1, scale: 1, duration: 0.35, ease: "expo.out", immediateRender: false }, t);
+  if (tOut != null) tl.fromTo(el, { opacity: 1 }, { opacity: 0, duration: 0.2, ease: "power1.in", immediateRender: false }, tOut);
+}
+/* pastille / coche qui « pop » */
+function kPop(tl, el, t) { tl.fromTo(el, { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(2.2)", immediateRender: false }, t); }
+/* trait SVG qui se dessine (le chemin porte pathLength="100" stroke-dasharray="100" stroke-dashoffset="100") */
+function kDraw(tl, path, t, d) { tl.fromTo(path, { attr: { "stroke-dashoffset": 100 } }, { attr: { "stroke-dashoffset": 0 }, duration: d || 0.5, ease: "power2.out", immediateRender: false }, t); }
+/* frappe au clavier dans un élément (texte remplacé à chaque image ; caret optionnel) */
+function kType(tl, el, text, t, d, caret) {
+  var p = { n: 0 };
+  tl.fromTo(p, { n: 0 }, { n: text.length, duration: d, ease: "none", immediateRender: false,
+    onUpdate: function () { el.textContent = text.slice(0, Math.round(p.n)); if (caret) el.appendChild(caret); } }, t);
+}
+/* curseur : un seul geste courbe de (x0,y0) à (x1,y1) entre t et t+d, puis clic direct (pression + onde) */
+function kCursor(tl, el, x0, y0, x1, y1, t, d, ring) {
+  var p = { k: 0 };
+  var cx = (x0 + x1) / 2 + (y1 - y0) * 0.2, cy = (y0 + y1) / 2 - (x1 - x0) * 0.2;
+  function place() { var k = p.k, a = (1 - k) * (1 - k), b = 2 * (1 - k) * k, c = k * k; gsap.set(el, { x: a * x0 + b * cx + c * x1, y: a * y0 + b * cy + c * y1 }); }
+  tl.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "none", immediateRender: false }, t);
+  tl.fromTo(p, { k: 0 }, { k: 1, duration: d, ease: "power3.inOut", immediateRender: false, onUpdate: place }, t);
+  kClick(tl, el, t + d + 0.04, ring, x1, y1);
+  place();
+}
+/* déplacement du curseur déjà visible (sans le faire réapparaître), puis clic */
+function kCursorMove(tl, el, x0, y0, x1, y1, t, d, ring, noClick) {
+  var p = { k: 0 };
+  var cx = (x0 + x1) / 2 + (y1 - y0) * 0.15, cy = (y0 + y1) / 2 - (x1 - x0) * 0.15;
+  tl.fromTo(p, { k: 0 }, { k: 1, duration: d, ease: "power3.inOut", immediateRender: false,
+    onUpdate: function () { var k = p.k, a = (1 - k) * (1 - k), b = 2 * (1 - k) * k, c = k * k; gsap.set(el, { x: a * x0 + b * cx + c * x1, y: a * y0 + b * cy + c * y1 }); } }, t);
+  if (!noClick) kClick(tl, el, t + d + 0.04, ring, x1, y1);
+}
+function kClick(tl, el, t, ring, x, y) {
+  tl.fromTo(el, { scale: 1 }, { scale: 0.84, duration: 0.06, ease: "power2.in", immediateRender: false }, t);
+  tl.fromTo(el, { scale: 0.84 }, { scale: 1, duration: 0.14, ease: "power2.out", immediateRender: false }, t + 0.07);
+  if (ring) {
+    tl.set(ring, { left: x + "px", top: y + "px" }, t);
+    tl.fromTo(ring, { opacity: 1, scale: 0.3 }, { opacity: 0, scale: 1.5, duration: 0.5, ease: "power2.out", immediateRender: false }, t + 0.03);
+  }
+}
+/* sous-titres : une pastille par phrase, [{sub, t0, t1}] en temps LOCAUX ; le mot entre ** ** passe en jaune */
+function kSubs(tl, box, lines, tEnd) {
+  lines.forEach(function (ln, i) {
+    var d = document.createElement("div"); d.className = "k-sub";
+    d.innerHTML = ln.sub.replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
+    box.appendChild(d);
+    var tin = Math.max(0, ln.t0 - 0.08), tout = i < lines.length - 1 ? Math.min(lines[i + 1].t0 - 0.12, ln.t1 + 0.45) : Math.min(tEnd - 0.3, ln.t1 + 0.6);
+    tl.fromTo(d, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.2, ease: "power2.out", immediateRender: tin <= 0 }, tin);
+    tl.fromTo(d, { opacity: 1 }, { opacity: 0, duration: 0.15, ease: "power1.in", immediateRender: false }, tout);
+  });
+}
+/* barre d'étapes : step = 0 (intro) à 6 ; la pastille « en cours » s'allume à t */
+function kStepper(parent, step) {
+  var s = document.createElement("div"); s.className = "k-stepper";
+  for (var i = 1; i <= 6; i++) { var e = document.createElement("i"); e.textContent = i; if (i < step) e.className = "k-done"; s.appendChild(e); }
+  parent.appendChild(s); return s;
+}
+function kStepNow(tl, stepper, step, t) {
+  var e = stepper.children[step - 1]; if (!e) return;
+  tl.fromTo(e, { backgroundColor: "#ffffff", borderColor: "#e2e4ef", color: "#9aa0bd" }, { backgroundColor: "#6c47ff", borderColor: "#6c47ff", color: "#ffffff", duration: 0.2, ease: "none", immediateRender: false }, t);
+  tl.fromTo(e, { scale: 0.7 }, { scale: 1, duration: 0.4, ease: "back.out(2.5)", immediateRender: false }, t);
+}
+/* fenêtre de navigateur générique (aucun logo réel) : renvoie {win, url, app, head, side, main} */
+function kBrowser(parent, o) {
+  var w = document.createElement("div"); w.className = "k-browser"; w.id = o.id;
+  w.style.left = o.x + "px"; w.style.top = o.y + "px"; w.style.width = o.w + "px"; w.style.height = o.h + "px";
+  w.innerHTML = '<div class="k-bbar"><i style="left:24px;background:#ff6b6b"></i><i style="left:46px;background:#ffc94d"></i><i style="left:68px;background:#4fd28a"></i>' +
+    '<div class="k-url"><span>' + (o.url || "") + '</span></div></div><div class="k-app"></div>';
+  parent.appendChild(w);
+  var app = w.querySelector(".k-app");
+  var r = { win: w, url: w.querySelector(".k-url span"), app: app };
+  if (o.netlify) {
+    app.innerHTML = '<div class="k-apphead"><div class="k-logo">netlify</div></div>' +
+      (o.side ? '<div class="k-side">' + o.side.map(function (s, i) { return '<div' + (i === o.sideOn ? ' class="k-on"' : '') + '>' + s + '</div>'; }).join("") + '</div>' : '') +
+      '<div class="k-main"' + (o.side ? '' : ' style="left:0"') + '></div>';
+    r.head = app.querySelector(".k-apphead"); r.main = app.querySelector(".k-main"); r.side = app.querySelector(".k-side");
+  }
+  return r;
+}
+/* ===== fin du kit (JS) ===== */
+      var $ = function (id) { return document.getElementById(id); };
+      var tl = gsap.timeline({ paused: true, defaults: { lazy: false } });
+      tl.to({}, { duration: T }, 0);
+
+      var stepper = kStepper($("s1-stepwrap"), 0);
+
+      // caméra : un proxy écrit par kCam ; composé de la dérive (d), des cadrages (z) et des coutures entrée/sortie (e)
+      var world = $("s1-world"), cam = { x: 960, y: 540, s: 1, b: 0 };
+      var d = { s: 1 }, z = { x: 960, y: 540, s: 1 }, e = { x: -140, b: 14 };
+      function render() { cam.x = z.x + e.x; cam.y = z.y; cam.s = z.s * d.s; cam.b = e.b; kCam(world, cam); }
+      tl.eventCallback("onUpdate", render);
+      tl.fromTo(d, { s: 1 }, { s: 1.025, duration: T, ease: "none" }, 0);
+      // entrée : cam.x 820 -> 960, flou 14 -> 0
+      tl.fromTo(e, { x: -140, b: 14 }, { x: 0, b: 0, duration: 0.45, ease: "expo.out" }, 0);
+      // sortie : cam.x +140, flou 0 -> 14
+      tl.fromTo(e, { x: 0, b: 0 }, { x: 140, b: 14, duration: 0.35, ease: "power2.in", immediateRender: false }, T - 0.35);
+      // léger zoom sur chaque carte, puis recul pour les prix
+      tl.fromTo(z, { x: 960, y: 540, s: 1 }, { x: 950, y: 500, s: 1.07, duration: 0.45, ease: "power3.inOut", immediateRender: false }, 2.65);
+      tl.fromTo(z, { x: 950, y: 500, s: 1.07 }, { x: 990, y: 500, s: 1.08, duration: 0.45, ease: "power3.inOut", immediateRender: false }, 5.95);
+      tl.fromTo(z, { x: 990, y: 500, s: 1.08 }, { x: 1010, y: 500, s: 1.085, duration: 0.45, ease: "power3.inOut", immediateRender: false }, 9.05);
+      tl.fromTo(z, { x: 1010, y: 500, s: 1.085 }, { x: 990, y: 540, s: 1, duration: 0.6, ease: "power3.inOut", immediateRender: false }, 11.85);
+
+      tl.fromTo("#s1-dots", { x: 0 }, { x: -72, duration: T, ease: "none" }, 0);
+      tl.fromTo("#s1-b1", { x: 0, y: 0 }, { x: -80, y: 40, duration: T, ease: "sine.inOut" }, 0);
+
+      // en-tête
+      kArrive(tl, $("s1-badge"), 0, 1.1);
+      Array.prototype.forEach.call(document.querySelectorAll("#s1-title .s1-w"), function (w, i) {
+        tl.fromTo(w, { opacity: 0, y: 40, filter: "blur(8px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.45, ease: "expo.out", immediateRender: false }, 0.3 + i * 0.17);
+      });
+      kMark(tl, $("s1-mk"), 1.2);
+
+      // emplacements vides (1, 2, 3) qui attendent les cartes
+      ["s1-slot1", "s1-slot2", "s1-slot3"].forEach(function (id, i) { kArrive(tl, $(id), 0.3 + i * 0.18, 1.08, 20); });
+
+      // trois cartes qui arrivent des profondeurs
+      var cardT = [2.95, 6.25, 9.35];
+      var shrink = [{ x: 85, y: -162 }, { x: 0, y: -162 }, { x: -85, y: -162 }];
+      [1, 2, 3].forEach(function (n, i) {
+        var c = $("s1-card" + n), t = cardT[i];
+        tl.fromTo(c, { opacity: 0, z: -700, y: 40, rotationY: -30, transformPerspective: 1600, filter: "blur(10px)" },
+          { opacity: 1, z: 0, y: 0, rotationY: -10, transformPerspective: 1600, filter: "blur(0px)", duration: 0.8, ease: "expo.out", immediateRender: false }, t);
+        tl.fromTo(c, { rotationY: -10 }, { rotationY: -4, duration: 12.6 - (t + 0.8), ease: "sine.inOut", immediateRender: false }, t + 0.8);
+        tl.fromTo($("s1-slot" + n), { opacity: 1 }, { opacity: 0, duration: 0.3, ease: "power1.out", immediateRender: false }, t + 0.25);
+        Array.prototype.forEach.call(c.querySelectorAll(".s1-draw"), function (p, k) { kDraw(tl, p, t + 0.3 + k * 0.12, 0.55); });
+        tl.fromTo(c.querySelectorAll(".s1-fill"), { opacity: 0 }, { opacity: 1, duration: 0.35, ease: "power1.out", immediateRender: false }, t + 0.55);
+        kPop(tl, $("s1-chk" + n), t + 0.7);
+        // 12,0 : les cartes se réduisent et montent en haut de la zone
+        tl.fromTo(c, { x: 0, y: 0, scale: 1 }, { x: shrink[i].x, y: shrink[i].y, scale: 0.62, duration: 0.6, ease: "power3.inOut", immediateRender: false }, 12.0 + i * 0.04);
+      });
+
+      // ligne 1 : hébergement gratuit
+      kArrive(tl, $("s1-row1"), 12.4, 1.06, 24);
+      tl.fromTo("#s1-sk1", { opacity: 1 }, { opacity: 0, duration: 0.15, ease: "power1.in", immediateRender: false }, 13.8);
+      kPop(tl, $("s1-p1"), 13.9);
+      tl.fromTo("#s1-h1", { opacity: 0, scale: 0.6, rotation: -5 }, { opacity: 1, scale: 1, rotation: -5, duration: 0.35, ease: "back.out(2)", immediateRender: false }, 14.15);
+      kDraw(tl, $("s1-a1p"), 14.25, 0.4);
+      tl.fromTo("#s1-p1", { scale: 1 }, { scale: 1.1, duration: 0.22, ease: "power2.out", immediateRender: false }, 14.9);
+      tl.fromTo("#s1-p1", { scale: 1.1 }, { scale: 1, duration: 0.35, ease: "power2.inOut", immediateRender: false }, 15.13);
+
+      // ligne 2 : nom de domaine, le prix roule de 0 à 1 500
+      kArrive(tl, $("s1-row2"), 16.3, 1.06, 24);
+      tl.fromTo("#s1-sk2", { opacity: 1 }, { opacity: 0, duration: 0.15, ease: "power1.in", immediateRender: false }, 17.2);
+      kArrive(tl, $("s1-p2"), 17.3, 1.15);
+      var num = $("s1-num"), cnt = { n: 0 };
+      tl.fromTo(cnt, { n: 0 }, { n: 1500, duration: 1.0, ease: "power2.out", immediateRender: false,
+        onUpdate: function () {
+          var v = Math.round(cnt.n / 10) * 10;
+          num.textContent = v >= 1000 ? Math.floor(v / 1000) + " " + ("00" + (v % 1000)).slice(-3) : String(v);
+        } }, 17.6);
+      tl.fromTo("#s1-h2", { opacity: 0, scale: 0.6, rotation: -4 }, { opacity: 1, scale: 1, rotation: -4, duration: 0.35, ease: "back.out(2)", immediateRender: false }, 18.9);
+      kDraw(tl, $("s1-a2p"), 19.0, 0.45);
+      tl.fromTo("#s1-row2", { scale: 1 }, { scale: 1.025, duration: 0.25, ease: "power2.out", immediateRender: false }, 19.6);
+      tl.fromTo("#s1-row2", { scale: 1.025 }, { scale: 1, duration: 0.4, ease: "power2.inOut", immediateRender: false }, 19.85);
+
+      kSubs(tl, $("s1-subs"), [
+        { sub: "Avant de commencer, il vous faut **trois choses**.", t0: 0.00, t1: 2.30 },
+        { sub: "Le **fichier** de votre site, que je vous ai envoyé.", t0: 2.92, t1: 5.58 },
+        { sub: "Un **ordinateur** et une adresse mail.", t0: 6.20, t1: 8.67 },
+        { sub: "Et une **carte bancaire**, pour le nom de domaine.", t0: 9.29, t1: 11.57 },
+        { sub: "Bonne nouvelle : l'hébergement est **gratuit**. Zéro franc par mois.", t0: 12.19, t1: 15.54 },
+        { sub: "Seul le **nom de domaine** est payant : environ 1 500 francs par an.", t0: 16.16, t1: 19.86 }
+      ], T);
+
+      render();
+      window.__timelines[FID] = tl;
+    })();
+  </script>
+</template>
+</body></html>

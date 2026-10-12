@@ -1,0 +1,228 @@
+{
+ "total": 132.54,
+ "sections": [
+  {
+   "id": "s0-intro",
+   "start": 0.7,
+   "lines": [
+    {
+     "sub": "Mettre son site en ligne, c'est plus simple que vous ne le pensez.",
+     "t0": 0.7,
+     "t1": 4.005
+    },
+    {
+     "sub": "En six étapes et environ trente minutes, votre site sera visible par tout le monde.",
+     "t0": 4.625,
+     "t1": 9.414
+    }
+   ],
+   "end": 10.914
+  },
+  {
+   "id": "s1-avant",
+   "start": 10.914,
+   "lines": [
+    {
+     "sub": "Avant de commencer, il vous faut trois choses.",
+     "t0": 10.914,
+     "t1": 13.213
+    },
+    {
+     "sub": "Le fichier de votre site, que je vous ai envoyé.",
+     "t0": 13.833,
+     "t1": 16.49
+    },
+    {
+     "sub": "Un ordinateur et une adresse mail.",
+     "t0": 17.11,
+     "t1": 19.589
+    },
+    {
+     "sub": "Et une carte bancaire, pour le nom de domaine.",
+     "t0": 20.209,
+     "t1": 22.483
+    },
+    {
+     "sub": "Bonne nouvelle : l'hébergement est gratuit. Zéro franc par mois.",
+     "t0": 23.103,
+     "t1": 26.452
+    },
+    {
+     "sub": "Seul le nom de domaine est payant : environ 1 500 francs par an.",
+     "t0": 27.072,
+     "t1": 30.772
+    }
+   ],
+   "end": 32.272
+  },
+  {
+   "id": "s2-compte",
+   "start": 32.272,
+   "lines": [
+    {
+     "sub": "Étape 1 : créez votre compte.",
+     "t0": 32.272,
+     "t1": 33.797
+    },
+    {
+     "sub": "Allez sur netlify.com, puis cliquez sur Sign up.",
+     "t0": 34.417,
+     "t1": 38.524
+    },
+    {
+     "sub": "Choisissez Sign up with email, puis entrez votre adresse et un mot de passe.",
+     "t0": 39.144,
+     "t1": 43.759
+    },
+    {
+     "sub": "Vous recevez un mail : cliquez sur le lien pour confirmer votre compte.",
+     "t0": 44.379,
+     "t1": 48.811
+    }
+   ],
+   "end": 50.311
+  },
+  {
+   "id": "s3-publier",
+   "start": 50.311,
+   "lines": [
+    {
+     "sub": "Étape 2 : publiez votre site.",
+     "t0": 50.311,
+     "t1": 52.039
+    },
+    {
+     "sub": "Important : ne décompressez pas le fichier. Gardez-le en .zip.",
+     "t0": 52.659,
+     "t1": 56.09
+    },
+    {
+     "sub": "Dans Projects, cliquez sur Add new project, puis Deploy manually.",
+     "t0": 56.71,
+     "t1": 61.242
+    },
+    {
+     "sub": "Glissez votre fichier .zip dans la zone prévue.",
+     "t0": 61.862,
+     "t1": 64.409
+    },
+    {
+     "sub": "Quelques secondes plus tard, votre site est en ligne, avec une adresse provisoire.",
+     "t0": 65.029,
+     "t1": 69.468
+    }
+   ],
+   "end": 70.968
+  },
+  {
+   "id": "s4-adresse",
+   "start": 70.968,
+   "lines": [
+    {
+     "sub": "Étape 3 : choisissez une adresse plus jolie.",
+     "t0": 70.968,
+     "t1": 73.36
+    },
+    {
+     "sub": "Ouvrez Project configuration, puis Change project name.",
+     "t0": 73.98,
+     "t1": 77.742
+    },
+    {
+     "sub": "Tapez le nom de votre entreprise, et enregistrez.",
+     "t0": 78.362,
+     "t1": 80.993
+    }
+   ],
+   "end": 82.493
+  },
+  {
+   "id": "s5-domaine",
+   "start": 82.493,
+   "lines": [
+    {
+     "sub": "Étape 4 : votre propre nom de domaine.",
+     "t0": 82.493,
+     "t1": 84.837
+    },
+    {
+     "sub": "Allez dans Domain management, puis Add a domain.",
+     "t0": 85.457,
+     "t1": 87.771
+    },
+    {
+     "sub": "Tapez le nom que vous voulez. S'il est libre, cliquez sur Buy.",
+     "t0": 88.391,
+     "t1": 91.624
+    },
+    {
+     "sub": "Attention : le renouvellement est automatique chaque année. Notez bien la date.",
+     "t0": 92.244,
+     "t1": 96.486
+    }
+   ],
+   "end": 97.986
+  },
+  {
+   "id": "s6-verifier",
+   "start": 97.986,
+   "lines": [
+    {
+     "sub": "Étape 5 : vérifiez.",
+     "t0": 97.986,
+     "t1": 99.302
+    },
+    {
+     "sub": "Tapez votre adresse dans le navigateur : votre site apparaît !",
+     "t0": 99.922,
+     "t1": 103.078
+    },
+    {
+     "sub": "Sinon, patientez : cela peut prendre de quelques minutes à 24 heures.",
+     "t0": 103.698,
+     "t1": 107.795
+    }
+   ],
+   "end": 109.295
+  },
+  {
+   "id": "s7-maj",
+   "start": 109.295,
+   "lines": [
+    {
+     "sub": "Étape 6 : mettez à jour votre site.",
+     "t0": 109.295,
+     "t1": 111.449
+    },
+    {
+     "sub": "Quand je vous envoie une nouvelle version, ouvrez l'onglet Deploys.",
+     "t0": 112.069,
+     "t1": 115.344
+    },
+    {
+     "sub": "Glissez le nouveau fichier .zip dans la zone. C'est tout : votre site est à jour.",
+     "t0": 115.964,
+     "t1": 120.274
+    }
+   ],
+   "end": 121.774
+  },
+  {
+   "id": "s8-fin",
+   "start": 121.774,
+   "lines": [
+    {
+     "sub": "Et voilà ! Votre site est en ligne, et il vous appartient.",
+     "t0": 121.774,
+     "t1": 124.638
+    },
+    {
+     "sub": "Une question ? Écrivez-moi sur WhatsApp.",
+     "t0": 125.258,
+     "t1": 129.54
+    }
+   ],
+   "end": 132.54
+  }
+ ]
+}

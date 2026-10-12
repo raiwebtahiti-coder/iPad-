@@ -63,7 +63,7 @@
 .k-logo { position: absolute; left: 28px; top: 18px; font: 800 24px/28px "Jakarta"; color: #15173a; letter-spacing: -0.01em; }
 .k-logo:before { content: ""; display: inline-block; width: 22px; height: 22px; border-radius: 7px; background: linear-gradient(135deg,#2fd1c4,#1a9f9a); margin-right: 10px; vertical-align: -3px; }
 .k-side { position: absolute; left: 0; top: 64px; bottom: 0; width: 260px; border-right: 1px solid #eef0f6; padding: 22px 16px; }
-.k-side div { height: 44px; border-radius: 10px; font: 600 19px/44px "Inter"; color: #5b6080; padding-left: 16px; margin-bottom: 4px; white-space: nowrap; }
+.k-side div { height: 44px; border-radius: 10px; font: 600 17px/44px "Inter"; letter-spacing: -0.01em; overflow: hidden; color: #5b6080; padding-left: 16px; margin-bottom: 4px; white-space: nowrap; }
 .k-side div.k-on { background: #efeaff; color: #6c47ff; }
 .k-main { position: absolute; left: 260px; top: 64px; right: 0; bottom: 0; padding: 30px 36px; }
 .k-h { font: 800 32px/1.2 "Jakarta"; color: #15173a; white-space: nowrap; }
@@ -115,14 +115,14 @@
     .s5-ovrow { position: absolute; left: 36px; width: 778px; height: 62px; border-radius: 12px; background: #f6f7fb; }
     .s5-ovrow i { position: absolute; left: 22px; top: 24px; height: 14px; border-radius: 7px; background: #e6e8f0; }
 
-    /* Domain management */
+    /* Domaines */
     #s5-dom { opacity: 0; }
     #s5-prod { position: absolute; left: 36px; top: 100px; width: 778px; height: 140px; border-radius: 16px; background: #f6f7fb; }
     #s5-prodl { position: absolute; left: 26px; top: 24px; font: 600 19px/1 "Inter"; color: #5b6080; white-space: nowrap; }
     #s5-prodd { position: absolute; left: 26px; top: 70px; font: 500 28px/1 "Mono"; color: #15173a; white-space: nowrap; }
     #s5-addbtn { left: 36px; top: 270px; width: 240px; height: 58px; opacity: 0; }
 
-    /* Add a domain */
+    /* Ajouter un domaine */
     #s5-addp { opacity: 0; }
     #s5-input { left: 36px; top: 100px; width: 778px; height: 66px; box-sizing: border-box; font-size: 26px; opacity: 0; }
     #s5-ph { position: absolute; left: 20px; top: 20px; color: #9aa0bd; }
@@ -289,7 +289,7 @@ function kBrowser(parent, o) {
 
       // navigateur : projet « votre-entreprise »
       var B = kBrowser($("s5-bwrap"), { id: "s5-browser", x: 0, y: 0, w: 1110, h: 720, url: "app.netlify.com/projects/votre-entreprise", netlify: true,
-        side: ["Project overview", "Deploys", "Domain management", "Project configuration"], sideOn: 0 });
+        side: ["Vue d’ensemble", "Déploiements", "Domaines", "Configuration du projet"], sideOn: 0 });
       B.side.children[0].id = "s5-si0"; B.side.children[2].id = "s5-si2";
       B.side.insertAdjacentHTML("beforeend", '<div class="s5-sk" style="width:120px"></div><div class="s5-sk" style="width:150px"></div>');
       var cal = '<svg id="s5-cal" viewBox="0 0 92 92"><rect x="6" y="14" width="80" height="72" rx="14" fill="#fff0e6" stroke="#ff6a1a" stroke-width="5"/>' +
@@ -299,13 +299,13 @@ function kBrowser(parent, o) {
         '<div class="s5-pane" id="s5-ov"><div class="k-h">votre-entreprise</div>' +
           '<div id="s5-ovhero"><i style="top:60px;width:300px"></i><i style="top:100px;width:220px"></i><i style="top:160px;width:140px;height:40px;border-radius:10px;background:rgba(21,23,58,.2)"></i></div>' +
           '<div class="s5-ovrow" style="top:356px"><i style="width:240px"></i></div><div class="s5-ovrow" style="top:436px"><i style="width:180px"></i></div></div>' +
-        '<div class="s5-pane" id="s5-dom"><div class="k-h">Domain management</div>' +
-          '<div id="s5-prod"><div id="s5-prodl">Production domains</div><div id="s5-prodd">votre-entreprise.netlify.app</div></div>' +
-          '<div class="k-btn" id="s5-addbtn">Add a domain</div></div>' +
-        '<div class="s5-pane" id="s5-addp"><div class="k-h">Add a domain</div>' +
-          '<div class="k-input k-focus" id="s5-input"><span id="s5-ph">Enter a domain</span><span id="s5-typed"></span></div>' +
-          '<div id="s5-row"><div id="s5-rname">votreentreprise.com</div><div id="s5-avail">● Available</div><div id="s5-price">≈ 1 500 F / an</div>' +
-            '<div class="k-btn" id="s5-buy"><span id="s5-buyt">Buy</span></div><div class="k-check" id="s5-check"></div></div>' +
+        '<div class="s5-pane" id="s5-dom"><div class="k-h">Domaines</div>' +
+          '<div id="s5-prod"><div id="s5-prodl">Domaines de production</div><div id="s5-prodd">votre-entreprise.netlify.app</div></div>' +
+          '<div class="k-btn" id="s5-addbtn">Ajouter un domaine</div></div>' +
+        '<div class="s5-pane" id="s5-addp"><div class="k-h">Ajouter un domaine</div>' +
+          '<div class="k-input k-focus" id="s5-input"><span id="s5-ph">Saisissez un domaine</span><span id="s5-typed"></span></div>' +
+          '<div id="s5-row"><div id="s5-rname">votreentreprise.com</div><div id="s5-avail">● Disponible</div><div id="s5-price">≈ 1 500 F / an</div>' +
+            '<div class="k-btn" id="s5-buy"><span id="s5-buyt">Acheter</span></div><div class="k-check" id="s5-check"></div></div>' +
           '<div class="k-card" id="s5-warn">' + cal + '<div id="s5-wtxt">Renouvellement automatique</div><div id="s5-tog"><i></i></div></div></div>';
       var stepper = kStepper($("s5-stepwrap"), 4);
 
@@ -337,7 +337,7 @@ function kBrowser(parent, o) {
       kMark(tl, $("s5-mk2"), 1.6);
       tl.fromTo("#s5-ovhero", { scale: 1 }, { scale: 1.02, duration: 1.6, ease: "sine.inOut", immediateRender: false }, 1.0);
 
-      // ligne 2 : « Allez dans Domain management, puis Add a domain. » (2.96 → 5.28)
+      // ligne 2 : « Allez dans Domaines, puis Ajouter un domaine. » (2.96 → 5.28)
       var cur = $("s5-cursor"), ring = $("s5-ring");
       kCursor(tl, cur, 1880, 820, 830, 452, 3.2, 0.66, ring);
       tl.fromTo("#s5-si2", { scale: 1 }, { scale: 0.94, duration: 0.07, ease: "power2.in", immediateRender: false }, 3.9);
@@ -393,8 +393,8 @@ function kBrowser(parent, o) {
 
       kSubs(tl, $("s5-subs"), [
         { sub: "Étape 4 : votre propre **nom de domaine**.", t0: 0.00, t1: 2.34 },
-        { sub: "Allez dans **Domain management**, puis Add a domain.", t0: 2.96, t1: 5.28 },
-        { sub: "Tapez le nom que vous voulez. S'il est libre, cliquez sur **Buy**.", t0: 5.90, t1: 9.13 },
+        { sub: "Allez dans **Domaines**, puis Ajouter un domaine.", t0: 2.96, t1: 5.28 },
+        { sub: "Tapez le nom que vous voulez. S’il est libre, cliquez sur **Acheter**.", t0: 5.90, t1: 9.13 },
         { sub: "Attention : le renouvellement est **automatique** chaque année. Notez bien la date.", t0: 9.75, t1: 13.99 }
       ], T);
 

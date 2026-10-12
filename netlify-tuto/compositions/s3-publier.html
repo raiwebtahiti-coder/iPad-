@@ -63,7 +63,7 @@
 .k-logo { position: absolute; left: 28px; top: 18px; font: 800 24px/28px "Jakarta"; color: #15173a; letter-spacing: -0.01em; }
 .k-logo:before { content: ""; display: inline-block; width: 22px; height: 22px; border-radius: 7px; background: linear-gradient(135deg,#2fd1c4,#1a9f9a); margin-right: 10px; vertical-align: -3px; }
 .k-side { position: absolute; left: 0; top: 64px; bottom: 0; width: 260px; border-right: 1px solid #eef0f6; padding: 22px 16px; }
-.k-side div { height: 44px; border-radius: 10px; font: 600 19px/44px "Inter"; color: #5b6080; padding-left: 16px; margin-bottom: 4px; white-space: nowrap; }
+.k-side div { height: 44px; border-radius: 10px; font: 600 17px/44px "Inter"; letter-spacing: -0.01em; overflow: hidden; color: #5b6080; padding-left: 16px; margin-bottom: 4px; white-space: nowrap; }
 .k-side div.k-on { background: #efeaff; color: #6c47ff; }
 .k-main { position: absolute; left: 260px; top: 64px; right: 0; bottom: 0; padding: 30px 36px; }
 .k-h { font: 800 32px/1.2 "Jakarta"; color: #15173a; white-space: nowrap; }
@@ -325,20 +325,20 @@ function kBrowser(parent, o) {
       tl.to({}, { duration: T }, 0);
 
       // navigateur : page « Projects » (zone principale : origine monde 980, 312)
-      var B = kBrowser($("s3-bwrap"), { id: "s3-browser", x: 0, y: 0, w: 1110, h: 720, url: "app.netlify.com/projects", netlify: true, side: ["Projects"], sideOn: 0 });
+      var B = kBrowser($("s3-bwrap"), { id: "s3-browser", x: 0, y: 0, w: 1110, h: 720, url: "app.netlify.com/projects", netlify: true, side: ["Projets"], sideOn: 0 });
       B.side.insertAdjacentHTML("beforeend", '<div class="s3-sk" style="width:120px"></div><div class="s3-sk" style="width:150px"></div><div class="s3-sk" style="width:104px"></div>');
       var zipIcon = '<svg viewBox="0 0 64 64"><path d="M32 44 V14 M20 26 L32 14 L44 26" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 40 V50 H52 V40" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-      B.main.innerHTML = '<div class="k-h">Projects</div>' +
+      B.main.innerHTML = '<div class="k-h">Projets</div>' +
         '<div class="s3-row" id="s3-r1" style="top:110px"><i style="width:220px"></i></div>' +
         '<div class="s3-row" id="s3-r2" style="top:190px"><i style="width:300px"></i></div>' +
         '<div class="s3-row" id="s3-r3" style="top:270px"><i style="width:180px"></i></div>' +
         '<div class="s3-row" id="s3-r4" style="top:350px"><i style="width:260px"></i></div>' +
-        '<div class="k-btn" id="s3-add">Add new project</div>' +
-        '<div class="k-card" id="s3-menu"><div class="s3-mi" style="top:8px">Import an existing project</div><div class="s3-mi" style="top:66px">Start from a template</div><div class="s3-mi" id="s3-mi3" style="top:124px">Deploy manually</div></div>' +
-        '<div class="k-drop" id="s3-drop">' + zipIcon + '<span>Drag and drop your project folder here</span></div>' +
-        '<div class="k-drop k-hot" id="s3-drophot">' + zipIcon + '<span>Drag and drop your project folder here</span></div>' +
+        '<div class="k-btn" id="s3-add">Ajouter un projet</div>' +
+        '<div class="k-card" id="s3-menu"><div class="s3-mi" style="top:8px">Importer un projet existant</div><div class="s3-mi" style="top:66px">Partir d’un modèle</div><div class="s3-mi" id="s3-mi3" style="top:124px">Déployer manuellement</div></div>' +
+        '<div class="k-drop" id="s3-drop">' + zipIcon + '<span>Glissez-déposez votre fichier ici</span></div>' +
+        '<div class="k-drop k-hot" id="s3-drophot">' + zipIcon + '<span>Glissez-déposez votre fichier ici</span></div>' +
         '<div id="s3-up"><div id="s3-upfill"></div></div>' +
-        '<div class="k-card" id="s3-pub"><div class="k-check" id="s3-pubchk"></div><div class="k-h" id="s3-pubh">Published</div>' +
+        '<div class="k-card" id="s3-pub"><div class="k-check" id="s3-pubchk"></div><div class="k-h" id="s3-pubh">Publié</div>' +
         '<div id="s3-addrbox"><span id="s3-addr"></span></div><div class="k-pill k-ok k-abs" id="s3-live">● En ligne</div></div>';
       var stepper = kStepper($("s3-stepwrap"), 2);
 
@@ -380,7 +380,7 @@ function kBrowser(parent, o) {
       tl.fromTo("#s3-zipbig", { scale: 1.06 }, { scale: 1, duration: 0.35, ease: "power2.inOut", immediateRender: false }, 5.5);
       kLeave(tl, $("s3-p1"), 5.95);
 
-      // ligne 3 : « Dans Projects, cliquez sur Add new project, puis Deploy manually. » (6.40 → 10.93)
+      // ligne 3 : « Dans Projects, cliquez sur Ajouter un projet, puis Déployer manuellement. » (6.40 → 10.93)
       tl.fromTo("#s3-bwrap", { opacity: 0, x: 90, scale: 1.04, filter: "blur(10px)" },
         { opacity: 1, x: 0, scale: 1, filter: "blur(0px)", duration: 0.6, ease: "expo.out", immediateRender: false }, 6.2);
       var cur = $("s3-cursor"), ring = $("s3-ring");
@@ -442,7 +442,7 @@ function kBrowser(parent, o) {
       kSubs(tl, $("s3-subs"), [
         { sub: "Étape 2 : publiez votre **site**.", t0: 0.00, t1: 1.73 },
         { sub: "Important : ne **décompressez pas** le fichier. Gardez-le en .zip.", t0: 2.35, t1: 5.78 },
-        { sub: "Dans Projects, cliquez sur **Add new project**, puis Deploy manually.", t0: 6.40, t1: 10.93 },
+        { sub: "Dans Projets, cliquez sur **Ajouter un projet**, puis Déployer manuellement.", t0: 6.40, t1: 10.93 },
         { sub: "Glissez votre fichier .zip dans la **zone prévue**.", t0: 11.55, t1: 14.10 },
         { sub: "Quelques secondes plus tard, votre site est **en ligne**, avec une adresse provisoire.", t0: 14.72, t1: 19.16 }
       ], T);

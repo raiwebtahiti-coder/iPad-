@@ -63,7 +63,7 @@
 .k-logo { position: absolute; left: 28px; top: 18px; font: 800 24px/28px "Jakarta"; color: #15173a; letter-spacing: -0.01em; }
 .k-logo:before { content: ""; display: inline-block; width: 22px; height: 22px; border-radius: 7px; background: linear-gradient(135deg,#2fd1c4,#1a9f9a); margin-right: 10px; vertical-align: -3px; }
 .k-side { position: absolute; left: 0; top: 64px; bottom: 0; width: 260px; border-right: 1px solid #eef0f6; padding: 22px 16px; }
-.k-side div { height: 44px; border-radius: 10px; font: 600 19px/44px "Inter"; color: #5b6080; padding-left: 16px; margin-bottom: 4px; white-space: nowrap; }
+.k-side div { height: 44px; border-radius: 10px; font: 600 17px/44px "Inter"; letter-spacing: -0.01em; overflow: hidden; color: #5b6080; padding-left: 16px; margin-bottom: 4px; white-space: nowrap; }
 .k-side div.k-on { background: #efeaff; color: #6c47ff; }
 .k-main { position: absolute; left: 260px; top: 64px; right: 0; bottom: 0; padding: 30px 36px; }
 .k-h { font: 800 32px/1.2 "Jakarta"; color: #15173a; white-space: nowrap; }
@@ -152,11 +152,11 @@
         <div id="s4-check" class="k-check"></div>
         <div id="s4-dim" class="k-abs"></div>
         <div id="s4-modal" class="k-card">
-          <div id="s4-mtitle" class="k-abs k-h">Change project name</div>
-          <div class="s4-lab" style="top:104px">Project name</div>
+          <div id="s4-mtitle" class="k-abs k-h">Modifier le nom du projet</div>
+          <div class="s4-lab" style="top:104px">Nom du projet</div>
           <div id="s4-input" class="k-input k-focus s4-bb"><span id="s4-in">magical-otter-12345<i id="s4-caret" class="k-caret"></i></span></div>
           <div id="s4-prev" class="k-abs"><svg width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5" fill="none" stroke="#9aa0bd" stroke-width="2.2"/><path d="M2.5 12h19M12 2.5c3 3 3 16 0 19M12 2.5c-3 3-3 16 0 19" fill="none" stroke="#9aa0bd" stroke-width="2"/></svg><span id="s4-pv">magical-otter-12345<span id="s4-pvs">.netlify.app</span></span></div>
-          <div id="s4-save" class="k-btn s4-bb">Save</div>
+          <div id="s4-save" class="k-btn s4-bb">Enregistrer</div>
         </div>
         <div id="s4-savespot" class="k-spot"></div>
         <div id="s4-ring" class="k-ring"></div>
@@ -282,7 +282,7 @@ function kBrowser(parent, o) {
       // ---------- navigateur ----------
       var OLD = "magical-otter-12345", NEW = "votre-entreprise";
       var B = kBrowser($("s4-bwrap"), { id: "s4-browser", x: 0, y: 0, w: 1110, h: 720, url: "", netlify: true,
-        side: ["Project overview", "Project configuration", "Deploys", "Logs", "Domain management"], sideOn: 0 });
+        side: ["Vue d’ensemble", "Configuration du projet", "Déploiements", "Journaux", "Domaines"], sideOn: 0 });
       B.url.innerHTML = 'app.netlify.com/projects/<span class="s4-sw"><span class="s4-old" id="s4-uold">' + OLD + '</span><span class="s4-new" id="s4-unew">' + NEW + '</span></span>';
       B.main.innerHTML =
         '<div id="s4-ptitle" class="k-abs k-h s4-a"><span class="s4-sw"><span class="s4-old" id="s4-told">' + OLD + '</span><span class="s4-new" id="s4-tnew">' + NEW + '</span></span></div>' +
@@ -293,11 +293,11 @@ function kBrowser(parent, o) {
         '<div class="k-skel s4-a s4-ov" style="left:36px;top:380px;width:240px;height:110px"></div>' +
         '<div class="k-skel s4-a s4-ov" style="left:300px;top:380px;width:240px;height:110px"></div>' +
         '<div id="s4-card" class="k-card s4-a">' +
-          '<div id="s4-ctitle" class="k-abs k-h">Project details</div>' +
+          '<div id="s4-ctitle" class="k-abs k-h">Détails du projet</div>' +
           '<div id="s4-cline" class="k-abs"></div>' +
-          '<div class="s4-lab" style="top:112px">Project name</div>' +
+          '<div class="s4-lab" style="top:112px">Nom du projet</div>' +
           '<div id="s4-cval" class="k-abs"><span class="s4-sw"><span class="s4-old" id="s4-vold">' + OLD + '</span><span class="s4-new" id="s4-vnew">' + NEW + '</span></span></div>' +
-          '<div id="s4-chg" class="k-btn k-ghost s4-bb">Change project name</div>' +
+          '<div id="s4-chg" class="k-btn k-ghost s4-bb">Modifier le nom du projet</div>' +
         '</div>';
       var items = B.side.children, itOv = items[0], itCfg = items[1];
       var stepper = kStepper($("s4-stepwrap"), 3);
@@ -306,7 +306,7 @@ function kBrowser(parent, o) {
       var world = $("s4-world"), cam = { x: 820, y: 540, s: 1, b: 14 };
       var D = { k: 0 }, O = { x: -140, b: 14 };
       var Z = [
-        { w: 0, x: 1193, y: 640, s: 1.45 },  // bouton Change project name
+        { w: 0, x: 1193, y: 640, s: 1.45 },  // bouton Modifier le nom du projet
         { w: 0, x: 1275, y: 540, s: 1.35 }   // fenêtre modale
       ];
       function render() {
@@ -357,7 +357,7 @@ function kBrowser(parent, o) {
       tl.fromTo("#s4-paddr", { color: "#5b6080" }, { color: "#6c47ff", duration: 0.3, ease: "power1.out", immediateRender: false }, 2.0);
       tl.fromTo("#s4-paddr", { color: "#6c47ff" }, { color: "#5b6080", duration: 0.4, ease: "power1.inOut", immediateRender: false }, 2.7);
 
-      // ---------- ligne 2 : « Ouvrez Project configuration, puis Change project name. » (3.01 → 6.77) ----------
+      // ---------- ligne 2 : « Ouvrez Configuration du projet, puis Modifier le nom du projet. » (3.01 → 6.77) ----------
       var cur = $("s4-cursor"), ring = $("s4-ring");
       kSpot(tl, $("s4-cfgspot"), 3.85, 4.65);
       kCursor(tl, cur, 1560, 860, 850, 404, 3.2, 1.06, ring);   // clic à 4.30
@@ -401,7 +401,7 @@ function kBrowser(parent, o) {
 
       kSubs(tl, $("s4-subs"), [
         { sub: "Étape 3 : choisissez une adresse plus **jolie**.", t0: 0.00, t1: 2.39 },
-        { sub: "Ouvrez **Project configuration**, puis Change project name.", t0: 3.01, t1: 6.77 },
+        { sub: "Ouvrez **Configuration du projet**, puis Modifier le nom du projet.", t0: 3.01, t1: 6.77 },
         { sub: "Tapez le nom de **votre entreprise**, et enregistrez.", t0: 7.39, t1: 10.02 }
       ], T);
 

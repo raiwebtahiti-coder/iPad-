@@ -63,7 +63,7 @@
 .k-logo { position: absolute; left: 28px; top: 18px; font: 800 24px/28px "Jakarta"; color: #15173a; letter-spacing: -0.01em; }
 .k-logo:before { content: ""; display: inline-block; width: 22px; height: 22px; border-radius: 7px; background: linear-gradient(135deg,#2fd1c4,#1a9f9a); margin-right: 10px; vertical-align: -3px; }
 .k-side { position: absolute; left: 0; top: 64px; bottom: 0; width: 260px; border-right: 1px solid #eef0f6; padding: 22px 16px; }
-.k-side div { height: 44px; border-radius: 10px; font: 600 19px/44px "Inter"; color: #5b6080; padding-left: 16px; margin-bottom: 4px; white-space: nowrap; }
+.k-side div { height: 44px; border-radius: 10px; font: 600 17px/44px "Inter"; letter-spacing: -0.01em; overflow: hidden; color: #5b6080; padding-left: 16px; margin-bottom: 4px; white-space: nowrap; }
 .k-side div.k-on { background: #efeaff; color: #6c47ff; }
 .k-main { position: absolute; left: 260px; top: 64px; right: 0; bottom: 0; padding: 30px 36px; }
 .k-h { font: 800 32px/1.2 "Jakarta"; color: #15173a; white-space: nowrap; }
@@ -294,7 +294,7 @@ function kBrowser(parent, o) {
 
       // ---------- navigateur (zone principale : origine monde 980, 312) ----------
       var B = kBrowser($("s7-bwrap"), { id: "s7-browser", x: 0, y: 0, w: 1110, h: 720, url: "", netlify: true,
-        side: ["Project overview", "Project configuration", "Deploys", "Logs", "Domain management"], sideOn: 0 });
+        side: ["Vue d’ensemble", "Configuration du projet", "Déploiements", "Journaux", "Domaines"], sideOn: 0 });
       B.url.innerHTML = 'app.netlify.com/projects/votre-entreprise<span id="s7-urlx"></span>';
       var upIcon = '<svg viewBox="0 0 64 64"><path d="M32 44 V14 M20 26 L32 14 L44 26" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 40 V50 H52 V40" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
       B.main.innerHTML =
@@ -305,12 +305,12 @@ function kBrowser(parent, o) {
         '<div class="k-skel s7-ov" style="left:36px;top:330px;width:380px;height:20px"></div>' +
         '<div class="k-skel s7-ov" style="left:36px;top:380px;width:240px;height:120px"></div>' +
         '<div class="k-skel s7-ov" style="left:300px;top:380px;width:240px;height:120px"></div>' +
-        '<div class="k-h" id="s7-dh">Deploys</div>' +
+        '<div class="k-h" id="s7-dh">Déploiements</div>' +
         '<div class="k-pill k-ok k-abs" id="s7-ok">● À jour</div>' +
-        '<div class="s7-row" id="s7-v1">Published · v1<i></i></div>' +
-        '<div class="s7-row" id="s7-v2">Published · v2<i></i><div class="k-check" id="s7-chk2"></div></div>' +
-        '<div class="k-drop" id="s7-drop">' + upIcon + '<span>Drag and drop your project folder here</span></div>' +
-        '<div class="k-drop k-hot" id="s7-drophot">' + upIcon + '<span>Drag and drop your project folder here</span></div>' +
+        '<div class="s7-row" id="s7-v1">Publié · v1<i></i></div>' +
+        '<div class="s7-row" id="s7-v2">Publié · v2<i></i><div class="k-check" id="s7-chk2"></div></div>' +
+        '<div class="k-drop" id="s7-drop">' + upIcon + '<span>Glissez-déposez votre fichier ici</span></div>' +
+        '<div class="k-drop k-hot" id="s7-drophot">' + upIcon + '<span>Glissez-déposez votre fichier ici</span></div>' +
         '<div id="s7-up"><div id="s7-upfill"></div></div>';
       var items = B.side.children;
       items[0].id = "s7-it0"; items[2].id = "s7-it2";
@@ -410,7 +410,7 @@ function kBrowser(parent, o) {
 
       kSubs(tl, $("s7-subs"), [
         { sub: "Étape 6 : mettez à jour votre **site**.", t0: 0.00, t1: 2.15 },
-        { sub: "Quand je vous envoie une nouvelle version, ouvrez l'onglet **Deploys**.", t0: 2.77, t1: 6.05 },
+        { sub: "Quand je vous envoie une nouvelle version, ouvrez l’onglet **Déploiements**.", t0: 2.77, t1: 6.05 },
         { sub: "Glissez le nouveau fichier .zip dans la zone. C'est tout : votre site est **à jour**.", t0: 6.67, t1: 10.98 }
       ], T);
 

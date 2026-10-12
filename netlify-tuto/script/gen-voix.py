@@ -2,6 +2,8 @@
 import json, sys, numpy as np, soundfile as sf
 from kokoro_onnx import Kokoro
 M, V, SCRIPT, OUT = sys.argv[1:5]
+REF = json.load(open(sys.argv[5])) if len(sys.argv) > 5 else None   # timing de référence : chaque phrase est calée sur sa durée
+import subprocess, tempfile, os
 cfg = json.load(open(SCRIPT))
 k = Kokoro(M, V)
 SR = 24000
@@ -15,12 +17,23 @@ for si, sec in enumerate(cfg["sections"]):
     for li, ln in enumerate(sec["lines"]):
         a, sr = k.create(ln.get("say", ln["sub"]), voice=cfg["voice"], speed=cfg["speed"], lang="fr-fr")
         a = trim(np.asarray(a, dtype=np.float32))
+        if REF:
+            r = REF["sections"][si]["lines"][li]; target = r["t1"] - r["t0"]; t = r["t0"]
+            ratio = (len(a) / SR) / target
+            if ratio > 1.004:
+                with tempfile.TemporaryDirectory() as td:
+                    sf.write(td + "/i.wav", a, SR)
+                    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", td + "/i.wav", "-af", f"atempo={ratio:.5f}", "-ar", str(SR), td + "/o.wav"], check=True)
+                    a, _ = sf.read(td + "/o.wav", dtype="float32")
+                a = a[: int(target * SR)]
+            if ratio > 1.02: print(f"  {sec['id']} ligne {li + 1} : vitesse x{ratio:.3f}")
         d = len(a) / SR
         parts.append((t, a)); st["lines"].append({"sub": ln["sub"], "t0": round(t, 3), "t1": round(t + d, 3)})
         t += d + GAP
     t += SEC_GAP - GAP
+    if REF: t = REF["sections"][si]["end"]
     st["end"] = round(t, 3); timing.append(st)
-total = t - SEC_GAP + TAIL
+total = REF["total"] if REF else t - SEC_GAP + TAIL
 buf = np.zeros(int(total * SR) + 1, dtype=np.float32)
 for t0, a in parts:
     i = int(round(t0 * SR)); buf[i:i + len(a)] += a

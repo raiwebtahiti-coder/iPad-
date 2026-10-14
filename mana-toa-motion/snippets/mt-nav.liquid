@@ -1,0 +1,12 @@
+{%- comment -%}
+  Menu principal : le trait du Ō glisse AU-DESSUS du lien actif (comme le macron au-dessus du O).
+  {% render 'mt-nav', menu: linklists['main-menu'] %}
+  En colonne (menu mobile), chaque lien actif porte son propre trait, sans glissement.
+{%- endcomment -%}
+<nav class="mt-nav" data-mt-nav aria-label="Menu principal">
+  {%- for link in menu.links -%}
+    <a class="mt-nav__link" href="{{ link.url }}"{% if link.current or link.child_active %} aria-current="page"{% endif %}>
+      <span class="mt-bar" aria-hidden="true"></span>{{ link.title }}
+    </a>
+  {%- endfor -%}
+</nav>

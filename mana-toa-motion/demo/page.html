@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mana Tō'a Motion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,900&family=Schibsted+Grotesk:wght@400;500;700&display=swap">
+<style>
+/*@@MT-CSS@@*/
+
+/* ---- page de démonstration (ne pas copier dans le thème : seul mt-motion.css est nécessaire) ----
+   Mise en page : une boutique réduite à l'essentiel (en-tête, grille, texte, la devise), puis la fiche technique.
+   Un seul monde visuel, le papier de la marque : page volontairement mono-thème, couleurs toutes explicites. */
+:root {
+  color-scheme: light;
+  --paper: #EEEAE2;
+  --paper-2: #E5E0D6;
+  --ink: #1B1A18;
+  --muted: #55524C;
+  --rule: #CFC8BA;
+  --gold: #F2B807;
+  --display: "Fraunces", "Iowan Old Style", Georgia, serif;
+  --body: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+html { background: var(--paper); }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 400 17px/1.6 var(--body); -webkit-font-smoothing: antialiased; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-inline: max(16px, 4vw); }
+
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--paper); border-bottom: 1px solid var(--rule); }
+.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-block: 18px; flex-wrap: wrap; }
+.mt-logo { font: 900 26px/1 var(--display); letter-spacing: .01em; color: var(--ink); text-decoration: none; }
+.mt-nav { display: flex; gap: 28px; flex-wrap: wrap; font: 500 14px/1 var(--body); letter-spacing: .08em; text-transform: uppercase; padding-top: 10px; }
+.mt-nav__link { color: var(--ink); text-decoration: none; padding: 6px 0; }
+.mt-nav__link:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+
+.intro { padding-block: 64px 24px; display: grid; gap: 22px; }
+.eyebrow { font: 700 12px/1 var(--body); letter-spacing: .26em; text-transform: uppercase; color: var(--muted); }
+h1, h2 { font-family: var(--display); font-weight: 900; text-transform: uppercase; margin: 0; text-wrap: balance; letter-spacing: -.005em; }
+h1 { font-size: clamp(2.6rem, 7vw, 5.6rem); line-height: .95; }
+h2 { font-size: clamp(1.9rem, 4.2vw, 3.2rem); line-height: 1; }
+.lede { max-width: 60ch; margin: 0; color: var(--muted); }
+.lede a, .note a { font-weight: 500; }
+.actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.btn { appearance: none; border: 1.5px solid var(--ink); background: transparent; color: var(--ink); font: 700 13px/1 var(--body); letter-spacing: .14em; text-transform: uppercase; padding: 15px 22px; cursor: pointer; }
+.btn--ink { background: var(--ink); color: var(--paper); }
+.btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+
+.shop { padding-block: 56px 72px; display: grid; gap: 40px; }
+.grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 44px 32px; padding: 10px; }
+.demo-card .mt-flip__face { aspect-ratio: 5 / 6; object-fit: cover; }
+.mt-card__info { display: flex; justify-content: space-between; gap: 12px; margin-top: 18px; }
+.mt-card__title { margin: 0; font: 500 15px/1.35 var(--body); }
+.mt-card__price { margin: 0; font: 500 15px/1.35 var(--body); color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.mt-card__link:focus-visible { text-decoration: underline; }
+.note { margin: 0; color: var(--muted); font-size: 15px; max-width: 62ch; }
+
+.spec { padding-block: 72px 96px; display: grid; gap: 36px; border-top: 1px solid var(--rule); }
+.spec-list { display: grid; gap: 0; }
+.spec-row { display: grid; grid-template-columns: minmax(180px, 1.1fr) 2fr; gap: 12px 40px; padding-block: 26px; border-bottom: 1px solid var(--rule); }
+.spec-row h3 { margin: 0; font: 900 22px/1.15 var(--display); text-transform: uppercase; }
+.spec-row h3 small { display: block; margin-top: 8px; font: 500 12px/1.3 var(--body); letter-spacing: .2em; color: var(--muted); }
+.spec-row p { margin: 0 0 12px; max-width: 64ch; }
+dl.specs { display: grid; grid-template-columns: max-content 1fr; gap: 6px 18px; margin: 0; font-size: 15px; }
+dl.specs dt { font: 700 11px/1.9 var(--body); letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
+dl.specs dd { margin: 0; }
+code { font: 500 .88em/1 ui-monospace, "SF Mono", Menlo, monospace; background: var(--paper-2); padding: 2px 5px; }
+
+footer { border-top: 1px solid var(--rule); padding-block: 28px 40px; color: var(--muted); font-size: 14px; }
+
+@media (max-width: 860px) {
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 36px 18px; }
+  .spec-row { grid-template-columns: 1fr; }
+}
+@media (max-width: 420px) {
+  .mt-nav { gap: 18px; font-size: 13px; }
+  dl.specs { grid-template-columns: 1fr; gap: 2px 0; }
+  dl.specs dd { margin-bottom: 8px; }
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a href="#" class="mt-logo" aria-label="Mana Tō'a">
+      <span aria-hidden="true">MANA T<span class="mt-o">O<span class="mt-o__bar"></span></span>'A</span>
+    </a>
+    <nav class="mt-nav" data-mt-nav aria-label="Menu principal">
+      <a class="mt-nav__link" href="#essentiels" aria-current="page"><span class="mt-bar" aria-hidden="true"></span>Boutique</a>
+      <a class="mt-nav__link" href="#motions"><span class="mt-bar" aria-hidden="true"></span>Motions</a>
+      <a class="mt-nav__link" href="#devise"><span class="mt-bar" aria-hidden="true"></span>La devise</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="wrap intro">
+    <span class="eyebrow">Langage de motion · démonstration</span>
+    <h1 class="mt-h"><span class="mt-h__text">Never stay down</span><span class="mt-bar" aria-hidden="true"></span></h1>
+    <p class="lede">Quatre gestes pour toute la boutique : les coins du ring autour des produits, le trait du Ō qui signe titres, menu, liens et chargements, la face et le dos des tees, et la devise qui se relève. Passe la souris sur les tees, ou sur iPhone et iPad, fais défiler et touche le bouton rond. <a class="mt-link" href="#motions">Voir la fiche technique</a>.</p>
+    <div class="actions">
+      <button class="btn btn--ink" type="button" id="demo-add">Ajouter au panier</button>
+      <button class="btn" type="button" id="demo-load">Simuler un chargement</button>
+    </div>
+  </section>
+
+  <section class="wrap shop" id="essentiels">
+    <h2 class="mt-h"><span class="mt-h__text">Les essentiels</span><span class="mt-bar" aria-hidden="true"></span></h2>
+    <div class="grid">
+      <!--@@CARDS@@-->
+    </div>
+    <p class="note">Coton épais 280 g/m², coupe oversize, petites séries. Les visuels sont des tees dessinés pour la démo : dans le thème, la carte prend la première photo du produit pour la face et la deuxième pour le dos. <a class="mt-link" href="#devise">Descendre jusqu'à la devise</a>.</p>
+  </section>
+
+  <section class="mt-nsd" data-mt-nsd id="devise">
+    <div class="mt-nsd__stage">
+      <p class="mt-nsd__line" data-text="Never stay down">Never stay down</p>
+      <span class="mt-nsd__floor" aria-hidden="true"></span>
+      <span class="mt-bar mt-nsd__bar" aria-hidden="true"></span>
+      <p class="mt-nsd__caption">Mana Tō'a · Aotearoa</p>
+    </div>
+  </section>
+
+  <section class="wrap spec" id="motions">
+    <h2 class="mt-h"><span class="mt-h__text">Les quatre motions</span><span class="mt-bar" aria-hidden="true"></span></h2>
+    <div class="spec-list">
+      <article class="spec-row">
+        <h3>Les coins du ring<small>CARTE PRODUIT</small></h3>
+        <div>
+          <p>Mettre un produit « dans le ring » : quatre coins fins le cadrent comme les poteaux d'angle, sans couvrir la photo. Les coins diagonaux (rouge et bleu) se tracent d'abord, les neutres ensuite.</p>
+          <dl class="specs">
+            <dt>Durée</dt><dd>Entrée 380 ms, décalages 0 / 40 / 70 / 110 ms. Sortie 160 ms sans délai.</dd>
+            <dt>Courbe</dt><dd>Entrée <code>cubic-bezier(.16, 1, .3, 1)</code>, sortie <code>cubic-bezier(.55, 0, .75, .2)</code>.</dd>
+            <dt>Mobile</dt><dd>Pas de survol : la carte qui passe au centre de l'écran pendant le défilement entre dans le ring.</dd>
+            <dt>Calme</dt><dd>Les coins apparaissent déjà tracés, en fondu de 240 ms.</dd>
+          </dl>
+        </div>
+      </article>
+      <article class="spec-row">
+        <h3>Le trait du Ō<small>TITRES · MENU · CHARGEMENT · LIENS</small></h3>
+        <div>
+          <p>La barre au-dessus du O devient la signature graphique. Elle se trace sous les titres une fois le texte posé, glisse au-dessus du lien actif du menu (à la place du macron), traverse le haut de l'écran pendant un chargement, et souligne les liens au survol.</p>
+          <dl class="specs">
+            <dt>Durée</dt><dd>Logo et titres 760 ms (titre 640 ms puis trait à +260 ms). Menu 380 ms. Lien 380 ms à l'aller, 160 ms au retour. Fin de chargement 640 ms.</dd>
+            <dt>Courbe</dt><dd>Tracé d'encre <code>cubic-bezier(.77, 0, .18, 1)</code>, menu <code>cubic-bezier(.65, 0, .35, 1)</code>.</dd>
+            <dt>Mobile</dt><dd>Menu en colonne : chaque lien actif porte son trait, sans glissement. Liens : trait fin permanent à 40 %, plein au toucher.</dd>
+            <dt>Calme</dt><dd>Les traits sont déjà là ; le titre apparaît en fondu, sans déplacement.</dd>
+          </dl>
+        </div>
+      </article>
+      <article class="spec-row">
+        <h3>Face / dos<small>CARTE PRODUIT</small></h3>
+        <div>
+          <p>Retourner le tee comme en boutique, pour voir le dos sans quitter la grille. Le geste attend 120 ms avant de partir : la souris qui traverse la grille ne retourne rien.</p>
+          <dl class="specs">
+            <dt>Durée</dt><dd>640 ms, après 120 ms d'intention. Retour 640 ms sans attente.</dd>
+            <dt>Courbe</dt><dd><code>cubic-bezier(.65, 0, .35, 1)</code>, perspective 1600 px.</dd>
+            <dt>Mobile</dt><dd>Un bouton rond « Voir le dos » en bas à droite de la photo ; un second toucher remet la face.</dd>
+            <dt>Calme</dt><dd>Fondu de 240 ms entre la face et le dos, sans rotation.</dd>
+          </dl>
+        </div>
+      </article>
+      <article class="spec-row">
+        <h3>Never stay down<small>UNE SEULE FOIS SUR LE SITE</small></h3>
+        <div>
+          <p>La devise mise en scène au scroll : les lettres sont envoyées au tapis dans le désordre, restent au sol, puis se relèvent dans l'ordre de lecture. Le trait doré se trace sous la devise relevée. Une fois debout, elles ne retombent plus, même en remontant.</p>
+          <dl class="specs">
+            <dt>Durée</dt><dd>Pilotée par le défilement sur 260 % de hauteur d'écran (210 % sur mobile).</dd>
+            <dt>Courbe</dt><dd>Chute en accélération cubique (gravité), relevé avec un léger dépassement, trait doré en décélération.</dd>
+            <dt>Mobile</dt><dd>Même geste, plus court ; un seul calcul par image, seulement quand la section est à l'écran.</dd>
+            <dt>Calme</dt><dd>La devise apparaît debout, en fondu, avec son trait doré.</dd>
+          </dl>
+        </div>
+      </article>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap">Mana Tō'a · motion system · HTML, CSS et JavaScript vanilla, préfixe <code>mt-</code>.</div></footer>
+
+<script>
+/*@@MT-JS@@*/
+</script>
+<script>
+  // démo : simule un ajout au panier et un chargement de page
+  document.getElementById("demo-add").addEventListener("click", function () {
+    MT.loader.start(); setTimeout(MT.loader.done, 900);
+  });
+  document.getElementById("demo-load").addEventListener("click", function () {
+    MT.loader.start(); setTimeout(MT.loader.done, 2600);
+  });
+</script>
+</body>
+</html>

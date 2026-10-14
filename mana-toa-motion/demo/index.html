@@ -1,0 +1,931 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mana Tō'a Motion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,900&family=Schibsted+Grotesk:wght@400;500;700&display=swap">
+<style>
+/* =============================================================================
+   MANA TŌ'A · langage de motion permanent
+   4 motions : les coins du ring · le trait du Ō · face / dos · never stay down
+   Règles : on n'anime que transform, opacity et clip-path. Aucune librairie.
+   Tout respecte prefers-reduced-motion (version calme en bas de fichier).
+   ============================================================================= */
+
+:root {
+  /* couleurs de la marque */
+  --mt-paper: #EEEAE2;
+  --mt-ink: #1B1A18;
+  --mt-muted: #55524C;
+  --mt-gold: #F2B807;          /* avec parcimonie : un seul moment doré par écran */
+
+  /* courbes. Aucune n'a de rebond : la marque est posée, pas joueuse. */
+  --mt-ease-out: cubic-bezier(.16, 1, .3, 1);     /* arrivée : rapide puis longue décélération */
+  --mt-ease-in: cubic-bezier(.55, 0, .75, .2);    /* sortie : discrète, accélère et disparaît */
+  --mt-ease-inout: cubic-bezier(.65, 0, .35, 1);  /* déplacement d'un état à l'autre */
+  --mt-ease-ink: cubic-bezier(.77, 0, .18, 1);    /* trait d'encre : départ retenu, fin posée comme une plume */
+
+  /* durées */
+  --mt-dur-xs: 160ms;
+  --mt-dur-s: 240ms;
+  --mt-dur-m: 380ms;
+  --mt-dur-l: 640ms;
+  --mt-dur-xl: 760ms;
+
+  /* le trait du Ō : épaisseur proportionnelle au texte, comme le macron de la typo */
+  --mt-bar-h: max(2px, .085em);
+  --mt-bar-color: var(--mt-ink);
+
+  /* les coins du ring */
+  --mt-ring-color: var(--mt-ink);
+  --mt-ring-w: 1.5px;          /* épaisseur du trait */
+  --mt-ring-arm: clamp(14px, 9%, 26px);   /* longueur de chaque bras */
+  --mt-ring-gap: 8px;          /* distance entre la photo et les coins */
+}
+
+/* =============================================================================
+   1 · LES COINS DU RING
+   4 coins fins se dessinent autour de la photo, comme les 4 coins d'un ring.
+   Les coins rouge et bleu (haut gauche, bas droite) d'abord, les neutres ensuite.
+   ============================================================================= */
+
+.mt-ring { position: relative; }
+.mt-ring__frame { position: relative; }
+.mt-ring__corners {
+  position: absolute;
+  inset: calc(var(--mt-ring-gap) * -1);
+  pointer-events: none;
+  z-index: 2;
+}
+.mt-ring__c { position: absolute; width: var(--mt-ring-arm); height: var(--mt-ring-arm); }
+.mt-ring__c--tl { top: 0; left: 0; }
+.mt-ring__c--tr { top: 0; right: 0; }
+.mt-ring__c--bl { bottom: 0; left: 0; }
+.mt-ring__c--br { bottom: 0; right: 0; }
+
+.mt-ring__c::before,
+.mt-ring__c::after {
+  content: "";
+  position: absolute;
+  background: var(--mt-ring-color);
+  /* sortie : rapide, sans délai, le cadre se replie dans ses coins */
+  transition: transform var(--mt-dur-xs) var(--mt-ease-in);
+}
+.mt-ring__c::before { height: var(--mt-ring-w); width: 100%; transform: scaleX(0); }   /* bras horizontal */
+.mt-ring__c::after  { width: var(--mt-ring-w); height: 100%; transform: scaleY(0); }   /* bras vertical */
+
+.mt-ring__c--tl::before { top: 0; left: 0; transform-origin: left center; }
+.mt-ring__c--tl::after  { top: 0; left: 0; transform-origin: center top; }
+.mt-ring__c--tr::before { top: 0; right: 0; transform-origin: right center; }
+.mt-ring__c--tr::after  { top: 0; right: 0; transform-origin: center top; }
+.mt-ring__c--bl::before { bottom: 0; left: 0; transform-origin: left center; }
+.mt-ring__c--bl::after  { bottom: 0; left: 0; transform-origin: center bottom; }
+.mt-ring__c--br::before { bottom: 0; right: 0; transform-origin: right center; }
+.mt-ring__c--br::after  { bottom: 0; right: 0; transform-origin: center bottom; }
+
+/* état actif : souris (appareils à survol), clavier, ou carte au centre de l'écran sur tactile */
+.mt-ring.is-mt-active .mt-ring__c::before,
+.mt-ring:focus-within .mt-ring__c::before { transform: scaleX(1); }
+.mt-ring.is-mt-active .mt-ring__c::after,
+.mt-ring:focus-within .mt-ring__c::after { transform: scaleY(1); }
+@media (hover: hover) and (pointer: fine) {
+  .mt-ring:hover .mt-ring__c::before { transform: scaleX(1); }
+  .mt-ring:hover .mt-ring__c::after { transform: scaleY(1); }
+}
+
+/* entrée : 380 ms, coins diagonaux d'abord (0 ms), puis les deux autres (+70 ms) ;
+   dans chaque coin, le bras vertical suit l'horizontal de 40 ms : un coin qui se trace, pas qui apparaît */
+.mt-ring.is-mt-active .mt-ring__c::before, .mt-ring:focus-within .mt-ring__c::before,
+.mt-ring.is-mt-active .mt-ring__c::after, .mt-ring:focus-within .mt-ring__c::after {
+  transition: transform var(--mt-dur-m) var(--mt-ease-out) var(--mt-d, 0ms);
+}
+@media (hover: hover) and (pointer: fine) {
+  .mt-ring:hover .mt-ring__c::before,
+  .mt-ring:hover .mt-ring__c::after { transition: transform var(--mt-dur-m) var(--mt-ease-out) var(--mt-d, 0ms); }
+}
+.mt-ring__c--tl::before, .mt-ring__c--br::before { --mt-d: 0ms; }
+.mt-ring__c--tl::after,  .mt-ring__c--br::after  { --mt-d: 40ms; }
+.mt-ring__c--tr::before, .mt-ring__c--bl::before { --mt-d: 70ms; }
+.mt-ring__c--tr::after,  .mt-ring__c--bl::after  { --mt-d: 110ms; }
+
+/* structure de la carte : toute la carte est cliquable (lien étiré), le bouton face / dos passe au-dessus */
+.mt-card { position: relative; }
+.mt-card__link { color: inherit; text-decoration: none; }
+.mt-card__link::before { content: ""; position: absolute; inset: 0; z-index: 1; }
+.mt-card__link:focus-visible { outline: none; }
+
+/* =============================================================================
+   2 · LE TRAIT DU Ō
+   Un seul élément graphique (.mt-bar) décliné en 5 usages :
+   logo · titres · menu · chargement · liens.
+   ============================================================================= */
+
+.mt-bar {
+  display: block;
+  height: var(--mt-bar-h);
+  background: var(--mt-bar-color);
+  transform: scaleX(0);
+  transform-origin: left center;
+  border-radius: 0;   /* un trait d'encre, pas une pilule */
+}
+
+/* --- 2a · le Ō du logo : la barre au-dessus du O se trace au chargement de la page --- */
+.mt-o { position: relative; display: inline-block; }
+.mt-o__bar {
+  position: absolute;
+  left: var(--mt-o-left, 16%);
+  width: var(--mt-o-width, 68%);
+  top: var(--mt-o-top, -.02em);
+  height: var(--mt-bar-h);
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+.mt-o.is-mt-drawn .mt-o__bar {
+  transform: scaleX(1);
+  transition: transform var(--mt-dur-xl) var(--mt-ease-ink) 200ms;
+}
+
+/* --- 2b · titres : le texte monte dans son cadre, puis le trait se trace dessous --- */
+.mt-h { position: relative; }
+.mt-h__text {
+  display: block;
+  padding-bottom: .08em;   /* garde les jambages dans le cadre */
+  clip-path: inset(0 0 100% 0);
+  transform: translateY(.28em);
+}
+.mt-h .mt-bar {
+  width: var(--mt-bar-len, 2.6rem);
+  margin-top: .32em;
+}
+.mt-h--center .mt-bar { margin-left: auto; margin-right: auto; transform-origin: center; }
+.mt-h.is-mt-in .mt-h__text {
+  clip-path: inset(0 0 0 0);
+  transform: translateY(0);
+  transition: clip-path var(--mt-dur-l) var(--mt-ease-out), transform var(--mt-dur-l) var(--mt-ease-out);
+}
+.mt-h.is-mt-in .mt-bar {
+  transform: scaleX(1);
+  transition: transform var(--mt-dur-xl) var(--mt-ease-ink) 260ms;   /* le trait arrive quand le titre est posé */
+}
+
+/* --- 2c · menu : un seul trait glisse AU-DESSUS du lien actif, exactement comme le macron au-dessus du O --- */
+.mt-nav { position: relative; }
+.mt-nav__bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1px;            /* mis à l'échelle en JS : translateX(x) scaleX(largeur) */
+  height: 2px;
+  background: var(--mt-bar-color);
+  transform-origin: left center;
+  transform: translateX(var(--mt-x, 0px)) scaleX(var(--mt-w, 0));
+  opacity: var(--mt-o, 0);
+  transition: transform var(--mt-dur-m) var(--mt-ease-inout), opacity var(--mt-dur-s) linear;
+  pointer-events: none;
+}
+.mt-nav.is-mt-instant .mt-nav__bar { transition: none; }
+/* menu mobile (liste verticale) : pas de trait qui glisse, chaque lien porte son propre trait */
+.mt-nav__link { position: relative; }
+.mt-nav__link > .mt-bar { position: absolute; left: 0; top: -.35em; width: 1.4em; height: 2px; }
+.mt-nav--stack .mt-nav__link[aria-current] > .mt-bar { transform: scaleX(1); }
+.mt-nav--stack .mt-nav__bar { display: none; }
+.mt-nav:not(.mt-nav--stack) .mt-nav__link > .mt-bar { display: none; }
+
+/* --- 2d · barre de chargement : le trait parcourt le haut de l'écran, puis se retire par la droite --- */
+.mt-loader {
+  position: fixed;
+  left: 0; right: 0; top: 0;
+  height: 3px;
+  z-index: 9999;
+  pointer-events: none;
+}
+.mt-loader__bar {
+  height: 100%;
+  background: var(--mt-ink);
+  transform: scaleX(var(--mt-p, 0));
+  transform-origin: left center;
+  transition: transform var(--mt-dur-s) var(--mt-ease-out);
+}
+.mt-loader.is-mt-done .mt-loader__bar {
+  transform-origin: right center;
+  transform: scaleX(0);
+  transition: transform var(--mt-dur-l) var(--mt-ease-ink) 120ms;
+}
+
+/* --- 2e · liens : le trait se trace de gauche à droite au survol et repart par la droite --- */
+.mt-link {
+  position: relative;
+  text-decoration: none;
+  color: inherit;
+}
+.mt-link::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0;
+  bottom: -.12em;
+  height: max(1.5px, .07em);
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform var(--mt-dur-s) var(--mt-ease-in);
+}
+@media (hover: hover) and (pointer: fine) {
+  .mt-link:hover::after {
+    transform: scaleX(1);
+    transform-origin: left center;
+    transition: transform var(--mt-dur-m) var(--mt-ease-out);
+  }
+}
+.mt-link:focus-visible::after { transform: scaleX(1); transform-origin: left center; }
+/* tactile : pas de survol, le lien reste lisible comme un lien (trait fin, à 40 %) */
+@media (hover: none) {
+  .mt-link::after { transform: scaleX(1); opacity: .4; transition: opacity var(--mt-dur-xs) linear; }
+  .mt-link:active::after { opacity: 1; }
+}
+
+/* =============================================================================
+   3 · FACE / DOS
+   La photo pivote en 3D de la face vers le dos du tee, comme quand on retourne le vêtement en boutique.
+   ============================================================================= */
+
+.mt-flip {
+  position: relative;
+  perspective: 1600px;
+  -webkit-perspective: 1600px;
+}
+.mt-flip__inner {
+  position: relative;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  transform: rotateY(0deg);
+  /* retour : sans délai */
+  transition: transform var(--mt-dur-l) var(--mt-ease-inout);
+}
+.mt-flip__face {
+  display: block;
+  width: 100%;
+  height: auto;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: rotateY(0deg) translateZ(1px);   /* translateZ : évite le scintillement de Safari iOS */
+}
+.mt-flip__face--back {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  object-fit: cover;
+  transform: rotateY(180deg) translateZ(1px);
+}
+/* aller : 120 ms d'intention (on ne retourne pas les tees quand la souris ne fait que traverser la grille) */
+@media (hover: hover) and (pointer: fine) {
+  .mt-flip-host.has-mt-back:hover .mt-flip__inner {
+    transform: rotateY(180deg);
+    transition: transform var(--mt-dur-l) var(--mt-ease-inout) 120ms;
+  }
+}
+.mt-flip-host.is-mt-flipped .mt-flip__inner { transform: rotateY(180deg); }
+
+/* bouton tactile « voir le dos » : seulement sur les écrans sans survol. Il est placé HORS du bloc 3D
+   (frère de .mt-flip dans .mt-ring__frame) pour passer au-dessus du lien qui rend la carte cliquable. */
+.mt-flip__toggle {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  z-index: 3;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--mt-paper);
+  color: var(--mt-ink);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform var(--mt-dur-xs) var(--mt-ease-out);
+}
+.mt-flip__toggle svg { width: 18px; height: 18px; transition: transform var(--mt-dur-l) var(--mt-ease-inout); }
+.mt-flip-host.is-mt-flipped .mt-flip__toggle svg { transform: rotate(180deg); }
+.mt-flip__toggle:active { transform: scale(.92); }
+@media (hover: none) {
+  .mt-flip-host.has-mt-back .mt-flip__toggle { display: inline-flex; }
+}
+
+/* =============================================================================
+   4 · NEVER STAY DOWN
+   Une seule fois sur le site. Au scroll, les lettres sont envoyées au tapis, restent au sol, puis se relèvent
+   une à une. Une fois debout, elles ne retombent plus : never stay down.
+   ============================================================================= */
+
+.mt-nsd {
+  position: relative;
+  height: 260vh;
+  height: 260svh;
+  background: var(--mt-paper);
+  color: var(--mt-ink);
+}
+.mt-nsd__stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 0 6vw;
+}
+.mt-nsd__line {
+  margin: 0;
+  text-align: center;
+  font-family: "Fraunces", Georgia, serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: clamp(3rem, 12.5vw, 10rem);
+  line-height: .92;
+  letter-spacing: -.01em;
+}
+.mt-nsd__word { display: inline-block; white-space: nowrap; }
+.mt-nsd__l {
+  display: inline-block;
+  transform-origin: 50% 92%;   /* la lettre bascule sur son pied */
+}
+.mt-nsd.is-mt-running .mt-nsd__l { will-change: transform, opacity; }
+.mt-nsd__knight { width: clamp(90px, 16vw, 170px); height: auto; margin-bottom: clamp(1rem, 3vw, 2rem); }
+.mt-nsd__floor {
+  /* le tapis : un trait fin qui apparaît quand les lettres tombent */
+  width: min(80vw, 46rem);
+  height: 1px;
+  margin-top: .8rem;
+  background: var(--mt-ink);
+  opacity: 0;
+  transform: scaleX(.2);
+}
+.mt-nsd__bar {
+  --mt-bar-color: var(--mt-gold);
+  width: clamp(4rem, 14vw, 9rem);
+  height: clamp(4px, .9vw, 8px);
+  margin-top: clamp(1rem, 3vw, 2rem);
+  transform-origin: center;
+}
+.mt-nsd__caption {
+  margin-top: 1.1rem;
+  font: 500 .8rem/1.4 "Schibsted Grotesk", system-ui, sans-serif;
+  letter-spacing: .32em;
+  text-transform: uppercase;
+  color: var(--mt-muted);
+  opacity: 0;
+}
+@media (max-width: 749px) {
+  .mt-nsd { height: 210vh; height: 210svh; }
+}
+
+/* =============================================================================
+   VERSION CALME · prefers-reduced-motion
+   Pas de déplacement ni de rotation : uniquement des fondus courts. Rien n'est perdu (chaque état reste visible).
+   ============================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  /* coins : apparaissent en fondu, déjà tracés */
+  .mt-ring__c::before { transform: scaleX(1); }
+  .mt-ring__c::after { transform: scaleY(1); }
+  .mt-ring__c { opacity: 0; transition: opacity var(--mt-dur-s) linear; }
+  .mt-ring.is-mt-active .mt-ring__c, .mt-ring:focus-within .mt-ring__c { opacity: 1; }
+  @media (hover: hover) { .mt-ring:hover .mt-ring__c { opacity: 1; } }
+  .mt-ring__c::before, .mt-ring__c::after { transition: none !important; }
+
+  /* trait du Ō : visible tout de suite, sans tracé */
+  .mt-o__bar, .mt-h .mt-bar { transform: scaleX(1); transition: none !important; }
+  .mt-h__text { clip-path: none; transform: none; opacity: 0; transition: opacity var(--mt-dur-m) linear; }
+  .mt-h.is-mt-in .mt-h__text { opacity: 1; transition: opacity var(--mt-dur-m) linear; }
+  .mt-nav__bar { transition: opacity var(--mt-dur-s) linear; }
+  .mt-loader__bar, .mt-loader.is-mt-done .mt-loader__bar { transition: none; }
+  .mt-loader.is-mt-done { opacity: 0; transition: opacity var(--mt-dur-s) linear; }
+  .mt-link::after, .mt-link:hover::after { transition: none !important; }
+
+  /* face / dos : fondu entre les deux photos au lieu de la rotation 3D */
+  .mt-flip__inner, .mt-flip-host.has-mt-back:hover .mt-flip__inner, .mt-flip-host.is-mt-flipped .mt-flip__inner { transform: none !important; transition: none !important; }
+  .mt-flip__face, .mt-flip__face--back { transform: none; backface-visibility: visible; -webkit-backface-visibility: visible; }
+  .mt-flip__face--back { opacity: 0; transition: opacity var(--mt-dur-s) linear; }
+  @media (hover: hover) and (pointer: fine) { .mt-flip-host.has-mt-back:hover .mt-flip__face--back { opacity: 1; } }
+  .mt-flip-host.is-mt-flipped .mt-flip__face--back { opacity: 1; }
+  .mt-flip__toggle svg { transition: none; }
+
+  /* never stay down : pas de scroll piloté ; la devise apparaît debout, le trait doré est déjà là */
+  .mt-nsd { height: auto; }
+  .mt-nsd__stage { position: relative; height: auto; min-height: 70vh; padding: 18vh 6vw; }
+  .mt-nsd__line { opacity: 0; transition: opacity var(--mt-dur-l) linear; }
+  .mt-nsd.is-mt-in .mt-nsd__line, .mt-nsd.is-mt-in .mt-nsd__caption { opacity: 1; }
+  .mt-nsd__caption { transition: opacity var(--mt-dur-l) linear 200ms; }
+  .mt-nsd__bar { transform: scaleX(1); }
+}
+
+
+/* ---- page de démonstration (ne pas copier dans le thème : seul mt-motion.css est nécessaire) ----
+   Mise en page : une boutique réduite à l'essentiel (en-tête, grille, texte, la devise), puis la fiche technique.
+   Un seul monde visuel, le papier de la marque : page volontairement mono-thème, couleurs toutes explicites. */
+:root {
+  color-scheme: light;
+  --paper: #EEEAE2;
+  --paper-2: #E5E0D6;
+  --ink: #1B1A18;
+  --muted: #55524C;
+  --rule: #CFC8BA;
+  --gold: #F2B807;
+  --display: "Fraunces", "Iowan Old Style", Georgia, serif;
+  --body: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+html { background: var(--paper); }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 400 17px/1.6 var(--body); -webkit-font-smoothing: antialiased; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-inline: max(16px, 4vw); }
+
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--paper); border-bottom: 1px solid var(--rule); }
+.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-block: 18px; flex-wrap: wrap; }
+.mt-logo { font: 900 26px/1 var(--display); letter-spacing: .01em; color: var(--ink); text-decoration: none; }
+.mt-nav { display: flex; gap: 28px; flex-wrap: wrap; font: 500 14px/1 var(--body); letter-spacing: .08em; text-transform: uppercase; padding-top: 10px; }
+.mt-nav__link { color: var(--ink); text-decoration: none; padding: 6px 0; }
+.mt-nav__link:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+
+.intro { padding-block: 64px 24px; display: grid; gap: 22px; }
+.eyebrow { font: 700 12px/1 var(--body); letter-spacing: .26em; text-transform: uppercase; color: var(--muted); }
+h1, h2 { font-family: var(--display); font-weight: 900; text-transform: uppercase; margin: 0; text-wrap: balance; letter-spacing: -.005em; }
+h1 { font-size: clamp(2.6rem, 7vw, 5.6rem); line-height: .95; }
+h2 { font-size: clamp(1.9rem, 4.2vw, 3.2rem); line-height: 1; }
+.lede { max-width: 60ch; margin: 0; color: var(--muted); }
+.lede a, .note a { font-weight: 500; }
+.actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.btn { appearance: none; border: 1.5px solid var(--ink); background: transparent; color: var(--ink); font: 700 13px/1 var(--body); letter-spacing: .14em; text-transform: uppercase; padding: 15px 22px; cursor: pointer; }
+.btn--ink { background: var(--ink); color: var(--paper); }
+.btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+
+.shop { padding-block: 56px 72px; display: grid; gap: 40px; }
+.grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 44px 32px; padding: 10px; }
+.demo-card .mt-flip__face { aspect-ratio: 5 / 6; object-fit: cover; }
+.mt-card__info { display: flex; justify-content: space-between; gap: 12px; margin-top: 18px; }
+.mt-card__title { margin: 0; font: 500 15px/1.35 var(--body); }
+.mt-card__price { margin: 0; font: 500 15px/1.35 var(--body); color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.mt-card__link:focus-visible { text-decoration: underline; }
+.note { margin: 0; color: var(--muted); font-size: 15px; max-width: 62ch; }
+
+.spec { padding-block: 72px 96px; display: grid; gap: 36px; border-top: 1px solid var(--rule); }
+.spec-list { display: grid; gap: 0; }
+.spec-row { display: grid; grid-template-columns: minmax(180px, 1.1fr) 2fr; gap: 12px 40px; padding-block: 26px; border-bottom: 1px solid var(--rule); }
+.spec-row h3 { margin: 0; font: 900 22px/1.15 var(--display); text-transform: uppercase; }
+.spec-row h3 small { display: block; margin-top: 8px; font: 500 12px/1.3 var(--body); letter-spacing: .2em; color: var(--muted); }
+.spec-row p { margin: 0 0 12px; max-width: 64ch; }
+dl.specs { display: grid; grid-template-columns: max-content 1fr; gap: 6px 18px; margin: 0; font-size: 15px; }
+dl.specs dt { font: 700 11px/1.9 var(--body); letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
+dl.specs dd { margin: 0; }
+code { font: 500 .88em/1 ui-monospace, "SF Mono", Menlo, monospace; background: var(--paper-2); padding: 2px 5px; }
+
+footer { border-top: 1px solid var(--rule); padding-block: 28px 40px; color: var(--muted); font-size: 14px; }
+
+@media (max-width: 860px) {
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 36px 18px; }
+  .spec-row { grid-template-columns: 1fr; }
+}
+@media (max-width: 420px) {
+  .mt-nav { gap: 18px; font-size: 13px; }
+  dl.specs { grid-template-columns: 1fr; gap: 2px 0; }
+  dl.specs dd { margin-bottom: 8px; }
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a href="#" class="mt-logo" aria-label="Mana Tō'a">
+      <span aria-hidden="true">MANA T<span class="mt-o">O<span class="mt-o__bar"></span></span>'A</span>
+    </a>
+    <nav class="mt-nav" data-mt-nav aria-label="Menu principal">
+      <a class="mt-nav__link" href="#essentiels" aria-current="page"><span class="mt-bar" aria-hidden="true"></span>Boutique</a>
+      <a class="mt-nav__link" href="#motions"><span class="mt-bar" aria-hidden="true"></span>Motions</a>
+      <a class="mt-nav__link" href="#devise"><span class="mt-bar" aria-hidden="true"></span>La devise</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="wrap intro">
+    <span class="eyebrow">Langage de motion · démonstration</span>
+    <h1 class="mt-h"><span class="mt-h__text">Never stay down</span><span class="mt-bar" aria-hidden="true"></span></h1>
+    <p class="lede">Quatre gestes pour toute la boutique : les coins du ring autour des produits, le trait du Ō qui signe titres, menu, liens et chargements, la face et le dos des tees, et la devise qui se relève. Passe la souris sur les tees, ou sur iPhone et iPad, fais défiler et touche le bouton rond. <a class="mt-link" href="#motions">Voir la fiche technique</a>.</p>
+    <div class="actions">
+      <button class="btn btn--ink" type="button" id="demo-add">Ajouter au panier</button>
+      <button class="btn" type="button" id="demo-load">Simuler un chargement</button>
+    </div>
+  </section>
+
+  <section class="wrap shop" id="essentiels">
+    <h2 class="mt-h"><span class="mt-h__text">Les essentiels</span><span class="mt-bar" aria-hidden="true"></span></h2>
+    <div class="grid">
+      
+      <div class="mt-card mt-ring mt-flip-host demo-card">
+        <div class="mt-ring__frame">
+          <div class="mt-flip"><div class="mt-flip__inner">
+            <img class="mt-flip__face mt-flip__face--front" src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20400%20480%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22s%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23fff%22%20stop-opacity%3D%22.10%22/%3E%3Cstop%20offset%3D%22.6%22%20stop-color%3D%22%23000%22%20stop-opacity%3D%220%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23000%22%20stop-opacity%3D%22.10%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%22400%22%20height%3D%22480%22%20fill%3D%22%23E3DED4%22/%3E%3Cellipse%20cx%3D%22200%22%20cy%3D%22420%22%20rx%3D%22150%22%20ry%3D%2210%22%20fill%3D%22%23000%22%20opacity%3D%22.06%22/%3E%3Cg%20transform%3D%22translate%280%2030%29%22%3E%3Cpath%20d%3D%22M150%2040%20C%20170%2058%2C%20230%2058%2C%20250%2040%20L%20330%2072%20L%20372%20160%20L%20318%20186%20L%20300%20152%20L%20300%20372%20L%20100%20372%20L%20100%20152%20L%2082%20186%20L%2028%20160%20L%2070%2072%20Z%22%20fill%3D%22%231B1A18%22/%3E%3Cpath%20d%3D%22M150%2040%20C%20170%2058%2C%20230%2058%2C%20250%2040%20L%20330%2072%20L%20372%20160%20L%20318%20186%20L%20300%20152%20L%20300%20372%20L%20100%20372%20L%20100%20152%20L%2082%20186%20L%2028%20160%20L%2070%2072%20Z%22%20fill%3D%22url%28%23s%29%22/%3E%3Cpath%20d%3D%22M100%20152%20L%20100%20372%20M300%20152%20L300%20372%22%20stroke%3D%22%23EEEAE2%22%20stroke-opacity%3D%22.12%22%20stroke-width%3D%222%22/%3E%3Cpath%20d%3D%22M150%2040%20C%20170%2064%2C%20230%2064%2C%20250%2040%22%20fill%3D%22none%22%20stroke%3D%22%23EEEAE2%22%20stroke-opacity%3D%22.35%22%20stroke-width%3D%223%22/%3E%3Cg%20transform%3D%22translate%28232%20112%29%22%3E%3Ctext%20font-family%3D%22Georgia%2Cserif%22%20font-weight%3D%22900%22%20font-size%3D%2220%22%20fill%3D%22%23EEEAE2%22%3EMT%3C/text%3E%3Crect%20x%3D%2218%22%20y%3D%22-17%22%20width%3D%229%22%20height%3D%222.2%22%20fill%3D%22%23F2B807%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E" alt="Tee Kneel — encre, face" width="400" height="480">
+            <img class="mt-flip__face mt-flip__face--back" src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20400%20480%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22s%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23fff%22%20stop-opacity%3D%22.10%22/%3E%3Cstop%20offset%3D%22.6%22%20stop-color%3D%22%23000%22%20stop-opacity%3D%220%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23000%22%20stop-opacity%3D%22.10%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%22400%22%20height%3D%22480%22%20fill%3D%22%23E3DED4%22/%3E%3Cellipse%20cx%3D%22200%22%20cy%3D%22420%22%20rx%3D%22150%22%20ry%3D%2210%22%20fill%3D%22%23000%22%20opacity%3D%22.06%22/%3E%3Cg%20transform%3D%22translate%280%2030%29%22%3E%3Cpath%20d%3D%22M150%2040%20C%20170%2058%2C%20230%2058%2C%20250%2040%20L%20330%2072%20L%20372%20160%20L%20318%20186%20L%20300%20152%20L%20300%20372%20L%20100%20372%20L%20100%20152%20L%2082%20186%20L%2028%20160%20L%2070%2072%20Z%22%20fill%3D%22%231B1A18%22/%3E%3Cpath%20d%3D%22M150%2040%20C%20170%2058%2C%20230%2058%2C%20250%2040%20L%20330%2072%20L%20372%20160%20L%20318%20186%20L%20300%20152%20L%20300%20372%20L%20100%20372%20L%20100%20152%20L%2082%20186%20L%2028%20160%20L%2070%2072%20Z%22%20fill%3D%22url%28%23s%29%22/%3E%3Cpath%20d%3D%22M100%20152%20L%20100%20372%20M300%20152%20L300%20372%22%20stroke%3D%22%23EEEAE2%22%20stroke-opacity%3D%22.12%22%20stroke-width%3D%222%22/%3E%3Cpath%20d%3D%22M150%2040%20C%20170%2050%2C%20230%2050%2C%20250%2040%22%20fill%3D%22none%22%20stroke%3D%22%23EEEAE2%22%20stroke-opacity%3D%22.35%22%20stroke-width%3D%223%22/%3E%3Cg%20font-family%3D%22Georgia%2Cserif%22%20font-weight%3D%22900%22%20fill%3D%22%23EEEAE2%22%20text-anchor%3D%22middle%22%3E%3Ctext%20x%3D%22200%22%20y%3D%22176%22%20font-size%3D%2234%22%3ENEVER%3C/text%3E%3Ctext%20x%3D%22200%22%20y%3D%22214%22%20font-size%3D%2234%22%3ESTAY%3C/text%3E%3Ctext%20x%3D%22200%22%20y%3D%22252%22%20font-size%3D%2234%22%3EDOWN%3C/text%3E%3Crect%20x%3D%22176%22%20y%3D%22266%22%20width%3D%2248%22%20height%3D%223.5%22%20fill%3D%22%23F2B807%22/%3E%3Ctext%20x%3D%22200%22%20y%3D%22300%22%20font-size%3D%2211%22%20letter-spacing%3D%223%22%3EMANA%20T%C5%8C%27A%3C/text%3E%3C/g%3E%3C/g%3E%3C/svg%3E" alt="Tee Kneel — encre, dos" width="400" height="480" loading="lazy">
+          </div></div>
+          <button class="mt-flip__toggle" type="button" aria-pressed="false" aria-label="Voir le dos" data-label-back="Voir le dos" data-label-front="Voir la face">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9a8 8 0 0 1 14.5-3.5L20 7"/><path d="M20 3v4h-4"/><path d="M20 15a8 8 0 0 1-14.5 3.5L4 17"/><path d="M4 21v-4h4"/></svg>
+          </button>
+          <span class="mt-ring__corners" aria-hidden="true"><i class="mt-ring__c mt-ring__c--tl"></i><i class="mt-ring__c mt-ring__c--tr"></i><i class="mt-ring__c mt-ring__c--bl"></i><i class="mt-ring__c mt-ring__c--br"></i></span>
+        </div>
+        <div class="mt-card__info">
+          <h3 class="mt-card__title"><a class="mt-card__link" href="#essentiels">Tee Kneel — encre</a></h3>
+          <p class="mt-card__price">65 $ NZ</p>
+        </div>
+      </div>
+      <div class="mt-card mt-ring mt-flip-host demo-card">
+        <div class="mt-ring__frame">
+          <div class="mt-flip"><div class="mt-flip__inner">
+            <img class="mt-flip__face mt-flip__face--front" src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20400%20480%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22s%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23fff%22%20stop-opacity%3D%22.10%22/%3E%3Cstop%20offset%3D%22.6%22%20stop-color%3D%22%23000%22%20stop-opacity%3D%220%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23000%22%20stop-opacity%3D%22.10%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%22400%22%20height%3D%22480%22%20fill%3D%22%23D8D2C5%22/%3E%3Cellipse%20cx%3D%22200%22%20cy%3D%22420%22%20rx%3D%22150%22%20ry%3D%2210%22%20fill%3D%22%23000%22%20opacity%3D%22.06%22/%3E%3Cg%20transform%3D%22translate%280%2030%29%22%3E%3Cpath%20d%3D%22M150%2040%20C%20170%2058%2C%20230%2058%2C%20250%2040%20L%20330%2072%20L%20372%20160%20L%20318%20186%20L%20300%20152%20L%20300%20372%20L%20100%20372%20L%20100%20152%20L%2082%20186%20L%2028%20160%20L%2070%2072%20Z%22%20fill%3D%22%23E6E0D3%22/%3E%3Cpath%20d%3D%22M150%2040%20C%20170%2058%2C%20230%2058%2C%20250%2040%20L%20330%2072%20L%20372%20160%20L%20318%20186%20L%20300%20152%20L%20300%20372%20L%20100%20372%20L%20100%20152%20L%2082%20186%20L%2028%20160%20L%2070%2072%20Z%22%20fill%3D%22url%28%23s%29%22/%3E%3Cpath%20d%3D%22M100%20152%20L%20100%20372%20M300%20152%20L300%20372%22%20stroke%3D%22%231B1A18%22%20stroke-opacity%3D%22.12%22%20stroke-width%3D%222%22/%3E%3Cpath%20d%3D%22M150%2040%20C%20170%2064%2C%20230%2064%2C%20250%2040%22%20fill%3D%22none%22%20stroke%3D%22%231B1A18%22%20stroke-opacity%3D%22.35%22%20stroke-width%3D%223%22/%3E%3Cg%20transform%3D%22translate%28232%20112%29%22%3E%3Ctext%20font-family%3D%22Georgia%2Cserif%22%20font-weight%3D%22900%22%20font-size%3D%2220%22%20fill%3D%22%231B1A18%22%3EMT%3C/text%3E%3Crect%20x%3D%2218%22%20y%3D%22-17%22%20width%3D%229%22%20height%3D%222.2%22%20fill%3D%22%231B1A18%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E" alt="Tee Kneel — os, face" width="400" height="480">
+            <img class="mt-flip__face mt-flip__face--back" src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20400%20480%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22s%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23fff%22%20stop-opacity%3D%22.10%22/%3E%3Cstop%20offset%3D%22.6%22%20stop-color%3D%22%23000%22%20stop-opacity%3D%220%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23000%22%20stop-opacity%3D%22.10%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%22400%22%20height%3D%22480%22%20fill%3D%22%23D8D2C5%22/%3E%3Cellipse%20cx%3D%22200%22%20cy%3D%22420%22%20rx%3D%22150%22%20ry%3D%2210%22%20fill%3D%22%23000%22%20opacity%3D%22.06%22/%3E%3Cg%20transform%3D%22translate%280%2030%29%22%3E%3Cpath%20d%3D%22M150%2040%20C%20170%2058%2C%20230%2058%2C%20250%2040%20L%20330%2072%20L%20372%20160%20L%20318%20186%20L%20300%20152%20L%20300%20372%20L%20100%20372%20L%20100%20152%20L%2082%20186%20L%2028%20160%20L%2070%2072%20Z%22%20fill%3D%22%23E6E0D3%22/%3E%3Cpath%20d%3D%22M150%2040%20C%20170%2058%2C%20230%2058%2C%20250%2040%20L%20330%2072%20L%20372%20160%20L%20318%20186%20L%20300%20152%20L%20300%20372%20L%20100%20372%20L%20100%20152%20L%2082%20186%20L%2028%20160%20L%2070%2072%20Z%22%20fill%3D%22url%28%23s%29%22/%3E%3Cpath%20d%3D%22M100%20152%20L%20100%20372%20M300%20152%20L300%20372%22%20stroke%3D%22%231B1A18%22%20stroke-opacity%3D%22.12%22%20stroke-width%3D%222%22/%3E%3Cpath%20d%3D%22M150%2040%20C%20170%2050%2C%20230%2050%2C%20250%2040%22%20fill%3D%22none%22%20stroke%3D%22%231B1A18%22%20stroke-opacity%3D%22.35%22%20stroke-width%3D%223%22/%3E%3Cg%20font-family%3D%22Georgia%2Cserif%22%20font-weight%3D%22900%22%20fill%3D%22%231B1A18%22%20text-anchor%3D%22middle%22%3E%3Ctext%20x%3D%22200%22%20y%3D%22176%22%20font-size%3D%2234%22%3ENEVER%3C/text%3E%3Ctext%20x%3D%22200%22%20y%3D%22214%22%20font-size%3D%2234%22%3ESTAY%3C/text%3E%3Ctext%20x%3D%22200%22%20y%3D%22252%22%20font-size%3D%2234%22%3EDOWN%3C/text%3E%3Crect%20x%3D%22176%22%20y%3D%22266%22%20width%3D%2248%22%20height%3D%223.5%22%20fill%3D%22%231B1A18%22/%3E%3Ctext%20x%3D%22200%22%20y%3D%22300%22%20font-size%3D%2211%22%20letter-spacing%3D%223%22%3EMANA%20T%C5%8C%27A%3C/text%3E%3C/g%3E%3C/g%3E%3C/svg%3E" alt="Tee Kneel — os, dos" width="400" height="480" loading="lazy">
+          </div></div>
+          <button class="mt-flip__toggle" type="button" aria-pressed="false" aria-label="Voir le dos" data-label-back="Voir le dos" data-label-front="Voir la face">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9a8 8 0 0 1 14.5-3.5L20 7"/><path d="M20 3v4h-4"/><path d="M20 15a8 8 0 0 1-14.5 3.5L4 17"/><path d="M4 21v-4h4"/></svg>
+          </button>
+          <span class="mt-ring__corners" aria-hidden="true"><i class="mt-ring__c mt-ring__c--tl"></i><i class="mt-ring__c mt-ring__c--tr"></i><i class="mt-ring__c mt-ring__c--bl"></i><i class="mt-ring__c mt-ring__c--br"></i></span>
+        </div>
+        <div class="mt-card__info">
+          <h3 class="mt-card__title"><a class="mt-card__link" href="#essentiels">Tee Kneel — os</a></h3>
+          <p class="mt-card__price">65 $ NZ</p>
+        </div>
+      </div>
+      <div class="mt-card mt-ring mt-flip-host demo-card">
+        <div class="mt-ring__frame">
+          <div class="mt-flip"><div class="mt-flip__inner">
+            <img class="mt-flip__face mt-flip__face--front" src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20400%20480%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22s%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23fff%22%20stop-opacity%3D%22.10%22/%3E%3Cstop%20offset%3D%22.6%22%20stop-color%3D%22%23000%22%20stop-opacity%3D%220%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23000%22%20stop-opacity%3D%22.10%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%22400%22%20height%3D%22480%22%20fill%3D%22%23E3DED4%22/%3E%3Cellipse%20cx%3D%22200%22%20cy%3D%22420%22%20rx%3D%22150%22%20ry%3D%2210%22%20fill%3D%22%23000%22%20opacity%3D%22.06%22/%3E%3Cg%20transform%3D%22translate%280%2030%29%22%3E%3Cpath%20d%3D%22M150%2040%20C%20170%2058%2C%20230%2058%2C%20250%2040%20L%20330%2072%20L%20372%20160%20L%20318%20186%20L%20300%20152%20L%20300%20372%20L%20100%20372%20L%20100%20152%20L%2082%20186%20L%2028%20160%20L%2070%2072%20Z%22%20fill%3D%22%2355524C%22/%3E%3Cpath%20d%3D%22M150%2040%20C%20170%2058%2C%20230%2058%2C%20250%2040%20L%20330%2072%20L%20372%20160%20L%20318%20186%20L%20300%20152%20L%20300%20372%20L%20100%20372%20L%20100%20152%20L%2082%20186%20L%2028%20160%20L%2070%2072%20Z%22%20fill%3D%22url%28%23s%29%22/%3E%3Cpath%20d%3D%22M100%20152%20L%20100%20372%20M300%20152%20L300%20372%22%20stroke%3D%22%23EEEAE2%22%20stroke-opacity%3D%22.12%22%20stroke-width%3D%222%22/%3E%3Cpath%20d%3D%22M150%2040%20C%20170%2064%2C%20230%2064%2C%20250%2040%22%20fill%3D%22none%22%20stroke%3D%22%23EEEAE2%22%20stroke-opacity%3D%22.35%22%20stroke-width%3D%223%22/%3E%3Cg%20transform%3D%22translate%28232%20112%29%22%3E%3Ctext%20font-family%3D%22Georgia%2Cserif%22%20font-weight%3D%22900%22%20font-size%3D%2220%22%20fill%3D%22%23EEEAE2%22%3EMT%3C/text%3E%3Crect%20x%3D%2218%22%20y%3D%22-17%22%20width%3D%229%22%20height%3D%222.2%22%20fill%3D%22%23EEEAE2%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E" alt="Tee Corner — ardoise, face" width="400" height="480">
+            <img class="mt-flip__face mt-flip__face--back" src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20400%20480%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22s%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23fff%22%20stop-opacity%3D%22.10%22/%3E%3Cstop%20offset%3D%22.6%22%20stop-color%3D%22%23000%22%20stop-opacity%3D%220%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23000%22%20stop-opacity%3D%22.10%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%22400%22%20height%3D%22480%22%20fill%3D%22%23E3DED4%22/%3E%3Cellipse%20cx%3D%22200%22%20cy%3D%22420%22%20rx%3D%22150%22%20ry%3D%2210%22%20fill%3D%22%23000%22%20opacity%3D%22.06%22/%3E%3Cg%20transform%3D%22translate%280%2030%29%22%3E%3Cpath%20d%3D%22M150%2040%20C%20170%2058%2C%20230%2058%2C%20250%2040%20L%20330%2072%20L%20372%20160%20L%20318%20186%20L%20300%20152%20L%20300%20372%20L%20100%20372%20L%20100%20152%20L%2082%20186%20L%2028%20160%20L%2070%2072%20Z%22%20fill%3D%22%2355524C%22/%3E%3Cpath%20d%3D%22M150%2040%20C%20170%2058%2C%20230%2058%2C%20250%2040%20L%20330%2072%20L%20372%20160%20L%20318%20186%20L%20300%20152%20L%20300%20372%20L%20100%20372%20L%20100%20152%20L%2082%20186%20L%2028%20160%20L%2070%2072%20Z%22%20fill%3D%22url%28%23s%29%22/%3E%3Cpath%20d%3D%22M100%20152%20L%20100%20372%20M300%20152%20L300%20372%22%20stroke%3D%22%23EEEAE2%22%20stroke-opacity%3D%22.12%22%20stroke-width%3D%222%22/%3E%3Cpath%20d%3D%22M150%2040%20C%20170%2050%2C%20230%2050%2C%20250%2040%22%20fill%3D%22none%22%20stroke%3D%22%23EEEAE2%22%20stroke-opacity%3D%22.35%22%20stroke-width%3D%223%22/%3E%3Cg%20font-family%3D%22Georgia%2Cserif%22%20font-weight%3D%22900%22%20fill%3D%22%23EEEAE2%22%20text-anchor%3D%22middle%22%3E%3Ctext%20x%3D%22200%22%20y%3D%22176%22%20font-size%3D%2234%22%3ENEVER%3C/text%3E%3Ctext%20x%3D%22200%22%20y%3D%22214%22%20font-size%3D%2234%22%3ESTAY%3C/text%3E%3Ctext%20x%3D%22200%22%20y%3D%22252%22%20font-size%3D%2234%22%3EDOWN%3C/text%3E%3Crect%20x%3D%22176%22%20y%3D%22266%22%20width%3D%2248%22%20height%3D%223.5%22%20fill%3D%22%23EEEAE2%22/%3E%3Ctext%20x%3D%22200%22%20y%3D%22300%22%20font-size%3D%2211%22%20letter-spacing%3D%223%22%3EMANA%20T%C5%8C%27A%3C/text%3E%3C/g%3E%3C/g%3E%3C/svg%3E" alt="Tee Corner — ardoise, dos" width="400" height="480" loading="lazy">
+          </div></div>
+          <button class="mt-flip__toggle" type="button" aria-pressed="false" aria-label="Voir le dos" data-label-back="Voir le dos" data-label-front="Voir la face">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9a8 8 0 0 1 14.5-3.5L20 7"/><path d="M20 3v4h-4"/><path d="M20 15a8 8 0 0 1-14.5 3.5L4 17"/><path d="M4 21v-4h4"/></svg>
+          </button>
+          <span class="mt-ring__corners" aria-hidden="true"><i class="mt-ring__c mt-ring__c--tl"></i><i class="mt-ring__c mt-ring__c--tr"></i><i class="mt-ring__c mt-ring__c--bl"></i><i class="mt-ring__c mt-ring__c--br"></i></span>
+        </div>
+        <div class="mt-card__info">
+          <h3 class="mt-card__title"><a class="mt-card__link" href="#essentiels">Tee Corner — ardoise</a></h3>
+          <p class="mt-card__price">65 $ NZ</p>
+        </div>
+      </div>
+    </div>
+    <p class="note">Coton épais 280 g/m², coupe oversize, petites séries. Les visuels sont des tees dessinés pour la démo : dans le thème, la carte prend la première photo du produit pour la face et la deuxième pour le dos. <a class="mt-link" href="#devise">Descendre jusqu'à la devise</a>.</p>
+  </section>
+
+  <section class="mt-nsd" data-mt-nsd id="devise">
+    <div class="mt-nsd__stage">
+      <p class="mt-nsd__line" data-text="Never stay down">Never stay down</p>
+      <span class="mt-nsd__floor" aria-hidden="true"></span>
+      <span class="mt-bar mt-nsd__bar" aria-hidden="true"></span>
+      <p class="mt-nsd__caption">Mana Tō'a · Aotearoa</p>
+    </div>
+  </section>
+
+  <section class="wrap spec" id="motions">
+    <h2 class="mt-h"><span class="mt-h__text">Les quatre motions</span><span class="mt-bar" aria-hidden="true"></span></h2>
+    <div class="spec-list">
+      <article class="spec-row">
+        <h3>Les coins du ring<small>CARTE PRODUIT</small></h3>
+        <div>
+          <p>Mettre un produit « dans le ring » : quatre coins fins le cadrent comme les poteaux d'angle, sans couvrir la photo. Les coins diagonaux (rouge et bleu) se tracent d'abord, les neutres ensuite.</p>
+          <dl class="specs">
+            <dt>Durée</dt><dd>Entrée 380 ms, décalages 0 / 40 / 70 / 110 ms. Sortie 160 ms sans délai.</dd>
+            <dt>Courbe</dt><dd>Entrée <code>cubic-bezier(.16, 1, .3, 1)</code>, sortie <code>cubic-bezier(.55, 0, .75, .2)</code>.</dd>
+            <dt>Mobile</dt><dd>Pas de survol : la carte qui passe au centre de l'écran pendant le défilement entre dans le ring.</dd>
+            <dt>Calme</dt><dd>Les coins apparaissent déjà tracés, en fondu de 240 ms.</dd>
+          </dl>
+        </div>
+      </article>
+      <article class="spec-row">
+        <h3>Le trait du Ō<small>TITRES · MENU · CHARGEMENT · LIENS</small></h3>
+        <div>
+          <p>La barre au-dessus du O devient la signature graphique. Elle se trace sous les titres une fois le texte posé, glisse au-dessus du lien actif du menu (à la place du macron), traverse le haut de l'écran pendant un chargement, et souligne les liens au survol.</p>
+          <dl class="specs">
+            <dt>Durée</dt><dd>Logo et titres 760 ms (titre 640 ms puis trait à +260 ms). Menu 380 ms. Lien 380 ms à l'aller, 160 ms au retour. Fin de chargement 640 ms.</dd>
+            <dt>Courbe</dt><dd>Tracé d'encre <code>cubic-bezier(.77, 0, .18, 1)</code>, menu <code>cubic-bezier(.65, 0, .35, 1)</code>.</dd>
+            <dt>Mobile</dt><dd>Menu en colonne : chaque lien actif porte son trait, sans glissement. Liens : trait fin permanent à 40 %, plein au toucher.</dd>
+            <dt>Calme</dt><dd>Les traits sont déjà là ; le titre apparaît en fondu, sans déplacement.</dd>
+          </dl>
+        </div>
+      </article>
+      <article class="spec-row">
+        <h3>Face / dos<small>CARTE PRODUIT</small></h3>
+        <div>
+          <p>Retourner le tee comme en boutique, pour voir le dos sans quitter la grille. Le geste attend 120 ms avant de partir : la souris qui traverse la grille ne retourne rien.</p>
+          <dl class="specs">
+            <dt>Durée</dt><dd>640 ms, après 120 ms d'intention. Retour 640 ms sans attente.</dd>
+            <dt>Courbe</dt><dd><code>cubic-bezier(.65, 0, .35, 1)</code>, perspective 1600 px.</dd>
+            <dt>Mobile</dt><dd>Un bouton rond « Voir le dos » en bas à droite de la photo ; un second toucher remet la face.</dd>
+            <dt>Calme</dt><dd>Fondu de 240 ms entre la face et le dos, sans rotation.</dd>
+          </dl>
+        </div>
+      </article>
+      <article class="spec-row">
+        <h3>Never stay down<small>UNE SEULE FOIS SUR LE SITE</small></h3>
+        <div>
+          <p>La devise mise en scène au scroll : les lettres sont envoyées au tapis dans le désordre, restent au sol, puis se relèvent dans l'ordre de lecture. Le trait doré se trace sous la devise relevée. Une fois debout, elles ne retombent plus, même en remontant.</p>
+          <dl class="specs">
+            <dt>Durée</dt><dd>Pilotée par le défilement sur 260 % de hauteur d'écran (210 % sur mobile).</dd>
+            <dt>Courbe</dt><dd>Chute en accélération cubique (gravité), relevé avec un léger dépassement, trait doré en décélération.</dd>
+            <dt>Mobile</dt><dd>Même geste, plus court ; un seul calcul par image, seulement quand la section est à l'écran.</dd>
+            <dt>Calme</dt><dd>La devise apparaît debout, en fondu, avec son trait doré.</dd>
+          </dl>
+        </div>
+      </article>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap">Mana Tō'a · motion system · HTML, CSS et JavaScript vanilla, préfixe <code>mt-</code>.</div></footer>
+
+<script>
+/* =============================================================================
+   MANA TŌ'A · langage de motion permanent (JavaScript vanilla, aucune dépendance)
+   Charge-le avec defer. Il s'initialise tout seul, et se ré-initialise quand une section est
+   rechargée dans l'éditeur de thème Shopify (shopify:section:load).
+   API : window.MT.loader.start() / .set(0..1) / .done()   ·   window.MT.refresh(racine)
+   ============================================================================= */
+(function () {
+  "use strict";
+
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+  var canHover = window.matchMedia("(hover: hover) and (pointer: fine)");
+  var clamp = function (x, a, b) { return Math.min(b, Math.max(a, x)); };
+  var lerp = function (a, b, t) { return a + (b - a) * t; };
+  var seg = function (p, a, b) { return clamp((p - a) / (b - a), 0, 1); };
+  var easeIn = function (t) { return t * t * t; };                          // gravité
+  var easeOut = function (t) { return 1 - Math.pow(1 - t, 3); };
+  var easeOutBack = function (t) { var c = 1.4; return 1 + (c + 1) * Math.pow(t - 1, 3) + c * Math.pow(t - 1, 2); };
+
+  /* ---------------------------------------------------------------------------
+     1 · LES COINS DU RING : sur tactile, la carte au centre de l'écran est « dans le ring »
+     (le survol n'existe pas au doigt ; le :hover collant d'iOS est volontairement ignoré).
+     --------------------------------------------------------------------------- */
+  var ringIO = null;
+  function initRings(root) {
+    var cards = root.querySelectorAll(".mt-ring");
+    if (!cards.length) return;
+    if (canHover.matches) return;              // souris : le CSS :hover suffit
+    if (!ringIO) {
+      ringIO = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) { e.target.classList.toggle("is-mt-active", e.isIntersecting); });
+      }, { rootMargin: "-38% 0px -38% 0px", threshold: 0 });   // bande centrale de 24 % de l'écran
+    }
+    cards.forEach(function (c) { if (!c.__mtRing) { c.__mtRing = 1; ringIO.observe(c); } });
+  }
+
+  /* ---------------------------------------------------------------------------
+     2 · LE TRAIT DU Ō
+     --------------------------------------------------------------------------- */
+  // 2a · logo
+  function initLogo(root) {
+    root.querySelectorAll(".mt-o").forEach(function (o) {
+      if (o.__mt) return; o.__mt = 1;
+      requestAnimationFrame(function () { requestAnimationFrame(function () { o.classList.add("is-mt-drawn"); }); });
+    });
+  }
+
+  // 2b · titres : apparaissent quand 30 % du titre est visible, une seule fois
+  var headIO = null;
+  function initHeadings(root) {
+    var hs = root.querySelectorAll(".mt-h");
+    if (!hs.length) return;
+    if (!headIO) {
+      headIO = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { e.target.classList.add("is-mt-in"); headIO.unobserve(e.target); }
+        });
+      }, { threshold: 0.3, rootMargin: "0px 0px -8% 0px" });
+    }
+    hs.forEach(function (h) { if (!h.__mt) { h.__mt = 1; headIO.observe(h); } });
+  }
+
+  // 2c · menu : le trait glisse au-dessus du lien survolé et revient sur le lien actif
+  function initNavs(root) {
+    root.querySelectorAll("[data-mt-nav]").forEach(function (nav) {
+      if (nav.__mt) return; nav.__mt = 1;
+      var bar = nav.querySelector(".mt-nav__bar");
+      if (!bar) { bar = document.createElement("span"); bar.className = "mt-nav__bar"; bar.setAttribute("aria-hidden", "true"); nav.appendChild(bar); }
+      var links = Array.prototype.slice.call(nav.querySelectorAll(".mt-nav__link"));
+      var current = function () { return nav.querySelector(".mt-nav__link[aria-current]"); };
+      var geo = new Map();
+      function measure() {
+        // une seule mesure par changement de taille, jamais pendant l'animation
+        var nb = nav.getBoundingClientRect();
+        var tops = new Set();
+        links.forEach(function (a) {
+          var r = a.getBoundingClientRect();
+          // le trait couvre la largeur du texte, et se pose 6 px au-dessus du lien
+          geo.set(a, { x: r.left - nb.left, y: r.top - nb.top - 6, w: r.width });
+          tops.add(Math.round(r.top));
+        });
+        nav.classList.toggle("mt-nav--stack", tops.size > 1);   // menu passé en colonne (mobile) : traits statiques
+      }
+      function place(a, instant) {
+        if (!a || !geo.has(a)) { bar.style.setProperty("--mt-o", "0"); return; }
+        var g = geo.get(a);
+        if (instant) nav.classList.add("is-mt-instant");
+        bar.style.top = g.y + "px";
+        bar.style.setProperty("--mt-x", g.x + "px");
+        bar.style.setProperty("--mt-w", String(g.w));
+        bar.style.setProperty("--mt-o", "1");
+        if (instant) { void bar.offsetWidth; nav.classList.remove("is-mt-instant"); }
+      }
+      measure(); place(current(), true);
+      if (window.ResizeObserver) new ResizeObserver(function () { measure(); place(current(), true); }).observe(nav);
+      links.forEach(function (a) {
+        a.addEventListener("pointerenter", function (e) { if (e.pointerType === "mouse") place(a); });
+        a.addEventListener("focus", function () { place(a); });
+      });
+      nav.addEventListener("pointerleave", function () { place(current()); });
+      nav.addEventListener("focusout", function (e) { if (!nav.contains(e.relatedTarget)) place(current()); });
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { measure(); place(current(), true); });
+    });
+  }
+
+  // 2d · barre de chargement (API globale + branchements automatiques)
+  var loader = (function () {
+    var el = null, bar = null, p = 0, timer = null, active = false;
+    function ensure() {
+      if (el) return;
+      el = document.createElement("div"); el.className = "mt-loader"; el.setAttribute("aria-hidden", "true");
+      bar = document.createElement("div"); bar.className = "mt-loader__bar"; el.appendChild(bar);
+      document.body.appendChild(el);
+    }
+    function set(v) { ensure(); p = clamp(v, 0, 1); bar.style.setProperty("--mt-p", p.toFixed(4)); }
+    function trickle() {   // avance de moins en moins vite : ne touche jamais 100 % tout seul
+      if (!active) return;
+      set(p + (0.92 - p) * 0.12);
+      timer = setTimeout(trickle, 260);
+    }
+    return {
+      start: function () {
+        ensure(); clearTimeout(timer); active = true;
+        el.classList.remove("is-mt-done");
+        bar.style.transition = "none"; set(0); void bar.offsetWidth; bar.style.transition = "";
+        set(0.08); timer = setTimeout(trickle, 180);
+      },
+      set: function (v) { active = true; set(v); },
+      done: function () {
+        if (!el || !active) return;
+        active = false; clearTimeout(timer); set(1);
+        setTimeout(function () { el.classList.add("is-mt-done"); }, 220);
+      },
+    };
+  })();
+  function hookLoader() {
+    // ajouts au panier (fetch vers /cart/...) : le trait accompagne la requête
+    if (window.fetch && !window.fetch.__mt) {
+      var f = window.fetch;
+      var wrapped = function (input) {
+        var url = typeof input === "string" ? input : (input && input.url) || "";
+        var watch = /\/cart\/(add|change|update|clear)/.test(url);
+        if (!watch) return f.apply(this, arguments);
+        loader.start();
+        return f.apply(this, arguments).then(function (r) { loader.done(); return r; }, function (err) { loader.done(); throw err; });
+      };
+      wrapped.__mt = true; window.fetch = wrapped;
+    }
+    // navigation vers une autre page du site
+    window.addEventListener("pagehide", function () { loader.start(); });
+    window.addEventListener("pageshow", function (e) { if (e.persisted) loader.done(); });
+  }
+
+  /* ---------------------------------------------------------------------------
+     3 · FACE / DOS
+     --------------------------------------------------------------------------- */
+  function initFlips(root) {
+    root.querySelectorAll(".mt-flip").forEach(function (fl) {
+      if (fl.__mt) return; fl.__mt = 1;
+      var back = fl.querySelector(".mt-flip__face--back");
+      if (!back) return;                       // produit sans photo de dos : pas de retournement
+      // l'état vit sur l'hôte (.mt-flip-host, la carte) : le bouton est hors du bloc 3D
+      var host = fl.closest(".mt-flip-host") || fl;
+      host.classList.add("has-mt-back");
+      // la photo du dos se charge dès que l'intention se précise (souris sur la carte)
+      var warm = function () { if (back.loading === "lazy") back.loading = "eager"; };
+      host.addEventListener("pointerenter", warm, { once: true });
+      var btn = host.querySelector(".mt-flip__toggle");
+      if (btn) {
+        btn.addEventListener("click", function (e) {
+          e.preventDefault(); e.stopPropagation(); warm();
+          var on = !host.classList.contains("is-mt-flipped");
+          host.classList.toggle("is-mt-flipped", on);
+          btn.setAttribute("aria-pressed", on ? "true" : "false");
+          btn.setAttribute("aria-label", on ? (btn.dataset.labelFront || "Voir la face") : (btn.dataset.labelBack || "Voir le dos"));
+        });
+      }
+    });
+  }
+
+  /* ---------------------------------------------------------------------------
+     4 · NEVER STAY DOWN (piloté par le scroll, fonction pure de la progression)
+     --------------------------------------------------------------------------- */
+  function rand(seed) {   // pseudo-aléatoire stable : la chute est la même à chaque visite
+    return function () { seed = (seed + 0x6D2B79F5) | 0; var t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  }
+  function initNSD(root) {
+    root.querySelectorAll("[data-mt-nsd]").forEach(function (sec) {
+      if (sec.__mt) return; sec.__mt = 1;
+      var line = sec.querySelector(".mt-nsd__line");
+      var text = (line.getAttribute("data-text") || line.textContent).trim();
+      sec.setAttribute("aria-label", text);
+      line.setAttribute("aria-hidden", "true");
+      line.textContent = "";
+      var R = rand(7), letters = [], n = 0;
+      text.split(/\s+/).forEach(function (w, wi, arr) {
+        var word = document.createElement("span"); word.className = "mt-nsd__word";
+        w.split("").forEach(function (ch) {
+          var s = document.createElement("span"); s.className = "mt-nsd__l"; s.textContent = ch;
+          var dir = R() < 0.5 ? -1 : 1;
+          letters.push({
+            el: s, i: n++,
+            fall0: 0.12 + R() * 0.1,                 // départ de la chute (désordonné : un K.O. n'est pas une chorégraphie)
+            ang: dir * (62 + R() * 26),              // couchée entre 62 et 88°
+            drop: 0.06 + R() * 0.1,                  // s'affaisse un peu (en em)
+          });
+          word.appendChild(s);
+        });
+        line.appendChild(word);
+        if (wi < arr.length - 1) line.appendChild(document.createTextNode(" "));
+      });
+      // relevé : de gauche à droite, une lettre après l'autre (ordre de lecture = ordre de relevé)
+      letters.forEach(function (L) { L.rise0 = 0.56 + (L.i / Math.max(1, n - 1)) * 0.2; });
+      var floor = sec.querySelector(".mt-nsd__floor"), bar = sec.querySelector(".mt-nsd__bar"), cap = sec.querySelector(".mt-nsd__caption");
+      var lock = sec.getAttribute("data-mt-nsd-lock") !== "false";
+      var maxP = 0, ticking = false, live = false;
+
+      if (reduce.matches) {   // version calme : un fondu, une seule fois
+        var io0 = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { sec.classList.add("is-mt-in"); io0.disconnect(); } }, { threshold: 0.4 });
+        io0.observe(sec);
+        return;
+      }
+
+      function render(p) {
+        letters.forEach(function (L) {
+          var f = easeIn(seg(p, L.fall0, L.fall0 + 0.12));          // chute : accélère comme un corps qui tombe
+          var land = seg(p, L.fall0 + 0.12, L.fall0 + 0.17);        // à l'impact : petit tassement de 4°
+          var r = easeOutBack(seg(p, L.rise0, L.rise0 + 0.1));      // relevé : léger dépassement, puis droit
+          var down = f * (1 - r);
+          var ang = L.ang * down + (land > 0 && land < 1 ? -Math.sign(L.ang) * 4 * Math.sin(land * Math.PI) * (1 - r) : 0);
+          var y = L.drop * down;
+          L.el.style.transform = "translateY(" + y.toFixed(3) + "em) rotate(" + ang.toFixed(2) + "deg)";
+          L.el.style.opacity = (1 - 0.45 * down).toFixed(3);       // au sol, la lettre perd un peu d'encre
+        });
+        var fl = seg(p, 0.14, 0.3) * (1 - seg(p, 0.66, 0.8));
+        if (floor) { floor.style.opacity = (0.35 * fl).toFixed(3); floor.style.transform = "scaleX(" + lerp(0.2, 1, easeOut(fl)).toFixed(3) + ")"; }
+        if (bar) bar.style.transform = "scaleX(" + easeOut(seg(p, 0.8, 0.94)).toFixed(4) + ")";   // le seul moment doré
+        if (cap) cap.style.opacity = seg(p, 0.86, 0.96).toFixed(3);
+      }
+      function progress() {
+        var r = sec.getBoundingClientRect(), vh = window.innerHeight;
+        return clamp(-r.top / Math.max(1, r.height - vh), 0, 1);
+      }
+      function frame() {
+        ticking = false;
+        var p = progress();
+        if (lock) { if (maxP >= 1) p = 1; else if (p > maxP) maxP = p; if (maxP >= 0.95) { maxP = 1; p = 1; sec.classList.remove("is-mt-running"); } }
+        render(p);
+      }
+      function onScroll() { if (live && !ticking) { ticking = true; requestAnimationFrame(frame); } }
+      new IntersectionObserver(function (es) {
+        live = es[0].isIntersecting;
+        sec.classList.toggle("is-mt-running", live && maxP < 1);
+        if (live) onScroll();
+      }, { rootMargin: "20% 0px 20% 0px" }).observe(sec);
+      window.addEventListener("scroll", onScroll, { passive: true });
+      window.addEventListener("resize", onScroll, { passive: true });
+      render(0);
+    });
+  }
+
+  /* --------------------------------------------------------------------------- */
+  function refresh(root) {
+    root = root || document;
+    initRings(root); initLogo(root); initHeadings(root); initNavs(root); initFlips(root); initNSD(root);
+  }
+  window.MT = { refresh: refresh, loader: loader };
+  function boot() { refresh(document); hookLoader(); }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
+  document.addEventListener("shopify:section:load", function (e) { refresh(e.target); });
+})();
+
+</script>
+<script>
+  // démo : simule un ajout au panier et un chargement de page
+  document.getElementById("demo-add").addEventListener("click", function () {
+    MT.loader.start(); setTimeout(MT.loader.done, 900);
+  });
+  document.getElementById("demo-load").addEventListener("click", function () {
+    MT.loader.start(); setTimeout(MT.loader.done, 2600);
+  });
+</script>
+</body>
+</html>

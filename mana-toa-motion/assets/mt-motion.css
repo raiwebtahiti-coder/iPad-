@@ -1,0 +1,416 @@
+/* =============================================================================
+   MANA TŌ'A · langage de motion permanent
+   4 motions : les coins du ring · le trait du Ō · face / dos · never stay down
+   Règles : on n'anime que transform, opacity et clip-path. Aucune librairie.
+   Tout respecte prefers-reduced-motion (version calme en bas de fichier).
+   ============================================================================= */
+
+:root {
+  /* couleurs de la marque */
+  --mt-paper: #EEEAE2;
+  --mt-ink: #1B1A18;
+  --mt-muted: #55524C;
+  --mt-gold: #F2B807;          /* avec parcimonie : un seul moment doré par écran */
+
+  /* courbes. Aucune n'a de rebond : la marque est posée, pas joueuse. */
+  --mt-ease-out: cubic-bezier(.16, 1, .3, 1);     /* arrivée : rapide puis longue décélération */
+  --mt-ease-in: cubic-bezier(.55, 0, .75, .2);    /* sortie : discrète, accélère et disparaît */
+  --mt-ease-inout: cubic-bezier(.65, 0, .35, 1);  /* déplacement d'un état à l'autre */
+  --mt-ease-ink: cubic-bezier(.77, 0, .18, 1);    /* trait d'encre : départ retenu, fin posée comme une plume */
+
+  /* durées */
+  --mt-dur-xs: 160ms;
+  --mt-dur-s: 240ms;
+  --mt-dur-m: 380ms;
+  --mt-dur-l: 640ms;
+  --mt-dur-xl: 760ms;
+
+  /* le trait du Ō : épaisseur proportionnelle au texte, comme le macron de la typo */
+  --mt-bar-h: max(2px, .085em);
+  --mt-bar-color: var(--mt-ink);
+
+  /* les coins du ring */
+  --mt-ring-color: var(--mt-ink);
+  --mt-ring-w: 1.5px;          /* épaisseur du trait */
+  --mt-ring-arm: clamp(14px, 9%, 26px);   /* longueur de chaque bras */
+  --mt-ring-gap: 8px;          /* distance entre la photo et les coins */
+}
+
+/* =============================================================================
+   1 · LES COINS DU RING
+   4 coins fins se dessinent autour de la photo, comme les 4 coins d'un ring.
+   Les coins rouge et bleu (haut gauche, bas droite) d'abord, les neutres ensuite.
+   ============================================================================= */
+
+.mt-ring { position: relative; }
+.mt-ring__frame { position: relative; }
+.mt-ring__corners {
+  position: absolute;
+  inset: calc(var(--mt-ring-gap) * -1);
+  pointer-events: none;
+  z-index: 2;
+}
+.mt-ring__c { position: absolute; width: var(--mt-ring-arm); height: var(--mt-ring-arm); }
+.mt-ring__c--tl { top: 0; left: 0; }
+.mt-ring__c--tr { top: 0; right: 0; }
+.mt-ring__c--bl { bottom: 0; left: 0; }
+.mt-ring__c--br { bottom: 0; right: 0; }
+
+.mt-ring__c::before,
+.mt-ring__c::after {
+  content: "";
+  position: absolute;
+  background: var(--mt-ring-color);
+  /* sortie : rapide, sans délai, le cadre se replie dans ses coins */
+  transition: transform var(--mt-dur-xs) var(--mt-ease-in);
+}
+.mt-ring__c::before { height: var(--mt-ring-w); width: 100%; transform: scaleX(0); }   /* bras horizontal */
+.mt-ring__c::after  { width: var(--mt-ring-w); height: 100%; transform: scaleY(0); }   /* bras vertical */
+
+.mt-ring__c--tl::before { top: 0; left: 0; transform-origin: left center; }
+.mt-ring__c--tl::after  { top: 0; left: 0; transform-origin: center top; }
+.mt-ring__c--tr::before { top: 0; right: 0; transform-origin: right center; }
+.mt-ring__c--tr::after  { top: 0; right: 0; transform-origin: center top; }
+.mt-ring__c--bl::before { bottom: 0; left: 0; transform-origin: left center; }
+.mt-ring__c--bl::after  { bottom: 0; left: 0; transform-origin: center bottom; }
+.mt-ring__c--br::before { bottom: 0; right: 0; transform-origin: right center; }
+.mt-ring__c--br::after  { bottom: 0; right: 0; transform-origin: center bottom; }
+
+/* état actif : souris (appareils à survol), clavier, ou carte au centre de l'écran sur tactile */
+.mt-ring.is-mt-active .mt-ring__c::before,
+.mt-ring:focus-within .mt-ring__c::before { transform: scaleX(1); }
+.mt-ring.is-mt-active .mt-ring__c::after,
+.mt-ring:focus-within .mt-ring__c::after { transform: scaleY(1); }
+@media (hover: hover) and (pointer: fine) {
+  .mt-ring:hover .mt-ring__c::before { transform: scaleX(1); }
+  .mt-ring:hover .mt-ring__c::after { transform: scaleY(1); }
+}
+
+/* entrée : 380 ms, coins diagonaux d'abord (0 ms), puis les deux autres (+70 ms) ;
+   dans chaque coin, le bras vertical suit l'horizontal de 40 ms : un coin qui se trace, pas qui apparaît */
+.mt-ring.is-mt-active .mt-ring__c::before, .mt-ring:focus-within .mt-ring__c::before,
+.mt-ring.is-mt-active .mt-ring__c::after, .mt-ring:focus-within .mt-ring__c::after {
+  transition: transform var(--mt-dur-m) var(--mt-ease-out) var(--mt-d, 0ms);
+}
+@media (hover: hover) and (pointer: fine) {
+  .mt-ring:hover .mt-ring__c::before,
+  .mt-ring:hover .mt-ring__c::after { transition: transform var(--mt-dur-m) var(--mt-ease-out) var(--mt-d, 0ms); }
+}
+.mt-ring__c--tl::before, .mt-ring__c--br::before { --mt-d: 0ms; }
+.mt-ring__c--tl::after,  .mt-ring__c--br::after  { --mt-d: 40ms; }
+.mt-ring__c--tr::before, .mt-ring__c--bl::before { --mt-d: 70ms; }
+.mt-ring__c--tr::after,  .mt-ring__c--bl::after  { --mt-d: 110ms; }
+
+/* structure de la carte : toute la carte est cliquable (lien étiré), le bouton face / dos passe au-dessus */
+.mt-card { position: relative; }
+.mt-card__link { color: inherit; text-decoration: none; }
+.mt-card__link::before { content: ""; position: absolute; inset: 0; z-index: 1; }
+.mt-card__link:focus-visible { outline: none; }
+
+/* =============================================================================
+   2 · LE TRAIT DU Ō
+   Un seul élément graphique (.mt-bar) décliné en 5 usages :
+   logo · titres · menu · chargement · liens.
+   ============================================================================= */
+
+.mt-bar {
+  display: block;
+  height: var(--mt-bar-h);
+  background: var(--mt-bar-color);
+  transform: scaleX(0);
+  transform-origin: left center;
+  border-radius: 0;   /* un trait d'encre, pas une pilule */
+}
+
+/* --- 2a · le Ō du logo : la barre au-dessus du O se trace au chargement de la page --- */
+.mt-o { position: relative; display: inline-block; }
+.mt-o__bar {
+  position: absolute;
+  left: var(--mt-o-left, 16%);
+  width: var(--mt-o-width, 68%);
+  top: var(--mt-o-top, -.02em);
+  height: var(--mt-bar-h);
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+.mt-o.is-mt-drawn .mt-o__bar {
+  transform: scaleX(1);
+  transition: transform var(--mt-dur-xl) var(--mt-ease-ink) 200ms;
+}
+
+/* --- 2b · titres : le texte monte dans son cadre, puis le trait se trace dessous --- */
+.mt-h { position: relative; }
+.mt-h__text {
+  display: block;
+  padding-bottom: .08em;   /* garde les jambages dans le cadre */
+  clip-path: inset(0 0 100% 0);
+  transform: translateY(.28em);
+}
+.mt-h .mt-bar {
+  width: var(--mt-bar-len, 2.6rem);
+  margin-top: .32em;
+}
+.mt-h--center .mt-bar { margin-left: auto; margin-right: auto; transform-origin: center; }
+.mt-h.is-mt-in .mt-h__text {
+  clip-path: inset(0 0 0 0);
+  transform: translateY(0);
+  transition: clip-path var(--mt-dur-l) var(--mt-ease-out), transform var(--mt-dur-l) var(--mt-ease-out);
+}
+.mt-h.is-mt-in .mt-bar {
+  transform: scaleX(1);
+  transition: transform var(--mt-dur-xl) var(--mt-ease-ink) 260ms;   /* le trait arrive quand le titre est posé */
+}
+
+/* --- 2c · menu : un seul trait glisse AU-DESSUS du lien actif, exactement comme le macron au-dessus du O --- */
+.mt-nav { position: relative; }
+.mt-nav__bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1px;            /* mis à l'échelle en JS : translateX(x) scaleX(largeur) */
+  height: 2px;
+  background: var(--mt-bar-color);
+  transform-origin: left center;
+  transform: translateX(var(--mt-x, 0px)) scaleX(var(--mt-w, 0));
+  opacity: var(--mt-o, 0);
+  transition: transform var(--mt-dur-m) var(--mt-ease-inout), opacity var(--mt-dur-s) linear;
+  pointer-events: none;
+}
+.mt-nav.is-mt-instant .mt-nav__bar { transition: none; }
+/* menu mobile (liste verticale) : pas de trait qui glisse, chaque lien porte son propre trait */
+.mt-nav__link { position: relative; }
+.mt-nav__link > .mt-bar { position: absolute; left: 0; top: -.35em; width: 1.4em; height: 2px; }
+.mt-nav--stack .mt-nav__link[aria-current] > .mt-bar { transform: scaleX(1); }
+.mt-nav--stack .mt-nav__bar { display: none; }
+.mt-nav:not(.mt-nav--stack) .mt-nav__link > .mt-bar { display: none; }
+
+/* --- 2d · barre de chargement : le trait parcourt le haut de l'écran, puis se retire par la droite --- */
+.mt-loader {
+  position: fixed;
+  left: 0; right: 0; top: 0;
+  height: 3px;
+  z-index: 9999;
+  pointer-events: none;
+}
+.mt-loader__bar {
+  height: 100%;
+  background: var(--mt-ink);
+  transform: scaleX(var(--mt-p, 0));
+  transform-origin: left center;
+  transition: transform var(--mt-dur-s) var(--mt-ease-out);
+}
+.mt-loader.is-mt-done .mt-loader__bar {
+  transform-origin: right center;
+  transform: scaleX(0);
+  transition: transform var(--mt-dur-l) var(--mt-ease-ink) 120ms;
+}
+
+/* --- 2e · liens : le trait se trace de gauche à droite au survol et repart par la droite --- */
+.mt-link {
+  position: relative;
+  text-decoration: none;
+  color: inherit;
+}
+.mt-link::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0;
+  bottom: -.12em;
+  height: max(1.5px, .07em);
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform var(--mt-dur-s) var(--mt-ease-in);
+}
+@media (hover: hover) and (pointer: fine) {
+  .mt-link:hover::after {
+    transform: scaleX(1);
+    transform-origin: left center;
+    transition: transform var(--mt-dur-m) var(--mt-ease-out);
+  }
+}
+.mt-link:focus-visible::after { transform: scaleX(1); transform-origin: left center; }
+/* tactile : pas de survol, le lien reste lisible comme un lien (trait fin, à 40 %) */
+@media (hover: none) {
+  .mt-link::after { transform: scaleX(1); opacity: .4; transition: opacity var(--mt-dur-xs) linear; }
+  .mt-link:active::after { opacity: 1; }
+}
+
+/* =============================================================================
+   3 · FACE / DOS
+   La photo pivote en 3D de la face vers le dos du tee, comme quand on retourne le vêtement en boutique.
+   ============================================================================= */
+
+.mt-flip {
+  position: relative;
+  perspective: 1600px;
+  -webkit-perspective: 1600px;
+}
+.mt-flip__inner {
+  position: relative;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  transform: rotateY(0deg);
+  /* retour : sans délai */
+  transition: transform var(--mt-dur-l) var(--mt-ease-inout);
+}
+.mt-flip__face {
+  display: block;
+  width: 100%;
+  height: auto;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: rotateY(0deg) translateZ(1px);   /* translateZ : évite le scintillement de Safari iOS */
+}
+.mt-flip__face--back {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  object-fit: cover;
+  transform: rotateY(180deg) translateZ(1px);
+}
+/* aller : 120 ms d'intention (on ne retourne pas les tees quand la souris ne fait que traverser la grille) */
+@media (hover: hover) and (pointer: fine) {
+  .mt-flip-host.has-mt-back:hover .mt-flip__inner {
+    transform: rotateY(180deg);
+    transition: transform var(--mt-dur-l) var(--mt-ease-inout) 120ms;
+  }
+}
+.mt-flip-host.is-mt-flipped .mt-flip__inner { transform: rotateY(180deg); }
+
+/* bouton tactile « voir le dos » : seulement sur les écrans sans survol. Il est placé HORS du bloc 3D
+   (frère de .mt-flip dans .mt-ring__frame) pour passer au-dessus du lien qui rend la carte cliquable. */
+.mt-flip__toggle {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  z-index: 3;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--mt-paper);
+  color: var(--mt-ink);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform var(--mt-dur-xs) var(--mt-ease-out);
+}
+.mt-flip__toggle svg { width: 18px; height: 18px; transition: transform var(--mt-dur-l) var(--mt-ease-inout); }
+.mt-flip-host.is-mt-flipped .mt-flip__toggle svg { transform: rotate(180deg); }
+.mt-flip__toggle:active { transform: scale(.92); }
+@media (hover: none) {
+  .mt-flip-host.has-mt-back .mt-flip__toggle { display: inline-flex; }
+}
+
+/* =============================================================================
+   4 · NEVER STAY DOWN
+   Une seule fois sur le site. Au scroll, les lettres sont envoyées au tapis, restent au sol, puis se relèvent
+   une à une. Une fois debout, elles ne retombent plus : never stay down.
+   ============================================================================= */
+
+.mt-nsd {
+  position: relative;
+  height: 260vh;
+  height: 260svh;
+  background: var(--mt-paper);
+  color: var(--mt-ink);
+}
+.mt-nsd__stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 0 6vw;
+}
+.mt-nsd__line {
+  margin: 0;
+  text-align: center;
+  font-family: "Fraunces", Georgia, serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: clamp(3rem, 12.5vw, 10rem);
+  line-height: .92;
+  letter-spacing: -.01em;
+}
+.mt-nsd__word { display: inline-block; white-space: nowrap; }
+.mt-nsd__l {
+  display: inline-block;
+  transform-origin: 50% 92%;   /* la lettre bascule sur son pied */
+}
+.mt-nsd.is-mt-running .mt-nsd__l { will-change: transform, opacity; }
+.mt-nsd__knight { width: clamp(90px, 16vw, 170px); height: auto; margin-bottom: clamp(1rem, 3vw, 2rem); }
+.mt-nsd__floor {
+  /* le tapis : un trait fin qui apparaît quand les lettres tombent */
+  width: min(80vw, 46rem);
+  height: 1px;
+  margin-top: .8rem;
+  background: var(--mt-ink);
+  opacity: 0;
+  transform: scaleX(.2);
+}
+.mt-nsd__bar {
+  --mt-bar-color: var(--mt-gold);
+  width: clamp(4rem, 14vw, 9rem);
+  height: clamp(4px, .9vw, 8px);
+  margin-top: clamp(1rem, 3vw, 2rem);
+  transform-origin: center;
+}
+.mt-nsd__caption {
+  margin-top: 1.1rem;
+  font: 500 .8rem/1.4 "Schibsted Grotesk", system-ui, sans-serif;
+  letter-spacing: .32em;
+  text-transform: uppercase;
+  color: var(--mt-muted);
+  opacity: 0;
+}
+@media (max-width: 749px) {
+  .mt-nsd { height: 210vh; height: 210svh; }
+}
+
+/* =============================================================================
+   VERSION CALME · prefers-reduced-motion
+   Pas de déplacement ni de rotation : uniquement des fondus courts. Rien n'est perdu (chaque état reste visible).
+   ============================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  /* coins : apparaissent en fondu, déjà tracés */
+  .mt-ring__c::before { transform: scaleX(1); }
+  .mt-ring__c::after { transform: scaleY(1); }
+  .mt-ring__c { opacity: 0; transition: opacity var(--mt-dur-s) linear; }
+  .mt-ring.is-mt-active .mt-ring__c, .mt-ring:focus-within .mt-ring__c { opacity: 1; }
+  @media (hover: hover) { .mt-ring:hover .mt-ring__c { opacity: 1; } }
+  .mt-ring__c::before, .mt-ring__c::after { transition: none !important; }
+
+  /* trait du Ō : visible tout de suite, sans tracé */
+  .mt-o__bar, .mt-h .mt-bar { transform: scaleX(1); transition: none !important; }
+  .mt-h__text { clip-path: none; transform: none; opacity: 0; transition: opacity var(--mt-dur-m) linear; }
+  .mt-h.is-mt-in .mt-h__text { opacity: 1; transition: opacity var(--mt-dur-m) linear; }
+  .mt-nav__bar { transition: opacity var(--mt-dur-s) linear; }
+  .mt-loader__bar, .mt-loader.is-mt-done .mt-loader__bar { transition: none; }
+  .mt-loader.is-mt-done { opacity: 0; transition: opacity var(--mt-dur-s) linear; }
+  .mt-link::after, .mt-link:hover::after { transition: none !important; }
+
+  /* face / dos : fondu entre les deux photos au lieu de la rotation 3D */
+  .mt-flip__inner, .mt-flip-host.has-mt-back:hover .mt-flip__inner, .mt-flip-host.is-mt-flipped .mt-flip__inner { transform: none !important; transition: none !important; }
+  .mt-flip__face, .mt-flip__face--back { transform: none; backface-visibility: visible; -webkit-backface-visibility: visible; }
+  .mt-flip__face--back { opacity: 0; transition: opacity var(--mt-dur-s) linear; }
+  @media (hover: hover) and (pointer: fine) { .mt-flip-host.has-mt-back:hover .mt-flip__face--back { opacity: 1; } }
+  .mt-flip-host.is-mt-flipped .mt-flip__face--back { opacity: 1; }
+  .mt-flip__toggle svg { transition: none; }
+
+  /* never stay down : pas de scroll piloté ; la devise apparaît debout, le trait doré est déjà là */
+  .mt-nsd { height: auto; }
+  .mt-nsd__stage { position: relative; height: auto; min-height: 70vh; padding: 18vh 6vw; }
+  .mt-nsd__line { opacity: 0; transition: opacity var(--mt-dur-l) linear; }
+  .mt-nsd.is-mt-in .mt-nsd__line, .mt-nsd.is-mt-in .mt-nsd__caption { opacity: 1; }
+  .mt-nsd__caption { transition: opacity var(--mt-dur-l) linear 200ms; }
+  .mt-nsd__bar { transform: scaleX(1); }
+}

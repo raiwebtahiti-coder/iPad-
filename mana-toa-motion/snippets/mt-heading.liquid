@@ -1,0 +1,10 @@
+{%- comment -%}
+  Titre avec le trait du Ō qui se trace dessous à son apparition.
+  {% render 'mt-heading', text: section.settings.title, tag: 'h2', align: 'left' %}
+  align : 'left' (défaut) ou 'center'.
+{%- endcomment -%}
+{%- assign tag = tag | default: 'h2' -%}
+<{{ tag }} class="mt-h{% if align == 'center' %} mt-h--center{% endif %}">
+  <span class="mt-h__text">{{ text }}</span>
+  <span class="mt-bar" aria-hidden="true"></span>
+</{{ tag }}>

@@ -1,0 +1,43 @@
+{%- comment -%}
+  Carte produit Mana Tō'a : coins du ring + face / dos.
+  Utilisation : {% render 'mt-card', product: product %}
+  La 2e image du produit sert de dos. Sans 2e image, la carte garde ses coins mais ne pivote pas.
+{%- endcomment -%}
+{%- assign front = product.featured_media -%}
+{%- assign back = product.media[1] -%}
+<div class="mt-card mt-ring mt-flip-host">
+  <div class="mt-ring__frame">
+    <div class="mt-flip"><div class="mt-flip__inner">
+      {{ front | image_url: width: 900 | image_tag:
+        class: 'mt-flip__face mt-flip__face--front',
+        widths: '360, 540, 720, 900',
+        sizes: '(min-width: 990px) 25vw, 50vw',
+        loading: 'lazy',
+        alt: product.title }}
+      {%- if back -%}
+        {{ back | image_url: width: 900 | image_tag:
+          class: 'mt-flip__face mt-flip__face--back',
+          widths: '360, 540, 720, 900',
+          sizes: '(min-width: 990px) 25vw, 50vw',
+          loading: 'lazy',
+          alt: product.title | append: ' — dos' }}
+      {%- endif -%}
+    </div></div>
+    {%- if back -%}
+      <button class="mt-flip__toggle" type="button" aria-pressed="false" aria-label="Voir le dos"
+              data-label-back="Voir le dos" data-label-front="Voir la face">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 9a8 8 0 0 1 14.5-3.5L20 7"/><path d="M20 3v4h-4"/><path d="M20 15a8 8 0 0 1-14.5 3.5L4 17"/><path d="M4 21v-4h4"/>
+        </svg>
+      </button>
+    {%- endif -%}
+    <span class="mt-ring__corners" aria-hidden="true">
+      <i class="mt-ring__c mt-ring__c--tl"></i><i class="mt-ring__c mt-ring__c--tr"></i>
+      <i class="mt-ring__c mt-ring__c--bl"></i><i class="mt-ring__c mt-ring__c--br"></i>
+    </span>
+  </div>
+  <div class="mt-card__info">
+    <h3 class="mt-card__title"><a class="mt-card__link" href="{{ product.url }}">{{ product.title }}</a></h3>
+    <p class="mt-card__price">{{ product.price | money }}</p>
+  </div>
+</div>

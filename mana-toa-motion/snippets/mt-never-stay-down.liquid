@@ -1,0 +1,16 @@
+{%- comment -%}
+  « Never stay down » : UNE seule fois sur le site (page À propos ou bas de l'accueil).
+  Au scroll, les lettres tombent au tapis puis se relèvent. Une fois debout, elles ne retombent plus.
+  data-mt-nsd-lock="false" : rejouable en remontant (déconseillé : la devise dit le contraire).
+{%- endcomment -%}
+<section class="mt-nsd" data-mt-nsd>
+  <div class="mt-nsd__stage">
+    {%- if knight_image -%}
+      {{ knight_image | image_url: width: 400 | image_tag: class: 'mt-nsd__knight', loading: 'lazy', alt: '' }}
+    {%- endif -%}
+    <p class="mt-nsd__line" data-text="Never stay down">Never stay down</p>
+    <span class="mt-nsd__floor" aria-hidden="true"></span>
+    <span class="mt-bar mt-nsd__bar" aria-hidden="true"></span>
+    <p class="mt-nsd__caption">Mana Tō'a</p>
+  </div>
+</section>
